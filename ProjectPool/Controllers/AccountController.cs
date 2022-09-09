@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ProjectPool.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,27 @@ namespace ProjectPool.Controllers
 {
     public class AccountController : Controller
     {
-        public IActionResult Index()
+        [Route("Signup")]
+        public IActionResult SignUp()
+        {
+            return View();
+        }
+
+        [Route("Signup")]
+        [HttpPost]
+        public IActionResult SignUp(SignUpModel signUpModel)
+        {
+            if(ModelState.IsValid)
+            {
+                //write code
+
+                ModelState.Clear();
+            }
+            return View();
+        }
+
+        [Route("Login")]
+        public IActionResult Login()
         {
             return View();
         }
