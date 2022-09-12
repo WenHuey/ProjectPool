@@ -1,0 +1,266 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+    font-family: "Nunito", sans-serif;
+}
+
+body {
+    width: 100%;
+    height: auto;
+}
+
+h1 {
+    line-height: 1.5;
+}
+
+.navbar {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    /*position: fixed;*/
+    top: 0;
+    left: 0;
+    padding: 1rem 2.5rem;
+    z-index: 10;
+    color: white;
+    background: black;
+}
+
+.narbar-logo > a {
+    letter-spacing: 2.5;
+    text-decoration: none;
+    color: white;
+}
+
+.navbar-menu {
+    width: 400px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-menu > a {
+    color: white;
+    text-decoration: none;
+}
+
+.menu-toggle {
+    display: none;
+}
+
+.menu-toggle .bar {
+    width: 15px;
+    height: 2px;
+    margin: 3px auto;
+    transition: all 0.3 ease-in-out;
+    background-color: white;
+    cursor: pointer;
+}
+
+
+header {
+    width: 100%;
+    height: 70vh;
+    background-image: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)),url(../image/projectlist-bg.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.header-title {
+    position: absolute;
+    top: 30%;
+    letter-spacing: 3;
+    /* font-weight: bolder; */
+    font-size: 45px;
+    color: white;
+    text-shadow: 4px 2px 0px rgba(0,0,0,0.2);
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+
+.header-title > span {
+    color: steelblue;
+}
+
+.search-wrapper {
+    width: 60%;
+    margin: auto;
+    min-width: 300px;
+    height: 3.5rem;
+    position: relative;
+}
+
+.search-box {
+    width: 100%;
+    position: absolute;
+    background-color: whitesmoke;
+    box-shadow: rgba(2, 11, 20, 0.2) 0px 5px 15px;
+    top: -45%;
+    height: 100%;
+    width: 100%;
+}
+
+.search-card {
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0.5rem;
+}
+
+.search-input {
+    height: 100%;
+    width: 100%;
+    border: none;
+    padding: 0.5rem;
+}
+
+.search-button {
+    width: 200px;
+    background: steelblue;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.filter-wrapper {
+    width: 100%;
+    height: auto;
+    font-size: 0.8rem;
+    width: 60%;
+    min-width: 300px;
+    margin: auto;
+}
+
+.filter-dropdown {
+    width: 100%;
+    border-bottom: 1px solid steelblue;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
+
+.filter-select {
+    border: none;
+    padding: 0.2rem;
+}
+
+.filter-select:hover {
+    background: whitesmoke;
+}
+
+.project-list {
+    margin: 3%;
+    padding: 1rem;
+    background-color: var(--greyColor);
+}
+
+.project-card {
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    margin: 1rem 6rem;
+    min-height: 100px;
+    align-items: center;
+    background-color: var(--whiteColor);
+    box-shadow: rgba(0,0,0,0.16) 0px 1px 4px;
+    cursor: default;
+}
+
+.project-card:hover {
+    box-shadow: rgba(0,0,0,0.1) 0px 4px 12px;
+}
+
+.project-name {
+    display: flex;
+    width: 80%;
+}
+
+@media(max-width: 768px) {
+    .project-name {
+        width: 75%;
+    }
+
+    .project-right{
+        width: 25%;
+    }
+}
+
+.project-detail {
+    padding: 0 10px;
+    cursor: default;
+}
+
+.project-detail > h4 {
+    color: var(--primaryColor);
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+.project-detail > p {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    margin: 10px 0;
+}
+
+.project-label {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.project-label > a {
+    padding: 0.1rem;
+    margin: 0.2rem;
+    color: white;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    padding: 2px 13px;
+    cursor: default;
+}
+
+.label {
+    background-color: cornflowerblue;
+}
+
+.project-posted {
+    font-size: 10px;
+}
+
+.project-right {
+    width: 20%;
+    text-align: center;
+    padding: 10px;
+}
+
+.project-right > div {
+    padding: 5px 0;
+}
+
+.apply-project {
+    display: block;
+    padding: 5px 10px;
+    margin: 5px auto;
+    width: 100%;
+    background-color: steelblue;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.apply-project:hover {
+    background-color: transparent;
+    color: steelblue;
+    border: 1px solid steelblue;
+    padding: 4px 10px;
+}

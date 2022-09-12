@@ -1,0 +1,198 @@
+﻿
+
+.no-border-grey {
+    border-style: none;
+    background-color: #f4f7f7;
+    box-shadow: none;
+    margin: 1rem;
+    border-radius: 5px;
+}
+
+.no-border {
+    border-style: none;
+    background-color: none;
+    box-shadow: none;
+    margin: 1rem;
+}
+
+.no-border-grey .card-body {
+    padding: 2rem;
+}
+
+.project-title > h4 {
+    font-size: 17px;
+    color: cornflowerblue;
+}
+
+.contact-info {
+    list-style: none;
+}
+
+.contact-info > li {
+    float: left;
+}
+
+.apply-project {
+    display: block;
+    padding: 10px 10px;
+    margin: 5px auto;
+    width: 100%;
+    background-color: steelblue;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.project-label > p {
+    padding: 0.1rem;
+    margin: 0.2rem;
+    color: white;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    padding: 2px 15px;
+    cursor: default;
+}
+
+@media(max-width: 990px) {
+    .apply-project {
+        width: 30%;
+    }
+
+    .project-title {
+        margin-bottom: 15px;
+    }
+}
+
+@media(max-width:768px) {
+    .apply-project {
+        width: 100%;
+    }
+}
+
+@media(max-width: 576px) {
+    .project-title {
+        text-align: center;
+    }
+}
+
+.project-desc {
+    margin-bottom: 40px;
+}
+
+.project-desc > h5 {
+    line-height: 1.7;
+    font-size: 18px;
+}
+
+.project-desc > h5 > ul {
+    padding-left: 1.25rem;
+}
+
+.skills {
+    margin: 40px 0;
+}
+
+.skills > small {
+    font-size: 18px;
+}
+
+.image {
+    width: 100%;
+    height: 360px;
+    background-image: url(../image/website-portfolio.jpg);
+    background-size: cover;
+    background-position: center;
+}
+
+.project-portfolio {
+    border: 0 solid rgba(0,0,0,.125);
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
+}
+
+.review-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.review-box {
+    width: 100%;
+    box-shadow: 2px 2px 30px rgba(0,0,0,0.1);
+    background-color: white;
+    padding: 30px;
+    cursor: pointer;
+}
+
+.profile-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    overflow: hidden;
+    margin-right: 10px;
+}
+
+.profile-img > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+}
+
+.name-contractor {
+    display: flex;
+    flex-direction: column;
+}
+
+.name-contractor > strong {
+    color: #3d3d3d;
+    font-size: 20px;
+    letter-spacing: 0.5px;
+}
+
+.name-contractor > span {
+    color: #979797;
+    font-size: 0.8rem;
+}
+
+.reviews {
+    color: #f9d71c;
+}
+
+.box-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.box-top .reviews > i {
+    font-size: 1.3rem;
+}
+
+.employer-comment > p {
+    font-size: 18px;
+    color: #4b4b4b;
+}
+
+.review-title {
+    display: flex;
+    align-items: baseline;
+    margin-top: 2rem;
+}
+
+.review-title > h4 {
+    color: #f9d71c;
+}
+
+.review-title .reviews {
+    font-size: 25px;
+}

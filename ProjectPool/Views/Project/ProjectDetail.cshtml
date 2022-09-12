@@ -1,0 +1,211 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Detail</title>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
+
+    <link rel="stylesheet" href="~/css/ProjectDetail.css">
+
+</head>
+<body>
+    <div>
+        <nav class="navbar">
+            <h2 class="narbar-logo"><a href="">ProjectPool</a></h2>
+            <div class="navbar-menu">
+                <a href="">Overview</a>
+                <a href="ProjectList">Projects</a>
+                <a href="ContractorProfile">Students</a>
+                <a href="Login">Login</a>
+                <a href="Signup">Sign Up</a>
+                <a href="Dashboard">Dashboard</a>
+            </div>
+            <div class="menu-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </nav>
+    </div>
+    <!-- navbar -->
+
+    <div class="main-body">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="main-breadcrumb">
+            <ol class="breadcrumb m-0">
+                <li class="breadcrumb-item"><a href="ProjectList">Projects</a></li>
+                <!-- <li class="breadcrumb-item"><a href="javascript:void(0)">Project Title</a></li> -->
+                <li class="breadcrumb-item active" aria-current="page">Project Title</li>
+            </ol>
+        </nav>
+        <!-- /Breadcrumb -->
+        <!-- project title -->
+        <div class="row gutters-sm">
+            <div class="col-12">
+                <div class="card no-border-grey">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-lg-2 col-sm-3 mb-4 mb-lg-0" style="text-align: center;">
+                                <img src="https://www.bootdey.com/app/webroot/img/logo.png" alt="Admin" class="rounded-circle" width="100">
+                            </div>
+                            <div class="col-lg-7 col-sm-9 px-xl-10 project-title">
+                                <div class="d-lg-inline-block py-1-9 px-1-9 px-sm-6 mb-1-9 mb-3">
+                                    <h3 class="h2 text-black mb-0">Project Title</h3>
+                                </div>
+                                <h4 style="font-size: 19px;"><a href="EmployerProfile">Company name Ltd.</a> </h4>
+                                <div class="row font-weight-bold mb-2" style="font-size: 18px;">
+                                    <div class="col-lg-4 col-12 col-sm-6">3 - 6 months</div>
+
+                                </div>
+                            </div>
+                            <div class="col-lg-3 align-items-center pl-5 pr-5" style="text-align: center;">
+                                <h3>$100</h3>
+                                <button class="apply-project">APPLY</button>
+                                <h5 class="pt-3 text-danger">3 Applied</h5>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row gutters-sm">
+            <!-- one section -->
+
+            <div class="col-md-8">
+                <!-- description -->
+                <div class="card no-border mb-3">
+                    <div class="card-body">
+                        <div class="project-desc">
+                            <div class="h2 text-black font-weight-bold mb-3">Description</div>
+                            <h5>
+                                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
+                                commodo ligula eget dolor. Aenean massa. Cum sociis natoque
+                                penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.
+                                Nulla consequat massa quis enim. Donec pede justo, fringilla vel,
+                                aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut,
+                                imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.
+                                <br><br>
+                                Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi.
+                                Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu,
+                                consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in,
+                                viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet.
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+                <!-- scope -->
+                <div class="card no-border mb-3">
+                    <div class="card-body">
+                        <div class="project-desc">
+                            <div class="h2 text-black font-weight-bold mb-3">Scope</div>
+                            <h5>
+                                <ul>
+                                    <li>Developing custom themes (WordPress.org & ThemeForest Standards)</li>
+                                    <li>Creating reactive website designs</li>
+                                    <li>Working under strict deadlines</li>
+                                    <li>Develop page speed optimized themes</li>
+                                    <li>Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet.</li>
+                                </ul>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <!-- contact -->
+                <div class="card">
+                    <div class="card-body m-2">
+                        <div class="d-flex flex-column">
+                            <!-- <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150"> -->
+                            <div class="mt-3">
+                                <p class="h4 font-weight-bold mb-4">Details : </p>
+                                <p>Posted by: John Doe</p>
+                                <p>Posted on: dd/mm/yyyy</p>
+                                <p>Phone: <span><a href="">0123456789</a></span></p>
+                                <p>Email: <span><a href="">john@mail.com</a></span></p>
+                                <!-- <button class="btn btn-primary">Follow</button>
+                                <button class="btn btn-outline-primary">Message</button> -->
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="mb-3">
+                            <p class="h4 font-weight-bold mb-4">Category : </p>
+                            <div class="project-label">
+                                <a class="label" style="font-size: 18px;" href="">Website Development</a>
+                                <a class="label" style="font-size: 18px;" href="">Programming</a>
+                                <a class="label" style="font-size: 18px;" href="">E-Commerce</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- skills -->
+                <div class="card">
+                    <div class="card-body project-range m-2">
+                        <!-- <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6> -->
+                        <p class="h4 font-weight-bold mb-4">Skills Required: </p>
+                        <small>HTML</small>
+                        <div class="progress mb-3" style="height: 5px">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <small>CSS</small>
+                        <div class="progress mb-3" style="height: 5px">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <small>Javascript</small>
+                        <div class="progress mb-3" style="height: 5px">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <small>React</small>
+                        <div class="progress mb-3" style="height: 5px">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <small>C#</small>
+                        <div class="progress mb-3" style="height: 5px">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- language -->
+                <div class="card">
+                    <div class="card-body project-range m-2">
+                        <!-- <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6> -->
+                        <p class="h4 font-weight-bold mb-4">Language : </p>
+                        <small>English</small>
+                        <div class="progress mb-3" style="height: 5px">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <small>Mandarin</small>
+                        <div class="progress mb-3" style="height: 5px">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>

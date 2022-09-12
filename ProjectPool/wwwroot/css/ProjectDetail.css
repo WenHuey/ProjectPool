@@ -1,0 +1,217 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+    font-family: "Jost", sans-serif;
+}
+
+body{
+    width: 100%;
+    height: auto;
+    margin-top:20px;
+    color: #1a202c;
+    text-align: left;    
+}
+
+.main-body {
+    margin: 5% 3%;
+    padding: 1rem;
+}
+
+.breadcrumb{
+    background-color: transparent !important;
+}
+
+.navbar{
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 1rem 2.5rem;
+    z-index: 10;
+    color: white;
+    background: black;
+    align-content: space-around;
+}
+
+.narbar-logo > a{
+    letter-spacing: 2.5;
+    text-decoration: none;
+    color: white;
+}
+
+.navbar-menu{
+    width: 400px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-menu > a{
+    color: white;
+    text-decoration: none;
+}
+
+.menu-toggle{
+    display: none;
+}
+
+.menu-toggle .bar{
+    width: 15px;
+    height: 2px;
+    margin: 3px auto;
+    transition: all 0.3 ease-in-out;
+    background-color: white;
+    cursor: pointer;
+}
+
+.project-label{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.project-label > a{
+    padding: 0.1rem;
+    margin: 0.2rem;
+    color: white;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    padding: 2px 13px;
+    cursor: default;
+}
+
+.label{
+    background-color: cornflowerblue;
+}
+
+/* project details */
+.card {
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
+}
+
+.card {
+    margin: 1rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 0 solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+}
+
+.card-body {
+    flex: 1 1 auto;
+    min-height: 1px;
+    padding: 1.5rem;
+}
+
+.gutters-sm {
+    margin-right: -8px;
+    margin-left: -8px;
+}
+
+.gutters-sm>.col, .gutters-sm>[class*=col-] {
+    padding-right: 8px;
+    padding-left: 8px;
+}
+.mb-3, .my-3 {
+    margin-bottom: 1rem!important;
+}
+
+.bg-gray-300 {
+    background-color: #e2e8f0;
+}
+.h-100 {
+    height: 100%!important;
+}
+.shadow-none {
+    box-shadow: none!important;
+}
+
+.no-border-grey {
+    border-style: none;
+    background-color: whitesmoke;
+    box-shadow: none;
+    margin: 1rem;
+}
+
+.no-border {
+    border-style: none;
+    background-color: none;
+    box-shadow: none;
+    margin: 1rem;
+}
+
+.no-border-grey .card-body {
+    padding: 2rem;
+}
+
+.project-title > h4 {
+    font-size: 17px;
+    color: cornflowerblue;
+}
+
+.apply-project {
+    display: block;
+    padding: 10px 10px;
+    margin: 5px auto;
+    width: 100%;
+    background-color: steelblue;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+@media(max-width: 990px) {
+    .apply-project {
+        width: 30%;
+    }
+
+    .project-title {
+        margin-bottom: 15px;
+    }
+}
+
+@media(max-width:768px) {
+    .main-body {
+        margin: 7% 3%;
+    }
+
+    .apply-project {
+        width: 100%;
+    }
+}
+
+@media(max-width: 576px) {
+    .project-title {
+        text-align: center;
+    }
+}
+
+.project-desc > h5 {
+    line-height: 1.7;
+    font-size: 18px;
+}
+
+    .project-desc > h5 > ul {
+        padding-left: 1.25rem;
+    }
+
+.project-range > small {
+    font-size: 18px;
+}
+
+
+.project-portfolio {
+    border: 0 solid rgba(0,0,0,.125);
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
+}

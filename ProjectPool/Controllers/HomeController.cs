@@ -28,6 +28,12 @@ namespace ProjectPool.Controllers
             return View();
         }
 
+        [Route("Overview")]
+        public IActionResult Overview()
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

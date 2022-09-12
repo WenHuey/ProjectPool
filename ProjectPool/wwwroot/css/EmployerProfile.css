@@ -1,0 +1,101 @@
+﻿
+
+.no-border-grey {
+    border-style: none;
+    background-color: #f4f7f7;
+    box-shadow: none;
+    margin: 1rem;
+    border-radius: 12px;
+}
+
+.no-border {
+    border-style: none;
+    background-color: none;
+    box-shadow: none;
+    margin: 1rem;
+}
+
+.no-border-grey .card-body {
+    padding: 2rem;
+}
+
+.company-contact {
+    list-style: none;
+}
+
+.company-contact > li {
+    float: left;
+}
+
+.project-info {
+    margin-bottom: 40px;
+}
+
+.project-cost {
+    align-items: center;
+}
+
+.project-cost > h4 {
+    float: left;
+}
+
+.project-cost > button {
+    float: right;
+}
+
+.apply-project {
+    display: block;
+    padding: 10px 10px;
+    margin: 5px auto;
+    width: 20%;
+    background-color: steelblue;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+@media(max-width: 990px) {
+
+    .project-title {
+        margin-bottom: 15px;
+    }
+}
+
+@media(max-width:768px) {
+}
+
+@media(max-width: 576px) {
+    .company-name {
+        text-align: center;
+    }
+
+    ul.company-contact {
+        display: inline-block;
+    }
+}
+
+.project-desc > h5 {
+    line-height: 1.7;
+    font-size: 18px;
+}
+
+.project-desc > h5 > ul {
+    padding-left: 1.25rem;
+}
+
+.project-range > small {
+    font-size: 18px;
+}
+
+.image {
+    width: 100%;
+    height: 360px;
+    background-image: url(website-portfolio.jpg);
+    background-size: cover;
+}
+
+.project-portfolio {
+    border: 0 solid rgba(0,0,0,.125);
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
+}

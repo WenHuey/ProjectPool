@@ -1,0 +1,246 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contractor Profile</title>
+
+    <!-- icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="~/css/ProjectDetail.css">
+    <link rel="stylesheet" href="~/css/ContractorProfile.css">
+
+</head>
+<body>
+
+    <nav class="navbar">
+        <h2 class="narbar-logo"><a href="">ProjectPool</a></h2>
+        <div class="navbar-menu">
+            <a href="">Overview</a>
+            <a href="ProjectList">Projects</a>
+            <a href="ContractorProfile">Students</a>
+            <a href="Login">Login</a>
+            <a href="Signup">Sign Up</a>
+            <a href="Dashboard">Dashboard</a>
+        </div>
+        <div class="menu-toggle">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+    </nav>
+
+    <div class="main-body">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="main-breadcrumb">
+            <ol class="breadcrumb m-0">
+                <li class="breadcrumb-item"><a href="ContractorProfile">Students</a></li>
+                <!-- <li class="breadcrumb-item"><a href="javascript:void(0)">Project Title</a></li> -->
+                <li class="breadcrumb-item active" aria-current="page">Profile Details</li>
+            </ol>
+        </nav>
+        <!-- /Breadcrumb -->
+        <!-- project title -->
+        <div class="row gutters-sm">
+            <div class="col-12">
+                <div class="card no-border-grey">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-lg-2 col-sm-3 mb-4 mb-lg-0" style="text-align: center;">
+                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="100">
+                            </div>
+                            <div class="col-lg-7 col-sm-9 px-xl-10 project-title">
+                                <div class="d-lg-inline-block py-1-9 px-1-9 px-sm-6 mb-1-9 mb-3">
+                                    <h3 class="h2 text-black mb-0">Project Title</h3>
+                                </div>
+                                <div><i class="fa fa-map-marker pr-2 mb-3"></i>Penang, Malaysia</div>
+
+                                <ul class="contact-info">
+                                    <li class="pr-3"><i class="fa fa-phone pr-2"></i><a href="">+6012-3456789</a></li>
+                                    <li><i class="fa fa-envelope pr-2"></i><a href="">example@gmail.com</a>
+                                    <li>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row gutters-sm">
+            <!-- one section -->
+
+            <div class="col-md-5">
+                <!-- description -->
+                <div class="card no-border-grey mb-3">
+                    <div class="card-body">
+                        <div class="project-desc">
+                            <div class="h2 text-black font-weight-bold mb-3">Description</div>
+                            <h5>
+                                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
+                                commodo ligula eget dolor. Aenean massa. Cum sociis natoque
+                                penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.
+                                Nulla consequat massa quis enim. Donec pede justo, fringilla vel,
+                                aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut,
+                                imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.
+                            </h5>
+                        </div>
+                        <hr>
+                        <!-- Skills -->
+                        <div class="skills">
+                            <p class="h4 font-weight-bold mb-4">Skills: </p>
+                            <small>HTML</small>
+                            <div class="progress mb-3" style="height: 5px">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <small>CSS</small>
+                            <div class="progress mb-3" style="height: 5px">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <small>Javascript</small>
+                            <div class="progress mb-3" style="height: 5px">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <small>React</small>
+                            <div class="progress mb-3" style="height: 5px">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <small>C#</small>
+                            <div class="progress mb-3" style="height: 5px">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="skills">
+                            <p class="h4 font-weight-bold mb-4">Language : </p>
+                            <small>English</small>
+                            <div class="progress mb-3" style="height: 5px">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <small>Mandarin</small>
+                            <div class="progress mb-3" style="height: 5px">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="skills">
+                            <p class="h4 font-weight-bold mb-4">Category : </p>
+                            <div class="project-label">
+                                <a class="label" style="font-size: 18px;" href="">Web Development</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <div class="col-md-7 mb-3">
+                <!-- contact -->
+                <div class="card no-border">
+                    <div class="card-body p-0 m-0">
+                        <div class="review-title mb-3">
+                            <h2 class="text-black font-weight-bolder pr-3">Reviews</h2>
+                            <div class="reviews pr-2">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star-o"></i>
+                            </div>
+                            <h4 class="font-weight-bold">4.9</h4>
+                            <h4 style="padding-left: 5px; color: black !important;">(321)</h4>
+                        </div>
+
+                        @for (var i = 0; i<2; i++)
+                        {
+                            <div class="review-section mb-3">
+                                <div class="review-box">
+                                    <div class="box-top">
+                                        <!-- profile -->
+                                        <div class="profile">
+                                            <!-- img -->
+                                            @*<div class="profile-img">
+                                <img src="https://www.bootdey.com/app/webroot/img/Content/user_2.jpg" alt="">
+                            </div>*@
+                                            <!-- name -->
+                                            <div class="name-contractor">
+                                                <strong>Lorem ipsum dolor sit amet, consectetuer</strong>
+                                                <span>@@Touseeq Ijaz</span>
+                                            </div>
+                                        </div>
+                                        <!-- reviews -->
+                                        <div class="reviews">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star-o"></i>
+                                        </div>
+                                    </div>
+
+                                    <!-- comments -->
+                                    <div class="employer-comment">
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
+                                            commodo ligula eget dolor. Aenean massa. Cum sociis natoque
+                                            penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+
+                        <div class="more">
+                            <a href="">More..</a>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+                <!-- Portfolio -->
+                <div class="card no-border mb-3">
+                    <div class="card-body">
+                        <div class="">
+                            <div class="h2 text-black font-weight-bold mb-3">Portfolio</div>
+                            <div class="project-portfolio">
+                                <div class="image"></div>
+                                <div class="card-body">
+                                    <p class="card-text" style="font-size: 18px;">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+</body>
+</html>

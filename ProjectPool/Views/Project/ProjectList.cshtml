@@ -1,0 +1,99 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project List</title>
+    <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
+    <link rel="stylesheet" href="~/css/ProjectList.css">
+</head>
+<body>
+    <!-- navbar -->
+    <nav class="navbar">
+        <h2 class="narbar-logo"><a href="">ProjectPool</a></h2>
+        <div class="navbar-menu">
+            <a href="">Overview</a>
+            <a href="ProjectList">Projects</a>
+            <a href="ContractorProfile">Students</a>
+            <a href="Login">Login</a>
+            <a href="Signup">Sign Up</a>
+            <a href="Dashboard">Dashboard</a>
+        </div>
+        <div class="menu-toggle">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+    </nav>
+    <!-- header -->
+    <header>
+        <h1 class="header-title">
+            Search for projects. <br>
+            Collaborate with Employees!
+        </h1>
+
+    </header>
+    <!-- search -->
+    <div class="search-wrapper">
+        <div class="search-box">
+            <div class="search-card">
+                <input class="search-input" type="text" placeholder="Search...">
+                <button class="search-button">Search</button>
+            </div>
+        </div>
+    </div>
+    <!-- filter -->
+    <div class="filter-wrapper">
+        <div class="filter-dropdown">
+            <select class="filter-select" name="category" id="category">
+                <option value="1">Category</option>
+                <option value="2">Web & Programming</option>
+                <option value="3">Graphic & Design</option>
+                <option value="4">Business</option>
+            </select>
+
+        </div>
+    </div>
+    <section class="project-list" id="projects">
+        @for (var i = 0; i < 10; i++)
+        {
+            <div class="project-card">
+                <div class="project-name">
+                    <div class="project-detail">
+                        <h4>Project Title</h4>
+                        <p>
+                            Project description Project description Project description
+                            Project descriptionProject descriptionProject description
+                            Project description Project description
+                            Project descriptionProject description
+                        </p>
+                        <div class="project-label">
+                            @for (var j = 0; j < 5; j++)
+                            {
+                                <a class="label" href="">HTML</a>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-right">
+                    <div>$ 100</div>
+                    <button class="apply-project" onclick="location.href='@Url.Action("ProjectDetail", "Project")'">View</button>
+                    <div>1 Applied</div>
+                    <div class="project-posted">POsted 2mins ago</div>
+                </div>
+            </div>
+
+        }
+    </section>
+</body>
+</html>
