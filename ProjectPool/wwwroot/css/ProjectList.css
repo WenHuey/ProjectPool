@@ -1,77 +1,32 @@
-﻿* {
+*{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     outline: none;
-    font-family: "Nunito", sans-serif;
+    font-family: "Jost", sans-serif;
 }
 
-body {
+body{
     width: 100%;
     height: auto;
 }
 
-h1 {
+h1{
     line-height: 1.5;
 }
 
-.navbar {
-    width: 100%;
-    height: 60px;
-    display: flex;
-    justify-content: space-between;
-    /*position: fixed;*/
-    top: 0;
-    left: 0;
-    padding: 1rem 2.5rem;
-    z-index: 10;
-    color: white;
-    background: black;
-}
 
-.narbar-logo > a {
-    letter-spacing: 2.5;
-    text-decoration: none;
-    color: white;
-}
-
-.navbar-menu {
-    width: 400px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.navbar-menu > a {
-    color: white;
-    text-decoration: none;
-}
-
-.menu-toggle {
-    display: none;
-}
-
-.menu-toggle .bar {
-    width: 15px;
-    height: 2px;
-    margin: 3px auto;
-    transition: all 0.3 ease-in-out;
-    background-color: white;
-    cursor: pointer;
-}
-
-
-header {
+.header{
     width: 100%;
     height: 70vh;
-    background-image: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)),url(../image/projectlist-bg.jpg);
+    background-image: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)),url(projectlist-bg.jpg);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
 }
 
-.header-title {
+.header-title{
     position: absolute;
     top: 30%;
     letter-spacing: 3;
@@ -84,11 +39,11 @@ header {
     height: 100%;
 }
 
-.header-title > span {
+.header-title > span{
     color: steelblue;
 }
 
-.search-wrapper {
+.search-wrapper{
     width: 60%;
     margin: auto;
     min-width: 300px;
@@ -96,7 +51,7 @@ header {
     position: relative;
 }
 
-.search-box {
+.search-box{
     width: 100%;
     position: absolute;
     background-color: whitesmoke;
@@ -106,21 +61,21 @@ header {
     width: 100%;
 }
 
-.search-card {
+.search-card{
     display: flex;
     justify-content: space-between;
     height: 100%;
     padding: 0.5rem;
 }
 
-.search-input {
+.search-input{
     height: 100%;
     width: 100%;
     border: none;
     padding: 0.5rem;
 }
 
-.search-button {
+.search-button{
     width: 200px;
     background: steelblue;
     border: none;
@@ -128,7 +83,7 @@ header {
     cursor: pointer;
 }
 
-.filter-wrapper {
+.filter-wrapper{
     width: 100%;
     height: auto;
     font-size: 0.8rem;
@@ -137,7 +92,7 @@ header {
     margin: auto;
 }
 
-.filter-dropdown {
+.filter-dropdown{
     width: 100%;
     border-bottom: 1px solid steelblue;
     display: flex;
@@ -146,27 +101,26 @@ header {
     gap: 0.3rem;
 }
 
-.filter-select {
+.filter-select{
     border: none;
     padding: 0.2rem;
 }
 
-.filter-select:hover {
+.filter-select:hover{
     background: whitesmoke;
 }
 
-.project-list {
+.main-body{
     margin: 3%;
     padding: 1rem;
     background-color: var(--greyColor);
 }
 
-.project-card {
-    font-size: 13px;
+.project-card{
     display: flex;
     justify-content: space-between;
     padding: 1rem;
-    margin: 1rem 6rem;
+    margin: 1rem;
     min-height: 100px;
     align-items: center;
     background-color: var(--whiteColor);
@@ -174,50 +128,44 @@ header {
     cursor: default;
 }
 
-.project-card:hover {
+.project-card:hover{
     box-shadow: rgba(0,0,0,0.1) 0px 4px 12px;
 }
 
-.project-name {
+.project-name{
     display: flex;
     width: 80%;
 }
 
-@media(max-width: 768px) {
-    .project-name {
+@media(max-width: 768px){
+    .project-name{
         width: 75%;
     }
-
-    .project-right{
-        width: 25%;
-    }
 }
 
-.project-detail {
+.project-detail{
     padding: 0 10px;
-    cursor: default;
 }
 
-.project-detail > h4 {
+.project-detail > h4{
     color: var(--primaryColor);
-    font-size: 15px;
-    margin-bottom: 5px;
+    font-size: 18px;
+    margin: 5px 0 0 0;
 }
 
-.project-detail > p {
+.project-detail > p{
     display: -webkit-box;
     overflow: hidden;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    margin: 10px 0;
 }
 
-.project-label {
+.project-label{
     display: flex;
     flex-wrap: wrap;
 }
 
-.project-label > a {
+.project-label > a{
     padding: 0.1rem;
     margin: 0.2rem;
     color: white;
@@ -228,25 +176,25 @@ header {
     cursor: default;
 }
 
-.label {
+.label{
     background-color: cornflowerblue;
 }
 
-.project-posted {
+.project-posted{
     font-size: 10px;
 }
 
-.project-right {
-    width: 20%;
+.project-right{
+    width: 15%;
     text-align: center;
     padding: 10px;
 }
 
-.project-right > div {
+.project-right > div{
     padding: 5px 0;
 }
 
-.apply-project {
+.apply-project{
     display: block;
     padding: 5px 10px;
     margin: 5px auto;
@@ -258,7 +206,7 @@ header {
     cursor: pointer;
 }
 
-.apply-project:hover {
+.apply-project:hover{
     background-color: transparent;
     color: steelblue;
     border: 1px solid steelblue;
