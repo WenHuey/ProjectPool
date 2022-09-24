@@ -28,7 +28,7 @@ namespace ProjectPool.Controllers
             return View();
         }
 
-        [Route("Login")]
+        [Route("/")]
         public IActionResult Login()
         {
             return View();

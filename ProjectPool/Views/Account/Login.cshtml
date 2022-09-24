@@ -12,53 +12,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- css -->
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
-    <link rel="stylesheet" href="~/css/Account2.css">
-    <script src="~/js/Account.js"></script>
+    <link rel="stylesheet" href="~/css/Account.css">
+    @*<script src="~/js/Account.js"></script>*@
 
     <title>Sign In</title>
+    <style>
+        .login-container {
+            left: 0;
+            width: 50%;
+            z-index: 2;
+        }
+
+        /*.container.right-panel-active .login-container {
+            transform: translateX(100%);
+            opacity: 1;
+            z-index: 5;
+        }*/
+
+        .overlay-container-login {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: transform 0.6s ease-in-out;
+            z-index: 100;
+        }
+
+        .overlay-right {
+            left: 0;
+            transform: translateX(100%);
+        }
+
+        .container.right-panel-active .overlay-right {
+            transform: translateX(100%);
+        }
+    </style>
+
 </head>
 <body>
-    <!-- <h2>Weekly Coding Challenge #1: Sign in/up Form</h2> -->
     <div class="container" id="container">
-        <!--<div class="form-container sign-up-container">
-            <form asp-action="SignUp">
-                <h1>Create Account</h1>-->
-                <!--<div class="social-container">
-                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-                <span>or use your email for registration</span>-->
 
-                <!--<div class="form-group">
-                    <input asp-for="Name" class="form-control" placeholder="Name" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input asp-for="Email" class="form-control" placeholder="Email" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input asp-for="Password" class="form-control" placeholder="Password" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" />
-                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                </div>
-                <br />
-                <button>Sign Up</button>
-            </form>
-        </div>-->
         <div class="form-container login-container">
             <form asp-action="Login">
                 <h1>Login</h1>
-                <!--<div class="social-container">
-                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-                <span>or use your account</span>-->
 
                 <input type="email" placeholder="Email" />
                 <input type="password" placeholder="Password" />
@@ -66,17 +64,12 @@
                 <button>Login</button>
             </form>
         </div>
-        <div class="overlay-container">
+        <div class="overlay-container-login">
             <div class="overlay">
-                <div class="overlay-panel overlay-left">
-                    <h1>Welcome Back!</h1>
-                    <p>To keep connected with us please login with your personal info</p>
-                    <button class="ghost" id="login">Login</button>
-                </div>
                 <div class="overlay-panel overlay-right">
                     <h1>Hello, Friend!</h1>
                     <p>Enter your personal details and start journey with us</p>
-                    <button class="ghost" id="signUp">Sign Up</button>
+                    <button class="ghost" id="signUp" onclick="location.href='@Url.Action("SignUp", "Account")'">Sign Up</button>
                 </div>
             </div>
         </div>
