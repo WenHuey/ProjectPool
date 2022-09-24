@@ -2,6 +2,7 @@
 
 @{
     Layout = null;
+    ViewBag.Title = "Login to your account | ProjectPooL.";
 }
 
 <!DOCTYPE html>
@@ -10,48 +11,33 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- css -->
+
+    <!-- Font -->
+    <link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
+    <!-- Icon -->
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <!-- CSS-->
+    <link rel="stylesheet" href="~/css/NavRegister.css">
     <link rel="stylesheet" href="~/css/Account.css">
-    @*<script src="~/js/Account.js"></script>*@
-
-    <title>Sign In</title>
-    <style>
-        .login-container {
-            left: 0;
-            width: 50%;
-            z-index: 2;
-        }
-
-        /*.container.right-panel-active .login-container {
-            transform: translateX(100%);
-            opacity: 1;
-            z-index: 5;
-        }*/
-
-        .overlay-container-login {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            width: 50%;
-            height: 100%;
-            overflow: hidden;
-            transition: transform 0.6s ease-in-out;
-            z-index: 100;
-        }
-
-        .overlay-right {
-            left: 0;
-            transform: translateX(100%);
-        }
-
-        .container.right-panel-active .overlay-right {
-            transform: translateX(100%);
-        }
-    </style>
+   
 
 </head>
 <body>
+    <header>
+        <p>ProjectPooL.</p>
+        <nav>
+            <ul class="nav-title">
+                <li><a href="Overview">Overview</a></li>
+                <li><a href="ProjectList">Projects</a></li>
+                <li><a href="ContractorList">Contractor</a></li>
+            </ul>
+        </nav>
+        <div class="account">
+            <a href="Login"><span>Log In</span></a>
+            <a class="cta" href="SignUp"><button>Sign Up now</button></a>
+        </div>
+    </header>
+
     <div class="container" id="container">
 
         <div class="form-container login-container">
