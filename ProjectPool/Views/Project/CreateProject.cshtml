@@ -1,0 +1,313 @@
+﻿@model ProjectPool.Models.CreateProjectModel
+
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="~/css/NavProfile.css">
+    <link rel="stylesheet" href="~/css/\texteditor/site.css">
+    <link rel="stylesheet" href="~/css/texteditor/richtext.min.css">
+    <link rel="stylesheet" href="~/css/CreateProject.css">
+    <link rel="stylesheet" href="~/css/taginput/tagify.css">
+
+    <!-- Font -->
+    <link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
+    <!-- Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <!-- <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"> -->
+
+
+    <style>
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header>
+        <nav>
+            <p>ProjectPooL.</p>
+            <ul class="nav-title">
+                <li><a href="Overview">Overview</a></li>
+                <li><a href="ProjectList">Projects</a></li>
+                <li><a href="ContractorList">Contractor</a></li>
+            </ul>
+
+            <!-- profile name -->
+            <div class="profile-img" onclick="toggleProfile()">
+                <img src="~/image/white-bg.jpg">
+                <p>WH</p>
+            </div>
+
+            <div class="sub-menu-wrap" id="subProfile">
+                <div class="sub-menu">
+
+                    <a href="Dashboard" class="sub-menu-link">
+                        <p>Dashboard</p>
+                        <span>></span>
+                    </a>
+                    <a href="#" class="sub-menu-link">
+                        <p>Profile</p>
+                        <span>></span>
+                    </a>
+                    <hr>
+                    <a href="#" class="sub-menu-link">
+                        <p>Sign Out</p>
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="main-body">
+        <div class="content">
+            <div class="col-12">
+                <div class="text-black font-weight-bold create-project">Create Project</div>
+            </div>
+            @*@using (Html.BeginForm("CreateProject", "ProjectController"))
+                {*@
+            <form asp-action="CreateProject" method="post">
+                @Html.ValidationSummary(true)
+                <div class="page col-12">
+                    <div class="field title">
+                        <div class="label">Project Title</div>
+                        <div class="form-group">
+                            <input asp-for="Title" class="form-control" placeholder="First Name" />
+                            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "validation" })
+                        </div>
+                        @Html.TextAreaFor(model => model.Title, new { @id = "project-textarea" })
+                        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "validation" })
+                        @*<textarea asp-for="Title" maxlength="80" cols="2" id="project-textarea"></textarea>*@
+                        @*<span class="validation-title" style="float: left;">asd</span>*@
+                        <div id="counter" style="float: right;">
+                            <span id="current-title">0</span>
+                            <span id="maximum-title">/ 50</span>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="field">
+                        <div class="label">Project Description</div>
+                        @*@Html.TextAreaFor(model => model.Description, new { @id = "project-desc" })*@
+                        <textarea asp-for="Description" cols="2" id="project-desc" required></textarea>
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "validation" })
+                        @*<span class="validation-desc" style="float: left;">asd</span>*@
+                    </div>
+                    <br />
+                    @*<div class="field">
+                            <div class="label">Category</div>
+                            <select asp-for="CategoryID" class="category" id="main-category">
+                                <option disabled selected value="">-- Select category --</option>
+                                <option value="1">Programming & Tech</option>
+                                <option value="2">Graphic & Design</option>
+                                <option value="3">Sales Marketing</option>
+                                <option value="4">Video & Animation</option>
+                                <option value="5">Writing & Translation</option>
+                            </select>
+                            @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "validation" })
+                            <span class="validation-cat" style="float: left;">asd</span>
+                        </div>
+                        <br>
+                        <div class="field">
+                            <div class="label">Sub-Category</div>
+                            <select asp-for="SubCategoryID" class="category" id="sub-category">
+                                <option disabled selected value="">-- Select sub - category --</option>
+                                <option value="">Programming & Tech</option>
+                                <option value="">Graphic & Design</option>
+                                <option value="">Sales Marketing</option>
+                                <option value="">Video & Animation</option>
+                                <option value="">Writing & Translation</option>
+                            </select>
+                            @Html.ValidationMessageFor(model => model.SubCategoryID, "", new { @class = "validation" })
+                            <span class="validation-subcat" style="float: left;">asd</span>
+                        </div>*@
+                    <br>
+                    <div class="field">
+                        <div class="label">Project Duration</div>
+                        <div class="duration">
+                            <div class="duration-grp from-right">
+                                <div class="label">From</div>
+                                <div class="from">
+                                    @Html.TextBoxFor(model => model.DurationFrom, new { type = "number", @class = "input-duration" })
+                                    @Html.ValidationMessageFor(model => model.DurationFrom, "", new { @class = "validation" })
+                                    @*<span class="validation-desc" style="float: left;">asd</span>*@
+                                </div>
+                            </div>
+                            <div class="duration-grp">
+                                <div class="label">To</div>
+                                <div class="to">
+                                    @Html.TextBoxFor(model => model.DurationTo, new { type = "number", @class = "input-duration" })
+                                    @Html.ValidationMessageFor(model => model.DurationTo, "", new { @class = "validation" })
+                                    @*<span class="validation-desc" style="float: left;">asd</span>*@
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <br>
+                    <div class="field">
+                        <div class="label">Required Skill</div>
+                        @Html.TextAreaFor(model => model.Skill, new { @class = "skill-tag" })
+                        @*<textarea class="skill-tag">CSS, HTML, PHP, jQuery</textarea>*@
+                    </div>
+                    <div class="field">
+                        <div class="label"> Required Language</div>
+                        <textarea class="language-tag">English, Chinese</textarea>
+                    </div>
+                    <div class="field">
+                        <div class="label">Project Cost (RM)</div>
+                        @Html.TextBoxFor(model => model.Cost, new { type = "number", @class = "project-cost" })
+                        @Html.ValidationMessageFor(model => model.Cost, "", new { @class = "validation" })
+                        @*<span class="validation-desc" style="float: left;">asd</span>*@
+                    </div>
+                    <br /><br />
+                    <div class="field btns">
+                        <button class="prev-5 prev">Previous</button>
+                        <button asp-controller="Project" asp-action="CreateProject" class="submit">Submit</button>
+                    </div>
+                </div>
+            </form>
+
+            @*}*@
+        </div>
+
+    </div>
+
+    <!-- Script -->
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+
+    <script src="~/script/jquery.richtext.js"></script>
+    <script src="~/script/tagify.min.js"></script>
+    <script>
+
+        // $(document).ready(function() {
+        $("#project-desc").richText({
+            maxlength: 300,
+            height: 200,
+            leftAlign: false,
+            centerAlign: false,
+            rightAlign: false,
+            justify: false,
+            heading: false,
+            fonts: false,
+            fontColor: false,
+            fontSize: false,
+            imageUpload: false,
+            fileUpload: false,
+            videoEmbed: false,
+            urls: false,
+            table: false,
+            removeStyles: false,
+            preview: false,
+            placeholder: 'Briefly describe your project...',
+        });
+
+        // });
+
+        $("#project-textarea").keyup(function () {
+
+            var character = $(this).val();
+            var withOutSpace = character.replace(/\s+/g, '').length,
+                current = $('#current-title');
+            maximum = $('#maximum-title');
+            theCount = $('#the-count');
+
+
+
+            current.text(withOutSpace);
+
+            if (withOutSpace > 49) {
+                maximum.css('color', '#841c1c');
+                current.css('color', '#841c1c');
+            }
+            else {
+                current.css('color', 'black');
+                maximum.css('color', 'black');
+            }
+
+        });
+
+        $(".firstNext").on("click", function () {
+            console.log("click");
+            if ($("#project-textarea").val() == "" || $("#project-textarea").val() == null) {
+                console.log("empty");
+                $("#validation-title").removeAttr("hidden");
+                $("#validation-title").css("color", "red");
+            } else {
+                $("#validation-title").attr("hidden");
+                $("#validation-title").css("color", "black");
+            }
+        });
+
+
+        //Tag input
+        var skill_input = document.querySelector('.skill-tag')
+        var tagify = new Tagify(skill_input, {
+            enforceWhitelist: true,
+            maxTags: 7,
+            editTags: false,
+            whitelist: [{ "title": "javaaaaasc", "value": "1" }, "Javascript", "JQuery", "PHP", "MySQL", "Ruby", "HTML ",
+                "CSS", "C++", "Java", "Python", "React", "C#", "APA MySQL"],
+            originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
+        })
+
+        var lang_input = document.querySelector('.language-tag');
+        var desc = document.querySelector('#project-desc');
+
+        var tagify = new Tagify(lang_input, {
+            enforceWhitelist: true,
+            maxTags: 3,
+            editTags: false,
+            whitelist: ["English", "Chinese", "Malay", "Japanese", "Korean", "Tamil", "Spanish", "Hokkien"],
+            originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
+        })
+
+        $(".submit").on("click", function () {
+            var tag = skill_input.value;
+            var descval = $("#project-desc").val();
+            var array = tag.split(",");
+
+            console.log("desc", descval);
+
+            $.each(array, function (i) {
+                console.log(array[i]);
+            });
+
+            @*$.ajax({
+                 type: "POST",
+                 url: '@Url.Action("CreateProject", "Project")',
+                 dataType: "html",
+                data: {
+                    tag: tag
+
+                },
+                 success: function (data) {
+                     if (data == "Success") {
+                       alert('Your data updated');
+                       window.location.href = "/Home/Index";
+                    } else {
+                       alert("Unsuccesful");
+                 }
+                 },
+                 error: function (jqXHR, textStatus) {
+                     alert(textStatus);
+                 }
+
+            });*@
+
+        });
+
+
+    </script>
+</body>
+</html>
