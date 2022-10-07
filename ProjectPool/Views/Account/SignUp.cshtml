@@ -1,9 +1,11 @@
 ﻿@model ProjectPool.Models.SignUpModel
 
 @{
-    Layout = null;
+  
     ViewBag.Title = "Create your account for free | ProjectPooL.";
 }
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -17,7 +19,7 @@
     <!-- Icon -->
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
     <!-- CSS-->
-    <link rel="stylesheet" href="~/css/NavRegister.css">
+    @*<link rel="stylesheet" href="~/css/NavRegister.css">*@
     <link rel="stylesheet" href="~/css/Account.css">
     <!-- Script-->
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
@@ -27,7 +29,7 @@
 </head>
 
 <body>
-    <header>
+    @*<header>
         <p>ProjectPooL.</p>
         <nav>
             <ul class="nav-title">
@@ -40,13 +42,14 @@
             <a href="Login"><span>Log In</span></a>
             <a class="cta" href="SignUp"><button>Sign Up now</button></a>
         </div>
-    </header>
+    </header>*@
 
     <div class="container" id="container">
         <div class="form-container account-container">
             <form asp-action="SignUp" method="post">
                 <h1>Create Account</h1>
                 @Html.ValidationSummary(true)
+                <input hidden asp-for="UserTypeID" value="@ViewBag.typeID" />
                 <div class="form-group">
                     <input asp-for="FirstName" class="form-control" placeholder="First Name" />
                     @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "validation" })

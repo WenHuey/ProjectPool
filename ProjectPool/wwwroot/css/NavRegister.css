@@ -1,0 +1,97 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Jost", sans-serif;
+    overflow: auto;
+}
+
+header, li, button {
+    font-weight: 500;
+    font-size: 16px;
+    color: #edf0f1;
+    text-decoration: none !important;
+    font-family: "Jost", sans-serif;
+}
+
+header > p {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+}
+
+header {
+    /*display: flex;
+    justify-content: space-between;*/
+    align-items: center;
+    padding: 15px 5%;
+    background-color: #24252A;
+    position: relative;
+}
+
+.nav-title {
+    list-style: none;
+    margin: 0;
+}
+
+.nav-title li {
+    display: inline-block;
+    padding: 0 20px;
+}
+
+.nav-title li a {
+    transition: all 0.3s ease 0s;
+    text-decoration: none !important;
+    color: #edf0f1;
+}
+
+.nav-title li a:hover {
+    color: #0088a9;
+}
+
+.account a {
+    text-decoration: none;
+    color: #edf0f1;
+}
+
+.account a:hover {
+    color: #0088a9;
+}
+
+.account a span {
+    margin-right: 15px;
+}
+
+.account button {
+    padding: 5px 23px;
+    background-color: rgba(0, 136, 169, 1);
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+}
+
+.account button:hover {
+    background-color: rgba(0, 136, 169, 0.8);
+}
+
+
+/* profile nav dropdown */
+.profile-img {
+    min-width: 35px;
+    min-height: 35px;
+    border-radius: 35px;
+    overflow: hidden;
+    background-color: white;
+}
+
+.profile-img > p {
+    color: white;
+    font-weight: bold;
+    font-size: 1em;
+    text-align: center;
+    padding-top: 6px;
+}

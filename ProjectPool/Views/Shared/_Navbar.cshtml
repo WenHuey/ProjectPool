@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ProjectPool</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <!-- CSS -->
+    <link rel="stylesheet" href="~/css/NavRegister.css" />
+    <!-- Font -->
+    <link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
+</head>
+<body>
+    <header>
+        <p>ProjectPooL.</p>
+        <nav>
+            <ul class="nav-title">
+                <li><a href="overview.html">Overview</a></li>
+                <li><a href="projectlist.html">Projects</a></li>
+                <li><a href="contractorlist.html">Contractor</a></li>
+            </ul>
+        </nav>
+        <div class="account">
+            <a href="#"><span>Log In</span></a>
+            <button><a class="cta" href="#">Register now</a></button>
+        </div>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2022 - ProjectPool - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

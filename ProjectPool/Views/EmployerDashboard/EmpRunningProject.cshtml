@@ -1,0 +1,219 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+    ViewData["Title"] = "Manage Project | ProjectPooL.";
+    string[] TableHeaders = new string[] {"#"
+               ,"Project Title"
+               ,"Category"
+               ,"Total bids"
+               ,"Cost (RM)"
+               ,"Actions"};
+
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Jquery -->
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <!-- CSS -->
+    @*<link rel="stylesheet" href="~/css/NavProfile.css">*@
+    <link rel="stylesheet" href="~/css/EmpManageProject.css">
+    <!-- Font -->
+    <link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
+    <!-- Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+
+</head>
+<body>
+
+    <div class="main-body">
+        <div class="text-black font-weight-bold manage-project">Manage Project</div>
+        <div class="tab">
+            <div class="btn-box">
+                <button onclick="location.href='@Url.Action("EmpManageProject", "Dashboard" )'">Active</button>
+                <button class="active" onclick="location.href='@Url.Action("EmpRunningProject", "Dashboard")'">Running</button>
+                <button>Applications</button>
+                <button>Closed</button>
+            </div>
+            <div>
+                <a class="btn-project" href="CreateProject"><button>Create Project Post</button></a>
+            </div>
+        </div>
+        
+        <hr>
+
+        <div class="outer-wrapper">
+            <div class="table-wrapper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            @{
+                                foreach (var item in TableHeaders)
+                                {
+                                    <th>
+                                        @item
+                                    </th>
+                                }
+                            }
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    @{ 
+                        if(Model != null)
+                        {
+                            foreach(var Data in Model)
+                            { 
+                                <tr>
+                                    <td></td>
+                                    <td>@Data.Title</td>
+                                    <td>@Data.Category</td>
+                                    <td>@Data.TotalCount</td>
+                                    <td>@Data.Cost</td>
+                                    <td>
+                                        <a type="button" class="btn btn-view" data-modal="modal-view">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </a>
+                                        <a href="" type="button" class="btn btn-edit" data-modal="modal-edit">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </a>
+                                        <a href="" type="button" class="btn btn-delete" data-modal="modal-delete">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </a>
+                                        <a href="" type="button" class="btn btn-tick" data-modal="modal-running">
+                                            <i class="fa-solid fa-square-check"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    }
+                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- View Modal -->
+    <div id="modal-view" class="modal">
+        <div class="modal-content">
+            <div class="project">
+                <a class="close">&times;</a>
+                <form>
+                    <h2>View Project Details</h2>
+                    <div>
+
+                        <div class="form-group row text-left">
+                            <table class="project-content">
+                                <tr>
+                                    <th>Project Title </th>
+                                    <td>: Project Title 1</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Description </th>
+                                    <td>: We have a content-sharing mobile App that required AR features we want to develop those AR features</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Total Bids </th>
+                                    <td>: 10</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Cost (RM) </th>
+                                    <td>: 900</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Project Status </th>
+                                    <td>: Open </td>
+                                </tr>
+
+                            </table>
+                        </div>
+                    </div>
+                    <button type="submit" href="/resources/views/admin/orders.html">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div id="modal-delete" class="modal">
+        <div class="modal-content">
+            <div class="project">
+                <a class="close">&times;</a>
+                <form>
+                    <h2>Delete Project</h2>
+                    <div class="project-content">
+                        <p>
+                            Are you sure you want to delete this project?
+                            <br>
+                            This action cannot be undone.
+                        </p>
+
+                    </div>
+
+                    <div class="project-button">
+                        <button type="submit" href="/resources/views/admin/orders.html">Confirm</button>
+                        <button type="submit" href="/resources/views/admin/orders.html">Cancel</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+        let subProfile = document.getElementById("subProfile");
+
+        function toggleProfile() {
+            subProfile.classList.toggle("open-profile");
+            console.log("click");
+        }
+
+        let modalView = [...document.querySelectorAll(".btn-view")];
+        modalView.forEach(function (btn) {
+            btn.onclick = function () {
+                let modal = btn.getAttribute("data-modal");
+                document.getElementById(modal).style.display = "block";
+            };
+        });
+
+        let modalDelete = [...document.querySelectorAll(".btn-delete")];
+        modalDelete.forEach(function (btn) {
+            btn.onclick = function () {
+                let modal = btn.getAttribute("data-modal");
+                document.getElementById(modal).style.display = "block";
+            };
+        });
+
+        let closeBtns = [...document.querySelectorAll(".close")];
+        closeBtns.forEach(function (btn) {
+            btn.onclick = function () {
+                let modal = btn.closest(".modal");
+                modal.style.display = "none";
+            };
+        });
+        window.onclick = function (event) {
+            if (event.target.className === "modal") {
+                event.target.style.display = "none";
+            }
+        };
+
+    </script>
+</body>
+</html>

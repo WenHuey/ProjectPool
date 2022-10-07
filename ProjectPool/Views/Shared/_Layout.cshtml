@@ -1,48 +1,129 @@
-﻿<!DOCTYPE html>
+﻿@{
+    @using System.Security.Claims
+
+    bool isLoggedIn = true;
+    //string name = @Context.Session.GetString("name");
+    if (string.IsNullOrWhiteSpace(User.Identity.Name))
+    {
+        isLoggedIn = false;
+    }
+
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - ProjectPool</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
+    @*<link rel="stylesheet" href="~/css/site.css" />*@
+    <link rel="stylesheet" href="~/css/NavProfile.css">
+    <!-- Font-->
+    <link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ProjectPool</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+    @*<header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                <div class="container">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ProjectPool</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
+            </nav>
+        </header>*@
+    <header>
+        <nav>
+            <p>ProjectPooL.</p>
+            <ul class="nav-title">
+                <li><a href="Overview">Overview</a></li>
+                <li><a href="ProjectList">Projects</a></li>
+                <li><a href="ContractorList">Contractor</a></li>
+            </ul>
+
+
+            @{
+                if (isLoggedIn)
+                {
+                    <!-- profile name -->
+                    <div class="profile-img" onclick="toggleProfile()">
+                        @*<img src="~/image/white-bg.jpg">*@
+                        <p>Hi,&nbsp;@User.Identity.Name</p>
+                    </div>
+
+                    <div class="sub-menu-wrap" id="subProfile">
+                        <div class="sub-menu">
+                            @{
+                                var claimsIdentity = User.Identity as System.Security.Claims.ClaimsIdentity;
+                                var userId = "";
+                                if (claimsIdentity != null)
+                                {
+                                     userId= claimsIdentity.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value;
+                                    if(userId == "2")
+                                    {
+                                        <p class="user-type">Employer</p>
+                                    }
+                                    else if (userId == "3")
+                                    {
+                                        <p class="user-type">Contractor</p>
+                                    }
+                                }
+                                
+                            }                           
+                            <hr>
+                            <a href="Dashboard" class="sub-menu-link">
+                                <p>Dashboard</p>
+                                <span>></span>
+                            </a>
+                            <a href="#" class="sub-menu-link">
+                                <p>Profile</p>
+                                <span>></span>
+                            </a>
+                            <hr>
+                            <a asp-controller="Account" asp-action="Logout" class="sub-menu-link">
+                                <p>Sign Out</p>
+                            </a>
+                        </div>
+                    </div>
+                }
+            else
+            {
+                <div class="account">
+                    <a asp-action="Login" asp-controller="Account"><span>Log In</span></a>
+                    <a class="cta" href="ChooseUser"><button>Sign Up now</button></a>
+                </div>
+            }
+
+            }
         </nav>
     </header>
-    <div class="container">
+
+    <div class="main-body">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - ProjectPool - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+    @*<footer class="border-top footer text-muted">
+            <div class="container">
+                &copy; 2022 - ProjectPool - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>*@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/script/toggleProfile.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

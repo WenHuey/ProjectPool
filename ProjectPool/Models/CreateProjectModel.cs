@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -15,9 +16,8 @@ namespace ProjectPool.Models
         [Required(ErrorMessage = "This field is required")]
         public string Description { get; set; }
         [Required]
-        public int DurationFrom { get; set; }
-        [Required]
-        public int DurationTo { get; set; }
+        public string Duration { get; set; }
+
         [Required]
         public string ConfirmPassword { get; set; }
         [Required]
@@ -32,8 +32,8 @@ namespace ProjectPool.Models
         //for other table
         [Required]
         public int CategoryID { get; set; }
-        [Required]
-        public int SubCategoryID { get; set; }
+        public string CategoryName { get; set; }
+        public string SubCategoryName { get; set; }
         [Required]
         public string Skill { get; set; }
         [Required]

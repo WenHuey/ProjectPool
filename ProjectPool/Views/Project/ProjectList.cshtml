@@ -1,8 +1,15 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model ProjectPool.Models.ProjectListModel
+
 @{
+    @using Microsoft.AspNetCore.Http
     Layout = null;
+    bool isLoggedIn = true;
+    //string name = @Context.Session.GetString("name");
+    if (string.IsNullOrWhiteSpace(User.Identity.Name))
+    {
+        isLoggedIn = false;
+    }
+
 }
 
 <!DOCTYPE html>
@@ -12,35 +19,76 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project List</title>
-    <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
+    <!-- CSS -->
+    @*<link rel="stylesheet" href="~/css/NavRegister.css">*@
+    <link rel="stylesheet" href="~/css/NavProfile.css">
     <link rel="stylesheet" href="~/css/ProjectList.css">
+
+    <!-- Script -->
+    <script src="~/script/toggleProfile.js"></script>
+    <!-- Font -->
+    <link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
+
+
 </head>
 <body>
-    <!-- navbar -->
-    <nav class="navbar">
-        <h2 class="narbar-logo"><a href="">ProjectPool</a></h2>
-        <div class="navbar-menu">
-            <a href="">Overview</a>
-            <a href="ProjectList">Projects</a>
-            <a href="ContractorProfile">Students</a>
-            <a href="Login">Login</a>
-            <a href="Signup">Sign Up</a>
-            <a href="Dashboard">Dashboard</a>
-        </div>
-        <div class="menu-toggle">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-        </div>
-    </nav>
-    <!-- header -->
+    <!-- Nav bar -->
     <header>
+        <nav>
+            <p>ProjectPooL.</p>
+            <ul class="nav-title">
+                <li><a href="Overview">Overview</a></li>
+                <li><a href="ProjectList">Projects</a></li>
+                <li><a href="ContractorList">Contractor</a></li>
+            </ul>
+
+
+            @{
+                if (isLoggedIn)
+                {
+                    <!-- profile name -->
+                    <div class="profile-img" onclick="toggleProfile()">
+                        @*<img src="~/image/white-bg.jpg">*@
+                        <p>@User.Identity.Name</p>
+                    </div>
+
+                    <div class="sub-menu-wrap" id="subProfile">
+                        <div class="sub-menu">
+
+                            <a href="Dashboard" class="sub-menu-link">
+                                <p>Dashboard</p>
+                                <span>></span>
+                            </a>
+                            <a href="#" class="sub-menu-link">
+                                <p>Profile</p>
+                                <span>></span>
+                            </a>
+                            <hr>
+                            <a href="#" class="sub-menu-link">
+                                <p>Sign Out</p>
+                            </a>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="account">
+                        <a asp-action="Login" asp-controller="Account"><span>Log In</span></a>
+                        <a class="cta" href="ChooseUser"><button>Sign Up now</button></a>
+                    </div>
+                }
+
+            }
+        </nav>
+    </header>
+
+    <div class="header">
         <h1 class="header-title">
             Search for projects. <br>
             Collaborate with Employees!
         </h1>
+    </div>
 
-    </header>
     <!-- search -->
     <div class="search-wrapper">
         <div class="search-box">
@@ -53,6 +101,37 @@
     <!-- filter -->
     <div class="filter-wrapper">
         <div class="filter-dropdown">
+            @{
+                List<SelectListItem> CatlistItems = new List<SelectListItem>();
+                CatlistItems.Add(new SelectListItem
+                {
+                    Text = "Programming & Tech",
+                    Value = "1"
+                });
+                CatlistItems.Add(new SelectListItem
+                {
+                    Text = "Graphic & Design",
+                    Value = "2"
+                });
+                CatlistItems.Add(new SelectListItem
+                {
+                    Text = "Sales & Marketing",
+                    Value = "3"
+                });
+                CatlistItems.Add(new SelectListItem
+                {
+                    Text = "Video & Animation",
+                    Value = "4"
+                });
+                CatlistItems.Add(new SelectListItem
+                {
+                    Text = "Writing & Translation",
+                    Value = "5"
+                });
+            }
+
+            @Html.DropDownListFor(model => model.Category, CatlistItems, "-- Filter Category --", new { @id = "category", @class = "filter-select" })
+
             <select class="filter-select" name="category" id="category">
                 <option value="1">Category</option>
                 <option value="2">Web & Programming</option>
@@ -68,28 +147,23 @@
             <div class="project-card">
                 <div class="project-name">
                     <div class="project-detail">
-                        <h4>Project Title</h4>
+                        @Html.HiddenFor(model => model.ProjectID)
+                        <h4>@*@Model.Title*@</h4>
                         <p>
-                            Project description Project description Project description
-                            Project descriptionProject descriptionProject description
-                            Project description Project description
-                            Project descriptionProject description
+                            @*@Model.Description*@
                         </p>
                         <div class="project-label">
-                            @for (var j = 0; j < 5; j++)
-                            {
-                                <a class="label" href="">HTML</a>
-                            }
-
+                            <a class="label" href="">@*@Model.Category*@</a>
+                            <a class="label" href="">@*@Model.SubCategory*@</a>
                         </div>
                     </div>
                 </div>
 
                 <div class="project-right">
-                    <div>$ 100</div>
-                    <button class="apply-project" onclick="location.href='@Url.Action("ProjectDetail", "Project")'">View</button>
-                    <div>1 Applied</div>
-                    <div class="project-posted">POsted 2mins ago</div>
+                    <div>@*RM&nbsp;@Model.Cost*@</div>
+                    <button class="apply-project" onclick="location.href='@Url.Action("ProjectDetail", "Project")'">Apply</button>
+                    <div>@*@Model.TotalBid&nbsp;Applied*@</div>
+                    <div class="project-posted">@*@Model.PostedAgo*@</div>
                 </div>
             </div>
 

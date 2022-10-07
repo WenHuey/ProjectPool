@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ProjectPool.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,7 @@ namespace ProjectPool.Data
         {
 
         }
+
+        public DbSet<SignUpModel> SignUpModel { get; set; }
     }
 }

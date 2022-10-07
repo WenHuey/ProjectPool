@@ -1,0 +1,43 @@
+/* page */
+.page-wrapper {
+    margin: 0 auto;
+    width: 960px;
+    max-width: 100%;
+}
+
+
+/* box */
+.box-content {
+    padding:20px;
+    background-color: #EFEFEF;
+}
+
+
+textarea {
+    /* background-color:#FAFAFA; */
+    border:#EFEFEF solid 1px;
+    color:#333;
+    height:150px;
+    width:100%;
+}
+
+
+/* richtext custom style */
+.richText {
+    margin-bottom: 10px;
+    border: 1px solid var(--inputBorderColor) !important;
+    border-radius: 5px !important;
+    /* -webkit-box-shadow: 0 0 20px 0 #999;
+    -moz-box-shadow: 0 0 20px 0 #999;
+    box-shadow: 0 0 20px 0 #999; */
+}
+
+.richText a,
+.richText li{
+    color: black !important;
+}
+
+.richText-editor{
+    text-align: left;
+    font-size: 18px;
+}

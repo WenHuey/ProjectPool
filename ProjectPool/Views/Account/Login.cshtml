@@ -1,7 +1,6 @@
-﻿@model ProjectPool.Models.SignUpModel
+﻿@model ProjectPool.Models.User
 
 @{
-    Layout = null;
     ViewBag.Title = "Login to your account | ProjectPooL.";
 }
 
@@ -17,35 +16,46 @@
     <!-- Icon -->
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
     <!-- CSS-->
-    <link rel="stylesheet" href="~/css/NavRegister.css">
+    <link rel="stylesheet" href="~/css/NavProfile.css">
     <link rel="stylesheet" href="~/css/Account.css">
    
 
 </head>
 <body>
-    <header>
-        <p>ProjectPooL.</p>
+    <!-- Nav bar -->
+    @*<header>
         <nav>
+            <p>ProjectPooL.</p>
             <ul class="nav-title">
                 <li><a href="Overview">Overview</a></li>
                 <li><a href="ProjectList">Projects</a></li>
                 <li><a href="ContractorList">Contractor</a></li>
             </ul>
+
+            <div class="account">
+                <a asp-action="Login" asp-controller="Account"><span>Log In</span></a>
+                <a class="cta" href="ChooseUser"><button>Sign Up Now</button></a>
+            </div>
+             
         </nav>
-        <div class="account">
-            <a href="Login"><span>Log In</span></a>
-            <a class="cta" href="SignUp"><button>Sign Up now</button></a>
-        </div>
-    </header>
+    </header>*@
 
     <div class="container" id="container">
 
         <div class="form-container login-container">
-            <form asp-action="Login">
+            <form asp-action="Login" method="post">
+                @Html.AntiForgeryToken()
+
                 <h1>Login</h1>
 
-                <input type="email" placeholder="Email" />
-                <input type="password" placeholder="Password" />
+                <input type="email" name="email" placeholder="Email" required />
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "validation" })
+
+                <input type="password" name="password" placeholder="Password" required />
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "validation" })
+
+                <label style="color:red; text-align:left">@ViewBag.error</label>
+
                 <a href="#">Forgot your password?</a>
                 <button>Login</button>
             </form>
@@ -55,7 +65,7 @@
                 <div class="overlay-panel overlay-right">
                     <h1>Hello, Friend!</h1>
                     <p>Enter your personal details and start journey with us</p>
-                    <button class="ghost" id="signUp" onclick="location.href='@Url.Action("SignUp", "Account")'">Sign Up</button>
+                    <button class="ghost" id="signUp" onclick="location.href='@Url.Action("UserType", "Account")'">Sign Up</button>
                 </div>
             </div>
         </div>

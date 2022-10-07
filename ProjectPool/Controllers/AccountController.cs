@@ -2,15 +2,26 @@
 using ProjectPool.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Data.SqlClient;
+using System.Data;
+using System.Linq;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
+using ProjectPool.Service;
+//using ProjectPool.Models;
 
 namespace ProjectPool.Controllers
 {
     public class AccountController : Controller
     {
+        private DataContext db = new DataContext();
+
         private readonly IConfiguration _configuration;
 
         public AccountController (IConfiguration configuration)
@@ -18,50 +29,236 @@ namespace ProjectPool.Controllers
             _configuration = configuration;
         }
 
-        [Route("Signup")]
-        public IActionResult SignUp()
+        [Route("ChooseUser")]
+        public IActionResult UserType()
         {
+            ClaimsPrincipal claimUser = HttpContext.User;
+            if (claimUser.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Welcome");
+            }
+                
             return View();
         }
 
-        [Route("Signup")]
+        [Route("ChooseUser")]
         [HttpPost]
-        public IActionResult SignUp(SignUpModel model)
+        public IActionResult UserType(string usertypeID)
+        {
+            TempData["typeID"] = usertypeID;
+            return RedirectToAction("SignUp");
+        }
+
+        //[Route("ChooseUser/Signup")]
+        [HttpGet]
+        public IActionResult SignUp(int typeID)
+        {
+            ViewBag.typeID = Convert.ToInt32(TempData["typeID"]);
+
+            return View();
+        }
+
+        //[Route("ChooseUser/Signup")]
+        [HttpPost]
+        public async Task<IActionResult> SignUp(SignUpModel model)
         {
             //Connect db
             string connStr = _configuration.GetConnectionString("DefaultConnection");
             SqlConnection conn = new SqlConnection(connStr);
             conn.Open();
+            //create command
+            SqlCommand cmd = new SqlCommand("Sp_Signup", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
 
+            try
+            {
+                if (model.UserTypeID != null)
+                {
+
+                    //hash password
+                    model.Password = BCrypt.Net.BCrypt.HashPassword(model.Password);
+                    //add value
+                    cmd.Parameters.AddWithValue("@UserTypeID", model.UserTypeID);
+                    cmd.Parameters["@UserTypeID"].Direction = ParameterDirection.Input;
+                    cmd.Parameters.AddWithValue("@FirstName", model.FirstName);
+                    cmd.Parameters["@FirstName"].Direction = ParameterDirection.Input;
+                    cmd.Parameters.AddWithValue("@LastName", model.LastName);
+                    cmd.Parameters["@LastName"].Direction = ParameterDirection.Input;
+                    cmd.Parameters.AddWithValue("@Email", model.Email);
+                    cmd.Parameters["@Email"].Direction = ParameterDirection.Input;
+                    cmd.Parameters.AddWithValue("@Password", model.Password);
+                    cmd.Parameters["@Password"].Direction = ParameterDirection.Input;
+                }
+
+                //Execute query
+                cmd.ExecuteNonQuery();
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
             //Create command
-            string query = "Insert into Employer (FirstName, LastName, Email, [Password]) VALUES (@FirstName, @LastName, @Email, hashbytes('sha2_512', @Password))";
-            SqlCommand cmd = new SqlCommand(query, conn);
-            cmd.Parameters.AddWithValue("@FirstName", model.FirstName);
-            cmd.Parameters.AddWithValue("@LastName", model.LastName);
-            cmd.Parameters.AddWithValue("@Email", model.Email);
-            cmd.Parameters.AddWithValue("@Password", model.Password);
+            //string query = "Insert into Employer (FirstName, LastName, Email, [Password]) VALUES (@FirstName, @LastName, @Email, hashbytes('sha2_512', @Password))";
 
-            //Execute query
-            cmd.ExecuteNonQuery();
+            //SqlCommand cmd = new SqlCommand(query, conn);
+            //cmd.Parameters.AddWithValue("@FirstName", model.FirstName);
+            //cmd.Parameters.AddWithValue("@LastName", model.LastName);
+            //cmd.Parameters.AddWithValue("@Email", model.Email);
+            //cmd.Parameters.AddWithValue("@Password", model.Password);
+
 
             //close connection
             conn.Close();
+            
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            return View("Login");
+            return RedirectToAction("Login");
         }
 
 
         [Route("/")]
         public IActionResult Login()
         {
+            ClaimsPrincipal claimUser = HttpContext.User;
+            if (claimUser.Identity.IsAuthenticated)
+            {
+                var claimsIdentity = User.Identity as ClaimsIdentity;
+                var userID = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+                if (userID != null)
+                {
+                    if (userID == "2") //employer
+                    {
+                        return RedirectToAction("EmpDashboard", "Dashboard");
+                    }
+                    else if (userID == "3") //contractor
+                    {
+                        return RedirectToAction("ConDashboard", "Dashboard");
+                    }
+                }
+                //return View("~/Views/Dashboard/Dashboard.cshtml");
+                return RedirectToAction("Welcome");
+            }
+                
+
             return View();
         }
+        
+        [Route("/")]
+        [HttpPost]
+        public async Task<IActionResult> Login(string email, string password)
+        {
+            var user = checkUser(email, password);
+            string name;
+            if (user == null)
+            {
+                ViewBag.error = "Invalid email or password";
+                //bool userExist
+                return View();
+            }
+            else
+            {
+                //Connect db
+                string connStr = _configuration.GetConnectionString("DefaultConnection");
+                SqlConnection conn = new SqlConnection(connStr);
+                conn.Open();
+                //create command
+                SqlCommand cmd = new SqlCommand("Sp_Login", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
 
-        //[Route("/")]
-        //[HttpPost]
-        //public IActionResult Login()
-        //{
-        //    return View();
-        //}
+                try
+                {
+                    cmd.Parameters.AddWithValue("@UserTypeID", user.UserTypeID);
+                    cmd.Parameters["@UserTypeID"].Direction = ParameterDirection.Input;
+                    cmd.Parameters.AddWithValue("@UserID", user.UserID);
+                    cmd.Parameters["@UserID"].Direction = ParameterDirection.Input;
+                    cmd.Parameters.Add("@Output", SqlDbType.NVarChar, 50);
+                    cmd.Parameters["@Output"].Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+                    name = (string)cmd.Parameters["@Output"].Value;
+                    HttpContext.Session.SetString("name", name);
+                    conn.Close();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                //user.Email = name;
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, name),
+                    new Claim(ClaimTypes.NameIdentifier, user.UserTypeID.ToString()),
+                    new Claim(ClaimTypes.Sid, user.UserID.ToString())
+                    //new Claim(ClaimTypes.Role, "Administrator"),
+                };
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                AuthenticationProperties properties = new AuthenticationProperties()
+                {
+                    AllowRefresh = true,
+                    //IsPersistent = user.Keep
+                };
+
+                var userID = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, 
+                    new ClaimsPrincipal(claimsIdentity), properties);
+
+                if (userID != null)
+                {
+                    if (userID == "2") //employer
+                    {
+                        return RedirectToAction("EmpDashboard", "Dashboard");
+                    }
+                    else if (userID == "3") //contractor
+                    {
+                        return RedirectToAction("ConDashboard", "Dashboard");
+                    }
+                }
+
+                
+
+                //return View("~/Views/Dashboard/Dashboard.cshtml");
+                //return RedirectToAction("Dashboard", "Dashboard");
+                return RedirectToAction("Welcome");
+            }
+            
+        }
+
+        private User checkUser(string email, string password)
+        {
+            var user = db.User.SingleOrDefault(x => x.Email.Equals(email));
+            if (user != null)
+            {
+                if (BCrypt.Net.BCrypt.Verify(password, user.Password))
+                {
+                    return user;
+                }
+            }
+            return null;
+        }
+
+        [Route("Logout")]
+        public async Task<IActionResult> Logout()
+        {
+            HttpContext.Session.Remove("name");
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login");
+        }
+
+        [Route("Welcome")]
+        [Authorize]
+        public IActionResult Welcome()
+        {
+            //ClaimsPrincipal claimUser = HttpContext.User;
+
+            //if (claimUser.Identity.IsAuthenticated)
+            //{
+            return View();
+            //}
+
+            //return RedirectToAction("Login");
+
+        }
     }
 }

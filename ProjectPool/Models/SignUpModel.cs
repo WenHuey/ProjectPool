@@ -8,6 +8,8 @@ namespace ProjectPool.Models
 {
     public class SignUpModel
     {
+        public int? UserTypeID { get; set; }
+
         [Required(ErrorMessage ="Please enter your first name")]
         public string FirstName { get; set; }
 

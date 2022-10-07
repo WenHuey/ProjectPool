@@ -1,0 +1,108 @@
+﻿@model ProjectPool.Models.SignUpModel
+
+@{
+
+    ViewBag.Title = "Create your account for free | ProjectPooL.";
+}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Font -->
+    <link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
+    <!-- Icon -->
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <!-- CSS-->
+   @* <link rel="stylesheet" href="~/css/NavRegister.css">*@
+    <link rel="stylesheet" href="~/css/Account.css">
+    <!-- Script-->
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+
+</head>
+
+<body>
+    @*<header>
+        <p>ProjectPooL.</p>
+        <nav>
+            <ul class="nav-title">
+                <li><a href="Overview">Overview</a></li>
+                <li><a href="ProjectList">Projects</a></li>
+                <li><a href="ContractorList">Contractor</a></li>
+            </ul>
+        </nav>
+        <div class="account">
+            <a href="Login"><span>Log In</span></a>
+            <a class="cta" href="SignUp"><button>Sign Up now</button></a>
+        </div>
+    </header>*@
+
+    <section id="usertype">
+        @*<form method="post" asp-controller="Account" asp-action="UserType">*@
+            <button class="btn-ut" name="usertypeID" value="2">Employer</button>
+            <button class="btn-ut" name="usertypeID" value="3">Contractor</button>
+        @*</form>*@
+    </section>
+
+    <section id="signup">
+        <div class="container" id="container">
+            <div class="form-container account-container">
+                <form asp-action="SignUp" method="post">
+                    <h1>Create Account</h1>
+                    @Html.ValidationSummary(true)
+                    <input hidden id="typeID" asp-for="UserTypeID" value="" />
+                    <div class="form-group">
+                        <input asp-for="FirstName" class="form-control" placeholder="First Name" />
+                        @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "validation" })
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="LastName" class="form-control" placeholder="Last Name" />
+                        @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "validation" })
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="Email" class="form-control" placeholder="Email" />
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "validation" })
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="Password" class="form-control" placeholder="Password" />
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "validation" })
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" />
+                        @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "validation" })
+                    </div>
+                    <br />
+                    <button asp-controller="Account" asp-action="SignUp">Sign Up</button>
+                </form>
+            </div>
+            <div class="overlay-container">
+                <div class="overlay">
+                    <div class="overlay-panel overlay-left">
+                        <h1>Welcome Back!</h1>
+                        <p>To keep connected with us please login with your personal info</p>
+                        <button class="ghost" id="login" onclick="location.href='@Url.Action("Login", "Account")'">Login</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        $(document).ready(function () {
+            $("#signup").hide();
+
+            $(".btn-ut").on("click", function () {
+                var id = $(this).val();
+                $("#signup").show();
+                $("#typeID").val(id);
+                console.log(id);
+            });
+        });
+    </script>
+</body>
+
+

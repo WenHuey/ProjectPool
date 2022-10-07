@@ -47,6 +47,14 @@
     border-radius: 15px;
 }
 
+.title a{
+    color: black;
+    text-decoration: none;
+}
+.title a:hover{
+    font-weight:bold;
+}
+
 .title-list {
     text-align: center;
     color: rgb(167, 164, 164);
@@ -60,11 +68,74 @@
 .title-list > h4 {
     font-size: 22px;
 }
+.main-body {
+    margin: 2% 3% !important;
+}
 
-.title-list > hr {
-    width: 40%;
-    margin: auto;
-    background-color: rgb(167, 164, 164);
+.no-border-grey {
+    border-style: none;
+    background-color: #f4f7f7;
+    box-shadow: none;
+    margin: 0;
+    border-radius: 5px;
+}
+
+.no-border {
+    border-style: none;
+    background-color: none;
+    box-shadow: none;
+    margin: 1rem;
+}
+
+.no-border-grey .card-body {
+    padding: 2rem;
+}
+
+.card-box {
+    margin: 0 0 6rem 0;
+}
+
+.dashboard {
+    margin: 0 1rem;
+    padding: 0 1rem;
+    font-size: 1.5rem;
+}
+
+.apply-project {
+    display: block;
+    padding: 10px 10px;
+    margin: 5px auto;
+    width: 100%;
+    background-color: steelblue;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.title {
+    padding: 5px 20px;
+    border-radius: 5px;
+    height: 35px;
+}
+
+.title-list > p {
+    text-align: center;
+    color: #a7a4a4;
+    margin: 40px 0 0 0;
+    font-size: 0.9rem;
+}
+
+.title-list > h5 {
+    padding: 10px;
+}
+
+.title-list hr {
+    border: 0;
+    height: 1px;
+    width: 50%;
+    background: #a7a4a4;
+    margin: 10px auto;
 }
 
 .more {
