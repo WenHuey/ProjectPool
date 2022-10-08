@@ -1,7 +1,7 @@
 ﻿@model ProjectPool.Models.CreateProjectModel
 
 @{
-
+    ViewData["Title"] = "Edit Project | ProjectPooL.";
 }
 
 
@@ -14,7 +14,7 @@
     <title>Document</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="~/css/NavProfile.css">
+    @*<link rel="stylesheet" href="~/css/NavProfile.css">*@
     <link rel="stylesheet" href="~/css/texteditor/site.css">
     <link rel="stylesheet" href="~/css/texteditor/richtext.min.css">
     <link rel="stylesheet" href="~/css/CreateProject.css">
@@ -33,15 +33,22 @@
 <body>
 
 
-    @*<div class="main-body">*@
-    <div class="content">
-        <div class="col-12">
-            <div class="text-black font-weight-bold create-project">Create Project</div>
-        </div>
-        @*@using (Html.BeginForm("CreateProject", "ProjectController"))
+    @*<div class="main-body">
+        *@
+        <div class="content">
+            <div class="col-12">
+                <div class="text-black font-weight-bold create-project">Edit Project</div>
+            </div>
+            @*@using (Html.BeginForm("CreateProject", "ProjectController"))
             {*@
-        <form asp-action="CreateProject" method="post">
+        <form asp-action="EditActiveProject1">
             @Html.ValidationSummary(true)
+
+            <!-- hidden field -->
+            <input hidden id="ProjectID" name="ProjectID" asp-for="ProjectID" />
+            <input hidden id="EmployerID" name="EmployerID" asp-for="EmployerID" />
+            <input hidden id="Status" name="Status" asp-for="Status" />
+
             <div class="page col-12">
                 <div class="field title">
                     <div class="label">Project Title</div>
@@ -60,13 +67,15 @@
                     @Html.TextAreaFor(model => model.Description, new { @id = "project-desc" })
                     @*<textarea asp-for="Description" cols="2" id="project-desc" required></textarea>*@
                     @Html.ValidationMessageFor(model => model.Description, "", new { @class = "validation" })
-                <span hidden class="validation-desc" style="float: left;">This field is required</span>
+                    <span hidden class="validation-desc" style="float: left;">This field is required</span>
                 </div>
                 <br />
                 <div class="field">
                     <div class="label">Category</div>
                     @{
-                        List<SelectListItem> CatlistItems= new List<SelectListItem>();
+                        List<SelectListItem>
+                            CatlistItems = new List<SelectListItem>
+                                ();
                         CatlistItems.Add(new SelectListItem
                         {
                             Text = "Programming & Tech",
@@ -94,7 +103,7 @@
                         });
                     }
 
-                    @Html.DropDownListFor(model => model.CategoryID, CatlistItems, "-- Select Category --", new { @id = "main-category", @class = "category" })                      
+                    @Html.DropDownListFor(model => model.CategoryID, CatlistItems, "-- Select Category --", new { @id = "main-category", @class = "category" })
                     @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "validation" })
                     @*<span class="validation-cat" style="float: left;">asd</span>*@
                 </div>
@@ -107,11 +116,11 @@
 
                     <select class="category hide-submenu" id="sub-category-1" hidden>
                         <option disabled selected value="">-- Select Sub Category --</option>
-                        <option value="">Website</option>
-                        <option value="">Mobile App</option>
-                        <option value="">Web mobile</option>
-                        <option value="">Wordpress</option>
-                        <option value="">Game development</option>
+                        <option value="Website">Website</option>
+                        <option value="Mobile App">Mobile App</option>
+                        <option value="Web mobile">Web mobile</option>
+                        <option value="Wordpress">Wordpress</option>
+                        <option value="Game development">Game development</option>
                     </select>
 
                     <select class="category hide-submenu" id="sub-category-2" hidden>
@@ -124,9 +133,9 @@
                     </select>
 
                     @*<select asp-for="SubCategoryName" class="category" id="sub-category">
-        <option value="">Select Sub Category</option>
-    </select>*@
-                    <input id="SubCategoryName" name="SubCategoryName" asp-for="SubCategoryName" />
+                    <option value="">Select Sub Category</option>
+                </select>*@
+                    <input hidden id="SubCategoryName" name="SubCategoryName" asp-for="SubCategoryName" />
                     @*@Html.HiddenFor(model => model.SubCategoryName)*@
                     @Html.ValidationMessageFor(model => model.SubCategoryName, "", new { @class = "validation" })
                 </div>
@@ -135,7 +144,9 @@
                     <div class="label">Project Duration</div>
                     <div class="duration">
                         @{
-                            List<SelectListItem> DurationlistItems = new List<SelectListItem>();
+                            List<SelectListItem>
+                                DurationlistItems = new List<SelectListItem>
+                                    ();
                             DurationlistItems.Add(new SelectListItem
                             {
                                 Text = "0-3 months",
@@ -161,21 +172,21 @@
                         @Html.ValidationMessageFor(model => model.Duration, "", new { @class = "validation" })
 
                         <!--<div class="duration-grp from-right">
-<div class="label">From</div>
-<div class="from">
-    Html.TextBoxFor(model => model.DurationFrom, new { type = "number", class = "input-duration" })
-    Html.ValidationMessageFor(model => model.DurationFrom, "", new { class = "validation" })-->
+                <div class="label">From</div>
+                <div class="from">
+                    Html.TextBoxFor(model => model.DurationFrom, new { type = "number", class = "input-duration" })
+                    Html.ValidationMessageFor(model => model.DurationFrom, "", new { class = "validation" })-->
                         @*<span class="validation-desc" style="float: left;">asd</span>*@
                         <!--</div>
-</div>
-<div class="duration-grp">
-    <div class="label">To</div>
-    <div class="to">
-        Html.TextBoxFor(model => model.DurationTo, new { type = "number", class = "input-duration" })
-        Html.ValidationMessageFor(model => model.DurationTo, "", new { class = "validation" })-->
+                </div>
+                <div class="duration-grp">
+                    <div class="label">To</div>
+                    <div class="to">
+                        Html.TextBoxFor(model => model.DurationTo, new { type = "number", class = "input-duration" })
+                        Html.ValidationMessageFor(model => model.DurationTo, "", new { class = "validation" })-->
                         @*<span class="validation-desc" style="float: left;">asd</span>*@
                         <!--</div>
-</div>-->
+                </div>-->
                     </div>
 
                 </div>
@@ -200,16 +211,20 @@
                 </div>
                 <br /><br />
                 <div class="field btns">
-                    <button class="prev-5 prev" onclick="location.href='@Url.Action("EmpManageProject", "Dashboard")'">Cancel</button>
-                    <button asp-controller="Project" asp-action="CreateProject" class="submit">Submit</button>
+                    @*<button class="prev-5 prev" onclick="location.href='@Url.Action("EmpActive", "EmployerDashboard" )'">Back to List</button>*@
+                    <button class="Save">Save</button>
                 </div>
+                <br />
             </div>
         </form>
+            <div>
+                <a asp-action="EmpActive">Back to List</a>
+            </div>
+            @*}*@
+        </div>
 
-        @*}*@
-    </div>
-
-    @*</div>*@
+        @*
+    </div>*@
 
     <!-- Script -->
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
@@ -220,8 +235,6 @@
     <script src="~/script/jquery.richtext.js"></script>
     <script src="~/script/tagify.min.js"></script>
     <script>
-
-        // $(document).ready(function() {
         $("#project-desc").richText({
             maxlength: 300,
             height: 200,
@@ -240,178 +253,138 @@
             table: false,
             removeStyles: false,
             preview: false,
-            placeholder: 'Briefly describe your project...',
         });
 
-        // });
+        $(document).ready(function () {
+            
 
-        $("#project-textarea").keyup(function () {
+            // });
 
-            var character = $(this).val();
-            var withOutSpace = character.replace(/\s+/g, '').length,
-                current = $('#current-title');
-            maximum = $('#maximum-title');
-            theCount = $('#the-count');
+            $("#project-textarea").keyup(function () {
 
-
-
-            current.text(withOutSpace);
-
-            if (withOutSpace > 49) {
-                maximum.css('color', '#841c1c');
-                current.css('color', '#841c1c');
-            }
-            else {
-                current.css('color', 'black');
-                maximum.css('color', 'black');
-            }
-
-        });
-
-        //$(".firstNext").on("click", function () {
-        //    console.log("click");
-        //    if ($("#project-textarea").val() == "" || $("#project-textarea").val() == null) {
-        //        console.log("empty");
-        //        $("#validation-title").removeAttr("hidden");
-        //        $("#validation-title").css("color", "red");
-        //    } else {
-        //        $("#validation-title").attr("hidden");
-        //        $("#validation-title").css("color", "black");
-        //    }
-        //});
+                var character = $(this).val();
+                var withOutSpace = character.replace(/\s+/g, '').length,
+                    current = $('#current-title');
+                maximum = $('#maximum-title');
+                theCount = $('#the-count');
 
 
-        //Tag input
-        var skill_input = document.querySelector('.skill-tag')
-        var arr = [ "Javascript", "JQuery", "PHP", "MySQL", "Ruby", "HTML ", "CSS", "C++", "Java", "Python", "React", "C#", "APA MySQL"];
-        var tagify = new Tagify(skill_input, {
-            enforceWhitelist: true,
-            maxTags: 7,
-            editTags: false,
-            whitelist: arr,
-            originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
-        })
 
-        
-        var lang_input = document.querySelector('.language-tag');
-        var desc = document.querySelector('#project-desc');
+                current.text(withOutSpace);
 
-        var tagify = new Tagify(lang_input, {
-            enforceWhitelist: true,
-            maxTags: 3,
-            editTags: false,
-            whitelist: ["English", "Chinese", "Malay", "Japanese", "Korean", "Tamil", "Spanish", "Hokkien"],
-            originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
-        })
-
-        //Sub category change based on category
-        $(function () {
-            var subjectObject = {
-                "0": [
-                    "-- Select Sub Category --"
-                ],
-                "1": [
-                    "Website",
-                    "Mobile App",
-                    "Web mobile",
-                    "Wordpress",
-                    "Game development"
-                ],
-                "2": [
-                    "Illustration",
-                    "Logo design",
-                    "Card design",
-                    "UI / UX design",
-                    "Fonts & Typography"
-                ],
-                "3": [
-                    "Data entry",
-                    "Social media campaign",
-                    "Adwords campaign",
-                    "Other"
-                ],
-                "4": [
-                    "Ads & commercial",
-                    "Video editing",
-                    "Animated GIFs",
-                    "Logo animation",
-                    "Character animation"
-                ],
-                "5": [
-                    "Translation",
-                    "Book Writing",
-                    "Scriptwriting",
-                    "Content writing",
-                    "Article and blog posts"
-                ]
-            };
-
-            //$('#main-category').change(function () {
-            //    var OrderType = $(this).val()
-            //    var CurrencyType = subjectObject[OrderType] || [];
-
-            //    var html = $.map(CurrencyType, function (cnt) {
-            //        return '<option value="' + OrderType + '">' + cnt + '</option>'
-            //    }).join('');
-
-            //    $('#sub-category').html(html)
-            //});
-
-            //$(".hide-submenu").change(function () {
-            //    console.log("changed")
-            //    $("#SubCategoryName").attr("value", $(".hide-submenu option:selected").text());
-            //    console.log($(".hide-submenu option:selected").text())
-            //    $('.hide-submenu option[selected]').removeAttr("selected");
-            //    $(".hide-submenu").find(":selected").attr("selected", "selected");
-            //    //$("#sub-category").attr("value", $("#sub-category option:selected").text());
-            //})
-
-            $('#main-category').change(function () {
-                var num = this.value;
-                $(".hide-submenu").hide();
-                $("#sub-category").hide();
-                $("#sub-category-" + num).show();
-
-                if ($("#main-category option:selected").val() == '') {
-                    $("#sub-category").show();
+                if (withOutSpace > 49) {
+                    maximum.css('color', '#841c1c');
+                    current.css('color', '#841c1c');
+                }
+                else {
+                    current.css('color', 'black');
+                    maximum.css('color', 'black');
                 }
 
+            });
+
+            //$(".firstNext").on("click", function () {
+            //    console.log("click");
+            //    if ($("#project-textarea").val() == "" || $("#project-textarea").val() == null) {
+            //        console.log("empty");
+            //        $("#validation-title").removeAttr("hidden");
+            //        $("#validation-title").css("color", "red");
+            //    } else {
+            //        $("#validation-title").attr("hidden");
+            //        $("#validation-title").css("color", "black");
+            //    }
+            //});
+
+
+            //Tag input
+            var skill_input = document.querySelector('.skill-tag')
+            var arr = ["Javascript", "JQuery", "PHP", "MySQL", "Ruby", "HTML ", "CSS", "C++", "Java", "Python", "React", "C#", "APA MySQL"];
+            var tagify = new Tagify(skill_input, {
+                enforceWhitelist: true,
+                maxTags: 7,
+                editTags: false,
+                whitelist: arr,
+                originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
+            })
+
+
+            var lang_input = document.querySelector('.language-tag');
+            var desc = document.querySelector('#project-desc');
+
+            var tagify = new Tagify(lang_input, {
+                enforceWhitelist: true,
+                maxTags: 3,
+                editTags: false,
+                whitelist: ["English", "Chinese", "Malay", "Japanese", "Korean", "Tamil", "Spanish", "Hokkien"],
+                originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
+            })
+
+            //Sub category change based on category
+            $(function () {
+                
+                var num = $('#main-category').val();
+                //console.log(num);
+                $("#sub-category").hide();
+                $("#sub-category-" + num).show();
+                var value = $("#SubCategoryName").val();
+                $("#sub-category-" + num).val(value).change();
+                $(".hide-submenu").find(":selected").attr("selected", "selected");
+
+                $('#main-category').change(function () {
+                    $(".hide-submenu").hide();
+                    $("#sub-category").hide();
+                    $("#sub-category-" + num).show();
+
+                    if ($("#main-category option:selected").val() == '') {
+                        $("#sub-category").show();
+                    }
+ 
+                });
+
                 $("#sub-category-" + num).change(function () {
-                    console.log("changed")
-                    $("#SubCategoryName").val($("#sub-category-" + num +" option:selected").text());
-                    console.log($("#sub-category-" + num  + " option:selected").text())
+                    //console.log("changed")
+                    $("#SubCategoryName").val($("#sub-category-" + num + " option:selected").text());
+                    //console.log($("#sub-category-" + num + " option:selected").text())
                     $('.hide-submenu option[selected]').removeAttr("selected");
                     $(".hide-submenu").find(":selected").attr("selected", "selected");
                     //$("#sub-category").attr("value", $("#sub-category option:selected").text());
                 })
+            })
+
+            $(".submit").on("click", function () {
+                if ($("#project-textarea").val() == "" || $("#project-textarea").val() == null || $("#project-textarea").val() == "<div><br></div>") {
+                    //console.log("empty");
+                    $("#validation-desc").removeAttr(this.hidden);
+                    $("#validation-desc").css("color", "red");
+                } else {
+                    $("#validation-desc").attr(this.hidden);
+                    $("#validation-desc").css("color", "black");
+                }
+
+                $("#SubCategoryName").attr("value", $("#sub-category option:selected").text());
+
+                var tag = skill_input.value;
+                var descval = $("#project-desc").val();
+                var array = tag.split(",");
+
+                //console.log("desc", descval);
+
+                $.each(array, function (i) {
+                    //console.log(array[i]);
+                });
+
             });
-        })
-
-        $(".submit").on("click", function () {
-            if ($("#project-textarea").val() == "" || $("#project-textarea").val() == null || $("#project-textarea").val() == "<div><br></div>") {
-                console.log("empty");
-                $("#validation-desc").removeAttr(this.hidden);
-                $("#validation-desc").css("color", "red");
-            } else {
-                $("#validation-desc").attr(this.hidden);
-                $("#validation-desc").css("color", "black");
-            }
-
-            $("#SubCategoryName").attr("value", $("#sub-category option:selected").text());
-
-            var tag = skill_input.value;
-            var descval = $("#project-desc").val();
-            var array = tag.split(",");
-
-            console.log("desc", descval);
-
-            $.each(array, function (i) {
-                console.log(array[i]);
-            });
-
         });
+
+        
 
 
     </script>
 </body>
 </html>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

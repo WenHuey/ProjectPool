@@ -20,12 +20,14 @@ namespace ProjectPool.Controllers
 {
     public class AccountController : Controller
     {
-        private DataContext db = new DataContext();
+        //private DataContext db = new DataContext();
+        private readonly DataContext _db;
 
         private readonly IConfiguration _configuration;
 
-        public AccountController (IConfiguration configuration)
+        public AccountController (DataContext db, IConfiguration configuration)
         {
+            _db = db;
             _configuration = configuration;
         }
 
@@ -227,7 +229,7 @@ namespace ProjectPool.Controllers
 
         private User checkUser(string email, string password)
         {
-            var user = db.User.SingleOrDefault(x => x.Email.Equals(email));
+            var user = _db.User.SingleOrDefault(x => x.Email.Equals(email));
             if (user != null)
             {
                 if (BCrypt.Net.BCrypt.Verify(password, user.Password))

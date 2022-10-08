@@ -33,7 +33,13 @@
 </head>
 <body>
 
-    <div class="main-body">
+    <div class="content">
+        <div class="TempMsg" style="margin: 0 1rem; font-size: 1.2rem;">
+            <p class="Msg" style="color:green">@TempData["SuccessMsg"]</p>
+            <p class="Msg" style="color:red">@TempData["ErrorMsg"]</p>
+        </div>
+        
+
         <div class="text-black font-weight-bold manage-project">Manage Project</div>
         <div class="tab">
             <div class="btn-box">
@@ -42,11 +48,11 @@
                 <button>Applications</button>
                 <button>Closed</button>
             </div>
-            <div>
+            <div class="btn-project">
                 <a asp-controller="Project" asp-action="CreateProject"><button>Create Project Post</button></a>
             </div>
         </div>
-        
+
         <hr>
 
         <div class="outer-wrapper">
@@ -66,36 +72,37 @@
                     </thead>
 
                     <tbody>
-                    @{ 
-                        if(Model != null)
-                        {
-                            foreach(var Data in Model)
-                            { 
-                                <tr>
-                                    <td></td>
-                                    <td>@Data.Title</td>
-                                    <td>@Data.Category</td>
-                                    <td>@Data.TotalCount</td>
-                                    <td>@Data.Cost</td>
-                                    <td>
-                                        <a type="button" class="btn btn-view" data-modal="modal-view">
-                                            <i class="fa-solid fa-eye"></i>
-                                        </a>
-                                        <a href="" type="button" class="btn btn-edit" data-modal="modal-edit">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </a>
-                                        <a href="" type="button" class="btn btn-delete" data-modal="modal-delete">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </a>
-                                        <a href="" type="button" class="btn btn-tick" data-modal="modal-running">
-                                            <i class="fa-solid fa-square-check"></i>
-                                        </a>
-                                    </td>
-                                </tr>
+                        @{
+                            if (Model != null)
+                            {
+                                foreach (var Data in Model)
+                                {
+                                    <tr>
+                                        <td></td>
+                                        <td>@Data.Title</td>
+                                        <td>@Data.Category</td>
+                                        <td>@Data.TotalBid</td>
+                                        <td>@Data.Cost</td>
+                                        <td>
+                                            <a href='@Url.Action("ViewActiveProject","EmployerDashboard", new { id = Data.ProjectID })' type="button"  class="btn btn-view">
+                                                <i class="fa-solid fa-eye"></i>
+                                                @*@Html.ActionLink("Edit", "EditActiveProject1", new { id = Data.ProjectID })*@
+                                            </a>
+                                            <a href="@Url.Action("EditActiveProject1","EmployerDashboard", new { id = Data.ProjectID })" type="button" class="btn btn-edit">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                            <a href="" type="button" class="btn btn-delete" data-modal="modal-delete">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </a>
+                                            <a href="" type="button" class="btn btn-tick" data-modal="modal-running">
+                                                <i class="fa-solid fa-square-check"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
                             }
                         }
-                    }
-                       
+
                     </tbody>
                 </table>
             </div>
@@ -177,6 +184,11 @@
 
 
     <script>
+        $(document).ready(function () {
+            $(".Msg").fadeTo(2000, 500).slideUp(500, function () {
+                $(".Msg").slideUp(500);
+            });
+        });
 
         let subProfile = document.getElementById("subProfile");
 

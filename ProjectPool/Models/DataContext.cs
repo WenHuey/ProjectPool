@@ -13,6 +13,11 @@ namespace ProjectPool.Models
 {
     public class DataContext: DbContext
     {
+        public DataContext(DbContextOptions<DataContext> options):base(options)
+        {
+
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var builder = new ConfigurationBuilder()
@@ -23,5 +28,11 @@ namespace ProjectPool.Models
         }
 
         public DbSet<User> User { get; set; }
+        //public DbSet<Project> Project { get; set; }
+        public DbSet<CreateProjectModel> Project { get; set; }
+        public DbSet<SkillsList> SkillsList { get; set; }
+        public DbSet<LanguageList> LanguageList { get; set; }
+
+
     }
 }

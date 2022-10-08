@@ -131,5 +131,12 @@ namespace ProjectPool.Controllers
             return RedirectToAction("EmpActive", "EmployerDashboard");
         }
 
+        //public async Task<IActionResult> EditProject(int? id)
+        //{
+        //    if(id == null)
+        //    {
+        //        return RedirectToAction();
+        //    }
+        //}
     }
 }

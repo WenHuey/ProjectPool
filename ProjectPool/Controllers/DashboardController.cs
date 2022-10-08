@@ -25,6 +25,11 @@ namespace ProjectPool.Controllers
         public IActionResult Dashboard(DashboardModel model)
         {
             var claimsIdentity = User.Identity as System.Security.Claims.ClaimsIdentity;
+            if (claimsIdentity.Claims.Count() == 0)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
             try
             {
