@@ -21,7 +21,6 @@
     <title>Dashboard</title>
 
     <!-- Bootstrap & Jquery -->
-    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- CSS -->
@@ -82,7 +81,7 @@
                     <div class="card no-border card-box p-0">
                         <div class="card-body">
                             <div class="card no-border-grey mb-3 title">
-                                <a asp-controller="EmployerDashboardController" asp-action=""><p class="text-black">Project Application Request</p></a>
+                                <a asp-controller="EmployerDashboard" asp-action="EmpApplication"><p class="text-black">Project Application Request</p></a>
                             </div>
                             @{
                                 if (projectCount != null)
@@ -144,7 +143,7 @@
                     <div class="card no-border card-box p-0">
                         <div class="card-body">
                             <div class="card no-border-grey mb-3 title">
-                                <a asp-controller="EmployerDashboardController" asp-action=""><p class="text-black ">Running projects</p></a>
+                                <a asp-controller="EmployerDashboard" asp-action="EmpRunning"><p class="text-black ">Running projects</p></a>
                             </div>
                             @{
                                 if (projectCount != null)
@@ -172,7 +171,7 @@
                     <div class="card no-border card-box p-0">
                         <div class="card-body">
                             <div class="card no-border-grey mb-3 title">
-                                <a asp-controller="EmployerDashboardController" asp-action=""><p class="text-black ">Interview session</p></a>
+                                <a asp-controller="EmployerDashboard" asp-action=""><p class="text-black ">Interview session</p></a>
                             </div>
                             @{
                                 if (projectCount != null)

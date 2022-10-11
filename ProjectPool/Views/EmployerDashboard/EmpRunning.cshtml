@@ -1,11 +1,8 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@*@model ProjectPool.Models.CreateProjectModel*@
+
 @{
-    Layout = null;
     ViewData["Title"] = "Manage Project | ProjectPooL.";
     string[] TableHeaders = new string[] {"#"
-               ,"Project Title"
                ,"Category"
                ,"Total bids"
                ,"Cost (RM)"
@@ -20,8 +17,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <!-- Jquery -->
-    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    
+    <!-- Datatable -->
+    <!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">-->
     <!-- CSS -->
     @*<link rel="stylesheet" href="~/css/NavProfile.css">*@
     <link rel="stylesheet" href="~/css/EmpManageProject.css">
@@ -33,25 +31,36 @@
 </head>
 <body>
 
-    <div class="main-body">
+    <div class="content">
         <div class="text-black font-weight-bold manage-project">Manage Project</div>
         <div class="tab">
             <div class="btn-box">
-                <button onclick="location.href='@Url.Action("EmpManageProject", "Dashboard" )'">Active</button>
-                <button class="active" onclick="location.href='@Url.Action("EmpRunningProject", "Dashboard")'">Running</button>
-                <button>Applications</button>
+                <button onclick="location.href='@Url.Action("EmpActive", "EmployerDashboard" )'">Active</button>
+                <button class="active" onclick="location.href='@Url.Action("EmpRunning", "EmployerDashboard")'">Running</button>
+                <button onclick="location.href='@Url.Action("EmpApplication", "EmployerDashboard")'">Applications</button>
                 <button>Closed</button>
             </div>
             <div>
                 <a class="btn-project" href="CreateProject"><button>Create Project Post</button></a>
             </div>
         </div>
-        
+
         <hr>
+
+        @*<form asp-action="EmpRunning" method="get">
+            <div class="page">
+                <div class="field">
+                    <select name="projectid" class="category" id="ProjectID" asp-items="@(new SelectList(@ViewBag.itemlist, "Value", "Text"))"></select>
+
+                </div>
+
+            </div>
+        </form>*@
+
 
         <div class="outer-wrapper">
             <div class="table-wrapper">
-                <table class="table">
+                <table class="table" id="datatable">
                     <thead>
                         <tr>
                             @{
@@ -66,36 +75,36 @@
                     </thead>
 
                     <tbody>
-                    @{ 
-                        if(Model != null)
-                        {
-                            foreach(var Data in Model)
-                            { 
-                                <tr>
-                                    <td></td>
-                                    <td>@Data.Title</td>
-                                    <td>@Data.Category</td>
-                                    <td>@Data.TotalCount</td>
-                                    <td>@Data.Cost</td>
-                                    <td>
-                                        <a type="button" class="btn btn-view" data-modal="modal-view">
-                                            <i class="fa-solid fa-eye"></i>
-                                        </a>
-                                        <a href="" type="button" class="btn btn-edit" data-modal="modal-edit">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </a>
-                                        <a href="" type="button" class="btn btn-delete" data-modal="modal-delete">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </a>
-                                        <a href="" type="button" class="btn btn-tick" data-modal="modal-running">
-                                            <i class="fa-solid fa-square-check"></i>
-                                        </a>
-                                    </td>
-                                </tr>
+                        @{
+                            if (Model != null)
+                            {
+                                foreach (var Data in Model)
+                                {
+                                    <tr>
+                                        <td></td>
+                                        <td>@Data.Title</td>
+                                        <td>@Data.Category</td>
+                                        <td>@Data.TotalCount</td>
+                                        <td>@Data.Cost</td>
+                                        <td>
+                                            <a type="button" class="btn btn-view" data-modal="modal-view">
+                                                <i class="fa-solid fa-eye"></i>
+                                            </a>
+                                            <a href="" type="button" class="btn btn-edit" data-modal="modal-edit">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                            <a href="" type="button" class="btn btn-delete" data-modal="modal-delete">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </a>
+                                            <a href="" type="button" class="btn btn-tick" data-modal="modal-running">
+                                                <i class="fa-solid fa-square-check"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
                             }
                         }
-                    }
-                       
+
                     </tbody>
                 </table>
             </div>
@@ -175,15 +184,17 @@
         </div>
     </div>
 
-
+    <!--<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>-->
+    @*<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>*@
+    <!--<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>-->
     <script>
 
-        let subProfile = document.getElementById("subProfile");
-
-        function toggleProfile() {
-            subProfile.classList.toggle("open-profile");
-            console.log("click");
-        }
+        $(document).ready(function () {
+            $("#datatable").DataTable();
+        });
+        //let table = new DataTable('#datatable', {
+        //    // options
+        //});
 
         let modalView = [...document.querySelectorAll(".btn-view")];
         modalView.forEach(function (btn) {
@@ -213,6 +224,52 @@
                 event.target.style.display = "none";
             }
         };
+
+
+
+            //$("#ProjectID").change(function () {
+                //var projectID = $("#ProjectID option:selected").val();
+                //$("#ProjectID").val(projectID);
+            //})
+
+            //$("#ProjectID option:selected").on("click", function () {
+                @*var projectid = $("#ProjectID option:selected").val();
+                $("#ProjectID").val(projectid).attr("selected", "selected");
+
+                $.ajax({
+                    //type: "POST",
+                    url: '@Url.Action("EmpRunning", "EmployerDashboard")',
+                    //dataType: "html",
+                    data: {
+                        projectid: projectid
+
+                    },
+                    success: function (data) {
+                        //if (data == "Success") {
+                        console.log(data);
+                        $("table .table").html(data);
+                        alert('Your data updated');
+                        //window.location.href = "/Home/Index";
+                        //} else {
+                        //    alert("Unsuccesful");
+                        //}
+                    },
+                    error: function (jqXHR, textStatus) {
+                        alert("Unsuccesful");
+                        alert(textStatus);
+                    }
+                //});
+                })*@
+            //})
+
+
+
+
+
+
+
+
+
 
     </script>
 </body>

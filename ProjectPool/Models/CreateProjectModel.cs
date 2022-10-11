@@ -32,6 +32,8 @@ namespace ProjectPool.Models
 
         public int EmployerID { get; set; }
 
+        public bool Deleted { get; set; }
+
         //for other table
         [Required]
         public int CategoryID { get; set; }

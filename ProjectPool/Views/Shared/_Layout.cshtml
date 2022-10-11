@@ -20,6 +20,11 @@
     <link rel="stylesheet" href="~/css/NavProfile.css">
     <!-- Font-->
     <link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
+    <!-- Datatable -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+    <!-- Jquery -->
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
 </head>
 <body>
     @*<header>
@@ -69,8 +74,8 @@
                                 var userId = "";
                                 if (claimsIdentity != null)
                                 {
-                                     userId= claimsIdentity.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value;
-                                    if(userId == "2")
+                                    userId = claimsIdentity.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value;
+                                    if (userId == "2")
                                     {
                                         <p class="user-type">Employer</p>
                                     }
@@ -79,8 +84,8 @@
                                         <p class="user-type">Contractor</p>
                                     }
                                 }
-                                
-                            }                           
+
+                            }
                             <hr>
                             <a href="Dashboard" class="sub-menu-link">
                                 <p>Dashboard</p>
@@ -97,13 +102,13 @@
                         </div>
                     </div>
                 }
-            else
-            {
-                <div class="account">
-                    <a asp-action="Login" asp-controller="Account"><span>Log In</span></a>
-                    <a class="cta" href="ChooseUser"><button>Sign Up now</button></a>
-                </div>
-            }
+                else
+                {
+                    <div class="account">
+                        <a asp-action="Login" asp-controller="Account"><span>Log In</span></a>
+                        <a class="cta" href="ChooseUser"><button>Sign Up now</button></a>
+                    </div>
+                }
 
             }
         </nav>
@@ -120,7 +125,8 @@
                 &copy; 2022 - ProjectPool - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
             </div>
         </footer>*@
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @*<script src="~/lib/jquery/dist/jquery.min.js"></script>*@
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/script/toggleProfile.js"></script>

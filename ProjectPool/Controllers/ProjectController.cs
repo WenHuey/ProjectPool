@@ -76,10 +76,6 @@ namespace ProjectPool.Controllers
         [HttpPost]
         public IActionResult CreateProject(CreateProjectModel model, string tag)
         {
-            bool result = false;
-            //model.Skill = tag;
-            model.Language = "English";
-            //string[] taglist = tag.Split(", ");
 
             var claimsIdentity = User.Identity as System.Security.Claims.ClaimsIdentity;
             var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;

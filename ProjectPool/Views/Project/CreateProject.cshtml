@@ -126,7 +126,7 @@
                     @*<select asp-for="SubCategoryName" class="category" id="sub-category">
         <option value="">Select Sub Category</option>
     </select>*@
-                    <input id="SubCategoryName" name="SubCategoryName" asp-for="SubCategoryName" />
+                    <input hidden id="SubCategoryName" name="SubCategoryName" asp-for="SubCategoryName" />
                     @*@Html.HiddenFor(model => model.SubCategoryName)*@
                     @Html.ValidationMessageFor(model => model.SubCategoryName, "", new { @class = "validation" })
                 </div>

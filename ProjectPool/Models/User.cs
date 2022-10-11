@@ -20,5 +20,7 @@ namespace ProjectPool.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
+        public bool Deleted { get; set; }
+
     }
 }

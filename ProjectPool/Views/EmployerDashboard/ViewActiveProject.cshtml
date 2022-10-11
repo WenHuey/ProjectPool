@@ -39,7 +39,7 @@
             <div class="text-black font-weight-bold create-project">Project Details</div>
         </div>
         @*@using (Html.BeginForm("CreateProject", "ProjectController"))
-            {*@
+        {*@
         <form asp-action="EditActiveProject1">
             @Html.ValidationSummary(true)
 
@@ -52,7 +52,7 @@
                 <div class="field title">
                     <div class="label">Project Title</div>
                     @Html.TextAreaFor(model => model.Title, new { @id = "project-textarea", @disabled = "disabled" })
-                    
+
                 </div>
                 <br>
                 <div class="field">
@@ -103,7 +103,7 @@
                     <select disabled class="category" id="sub-category">
                         <option value="">-- Select Sub Category --</option>
                     </select>
-
+                    <!--Programming-->
                     <select disabled class="category hide-submenu" id="sub-category-1" hidden>
                         <option disabled selected value="">-- Select Sub Category --</option>
                         <option value="Website">Website</option>
@@ -112,19 +112,45 @@
                         <option value="Wordpress">Wordpress</option>
                         <option value="Game development">Game development</option>
                     </select>
-
+                    <!--Graphic-->
                     <select disabled class="category hide-submenu" id="sub-category-2" hidden>
                         <option disabled selected value="">-- Select Sub Category --</option>
-                        <option value="">Illustration</option>
-                        <option value="">Logo design</option>
-                        <option value="">Card design</option>
-                        <option value="">UI/UX design</option>
-                        <option value="">Fonts & Typography</option>
+                        <option value="Illustration">Illustration</option>
+                        <option value="Logo design">Logo design</option>
+                        <option value="Card design">Card design</option>
+                        <option value="UI/UX design">UI/UX design</option>
+                        <option value="Fonts & Typography">Fonts & Typography</option>
+                    </select>
+                    <!--sales marketing-->
+                    <select disabled class="category hide-submenu" id="sub-category-3" hidden>
+                        <option disabled selected value="">-- Select Sub Category --</option>
+                        <option value="Data entry">Data entry</option>
+                        <option value="Social media campaign">Social media campaign</option>
+                        <option value="Adwords campaign">Adwords campaign</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <!--video animation-->
+                    <select disabled class="category hide-submenu" id="sub-category-4" hidden>
+                        <option disabled selected value="">-- Select Sub Category --</option>
+                        <option value="Ads & Commercial">Ads & Commercial</option>
+                        <option value="Video editing">Video editing</option>
+                        <option value="Animated GIFs">Animated GIFs</option>
+                        <option value="Logo animation">Logo animation</option>
+                        <option value="Character animation">Character animation</option>
+                    </select>
+                    <!--writing -->
+                    <select disabled class="category hide-submenu" id="sub-category-5" hidden>
+                        <option disabled selected value="">-- Select Sub Category --</option>
+                        <option value="Translation">Translation</option>
+                        <option value="Book Writing">Book Writing</option>
+                        <option value="Scriptwriting">Scriptwriting</option>
+                        <option value="Content writing">Content writing</option>
+                        <option value="Article and blog posts">Article and blog posts</option>
                     </select>
 
                     @*<select asp-for="SubCategoryName" class="category" id="sub-category">
-                            <option value="">Select Sub Category</option>
-                        </select>*@
+                        <option value="">Select Sub Category</option>
+                    </select>*@
                     <input hidden id="SubCategoryName" name="SubCategoryName" asp-for="SubCategoryName" />
 
                 </div>
@@ -165,11 +191,11 @@
                 <br>
                 <div class="field">
                     <div class="label">Required Skill</div>
-                    @Html.TextAreaFor(model => model.Skill, new { @class = "skill-tag", @disabled = "disabled" })
+                    @Html.TextAreaFor(model => model.Skill, new { @class = "skill-tag" })
                 </div>
                 <div class="field">
                     <div class="label"> Required Language</div>
-                    @Html.TextAreaFor(model => model.Language, new { @class = "language-tag", @disabled = "disabled" })
+                    @Html.TextAreaFor(model => model.Language, new { @class = "language-tag" })
                 </div>
                 <div class="field">
                     <div class="label">Project Cost (RM)</div>
@@ -186,6 +212,11 @@
         </form>
 
         @*}*@
+        <div>
+            @Html.ActionLink("Edit", "EditActiveProject1", new { id = Model.ProjectID }) |
+            <a asp-action="EmpActive">Back to List</a>
+        </div>
+
     </div>
 
     @*
@@ -234,7 +265,8 @@
                 maxTags: 7,
                 editTags: false,
                 whitelist: arr,
-                originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
+                originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(','),
+                readonly: true
             })
 
 
@@ -246,7 +278,8 @@
                 maxTags: 3,
                 editTags: false,
                 whitelist: ["English", "Chinese", "Malay", "Japanese", "Korean", "Tamil", "Spanish", "Hokkien"],
-                originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
+                originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(','),
+                readonly: true
             })
 
             //Sub category change based on category
@@ -290,7 +323,4 @@
 </body>
 </html>
 
-<div>
-    @Html.ActionLink("Edit", "EditActiveProject1", new { id = Model.ProjectID }) |
-    <a asp-action="EmpActive">Back to List</a>
-</div>
+

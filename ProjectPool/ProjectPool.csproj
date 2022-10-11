@@ -40,6 +40,12 @@
     <Compile Update="Models\CreateProjectModel.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Update="Models\EmpApplicationModel.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Models\EmpActiveProjectModel.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Update="Models\ProjectListModel.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
@@ -52,7 +58,7 @@
     <Content Update="Views\Dashboard\ConDashboard.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="Views\EmployerDashboard\EmpRunningProject.cshtml">
+    <Content Update="Views\EmployerDashboard\EmpRunning.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="Views\EmployerDashboard\EmpActive.cshtml">

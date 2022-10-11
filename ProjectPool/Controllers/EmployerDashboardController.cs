@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using ProjectPool.Models;
@@ -16,6 +17,8 @@ namespace ProjectPool.Controllers
         private readonly DataContext _db;
         private readonly IConfiguration _configuration;
         List<EmpActiveProjectModel> activeProject = new List<EmpActiveProjectModel>();
+        List<EmpActiveProjectModel> runningProject = new List<EmpActiveProjectModel>();
+        List<EmpApplicationModel> applications = new List<EmpApplicationModel>();
         //List<DashboardModel> projectCount = new List<DashboardModel>();
 
         public EmployerDashboardController(DataContext db, IConfiguration configuration)
@@ -171,10 +174,12 @@ namespace ProjectPool.Controllers
             }
             else
             {
+                TempData["ErrorMsg"] = "An error occurred while retrieving data";
                 return RedirectToAction("EmpActive");
             }
         }
 
+        [Route("Employer/Active/Details/{id}")]
         public async Task<IActionResult> ViewActiveProject(int? id)
         {
             if(id == null)
@@ -190,8 +195,40 @@ namespace ProjectPool.Controllers
                 TempData["ErrorMsg"] = "An error occurred while retrieving data";
                 return RedirectToAction("EmpActive");
             }
+            else
+            {
+                SkillsList skillslist = _db.SkillsList.Find(id);
+                if (skillslist != null)
+                    getActiveDetails.Skill = skillslist.Skills;
+
+                LanguageList languagelist = _db.LanguageList.Find(id);
+                if (languagelist != null)
+                    getActiveDetails.Language = languagelist.Language;
+
+            }
 
             return View(getActiveDetails);
+        }
+
+        
+        [HttpPost]
+        public async Task<IActionResult> DeleteActiveProject(int id)
+        {
+            var project = await _db.Project.FindAsync(id);
+            project.Deleted = true;
+            await _db.SaveChangesAsync();
+            TempData["SuccessMsg"] = "Data successfully deleted!";
+            return RedirectToAction("EmpActive");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SetRunningState(int id)
+        {
+            var project = await _db.Project.FindAsync(id);
+            project.Status = "Running";
+            await _db.SaveChangesAsync();
+            TempData["SuccessMsg"] = "Project status succesfully changed to 'Running'";
+            return RedirectToAction("EmpActive");
         }
 
         private bool isSkillExist(int id)
@@ -246,12 +283,198 @@ namespace ProjectPool.Controllers
             }
         }
 
-
-        [Route("EmpRunningProject")]
-        public IActionResult EmpRunningProject()
+        public IActionResult Running()
         {
             return View();
         }
+
+        [Route("Employer/Running")]
+        [HttpGet]
+        public IActionResult EmpRunning(int projectid)
+        {
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+
+            if (claimsIdentity.Claims.Count() == 0)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
+
+            try
+            {
+                SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+                SqlDataReader sdr;
+                conn.Open();
+                
+                DataSet ds = _db.GetProjectTitle(Convert.ToInt32(userID));
+                List<SelectListItem> list = new List<SelectListItem>();
+                foreach(DataRow dr in ds.Tables[0].Rows)
+                {
+                    list.Add(new SelectListItem { Text = dr["Title"].ToString(), Value = dr["ProjectID"].ToString() });
+                }
+                ViewBag.itemlist = list;
+
+                
+                //Create command
+                SqlCommand cmd = new SqlCommand("Sp_DisplayRunning", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@UserID", userID);
+                cmd.Parameters["@UserID"].Direction = ParameterDirection.Input;
+                cmd.Parameters.AddWithValue("@ProjectID", projectid);
+                cmd.Parameters["@ProjectID"].Direction = ParameterDirection.Input;
+                cmd.ExecuteNonQuery();
+
+                sdr = cmd.ExecuteReader();
+                while (sdr.Read())
+                {
+                    runningProject.Add(new EmpActiveProjectModel()
+                    {
+                        TotalBid = sdr["TotalBid"].ToString(),
+                        ProjectID = sdr["ProjectID"].ToString(),
+                        Title = sdr["Title"].ToString(),
+                        Category = sdr["Category"].ToString(),
+                        Cost = sdr["Cost"].ToString()
+                    });
+                }
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return View(runningProject);
+        }
+
+        //[Route("Employer/Running")]
+        //[HttpPost]
+        //public IActionResult EmpRunning(int projectid)
+        //{
+        //    var claimsIdentity = User.Identity as ClaimsIdentity;
+        //    var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
+
+        //    SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+        //    SqlDataReader dr;
+
+        //    if (activeProject.Count > 0)
+        //    {
+        //        activeProject.Clear();
+        //    }
+        //    try
+        //    {
+        //        conn.Open();
+        //        //Create command
+        //        SqlCommand cmd = new SqlCommand("Sp_DisplayRunning", conn);
+        //        cmd.CommandType = CommandType.StoredProcedure;
+
+        //        cmd.Parameters.AddWithValue("@UserID", userID);
+        //        cmd.Parameters["@UserID"].Direction = ParameterDirection.Input;
+        //        cmd.Parameters.AddWithValue("@ProjectID", projectid);
+        //        cmd.Parameters["@ProjectID"].Direction = ParameterDirection.Input;
+        //        cmd.ExecuteNonQuery();
+
+        //        dr = cmd.ExecuteReader();
+        //        while (dr.Read())
+        //        {
+        //            runningProject.Add(new EmpActiveProjectModel()
+        //            {
+        //                TotalBid = dr["TotalBid"].ToString(),
+        //                ProjectID = dr["ProjectID"].ToString(),
+        //                Title = dr["Title"].ToString(),
+        //                Category = dr["Category"].ToString(),
+        //                Cost = dr["Cost"].ToString()
+        //            });
+        //        }
+        //        conn.Close();
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //    return View();
+        //}
+
+        [Route("Employer/Application")]
+        [HttpGet]
+        public IActionResult EmpApplication()
+        {
+            //Retrieve userID
+            
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            if (claimsIdentity.Claims.Count() == 0)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
+
+            //Connect db
+            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            SqlDataReader dr;
+
+            if (activeProject.Count > 0)
+            {
+                activeProject.Clear();
+            }
+            try
+            {
+                conn.Open();
+                //Create command
+                SqlCommand cmd = new SqlCommand("Sp_DisplayApplication", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@UserID", userID);
+                cmd.Parameters["@UserID"].Direction = ParameterDirection.Input;
+                cmd.ExecuteNonQuery();
+
+                dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    var day = dr["Days"].ToString();
+                    var hr = dr["Hours"].ToString();
+                    var min = dr["Minutes"].ToString();
+                    string time = min + " minute(s) ago";
+
+                    if (Convert.ToInt32(hr) >= 24)
+                    {
+                        time = day + " day(s) ago";
+                    }
+                    else if(Convert.ToInt32(min) >= 60)
+                    {
+                        time = hr + " hour(s) ago";
+                    }
+
+
+
+                    applications.Add(new EmpApplicationModel()
+                    {
+                        ContractorID = dr["ContractorID"].ToString(),
+                        EmployerID = dr["EmployerID"].ToString(),
+                        ProjectID = dr["ProjectID"].ToString(),
+                        FirstName = dr["FirstName"].ToString(),
+                        LastName = dr["LastName"].ToString(),
+                        Category = dr["Category"].ToString(),
+                        SubCategory = dr["SubCategory"].ToString(),
+                        Skill = dr["Skills"].ToString(),
+                        DayHourMin = time,
+                    });
+                }
+
+
+                conn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return View(applications);
+        }
+
 
         [Route("Project")]
         public IActionResult ConPendingProject()

@@ -11,6 +11,7 @@ namespace ProjectPool.Models
         [Key]
         public int ProjectID { get; set; }
         public string Title { get; set; }
+
         public string Description { get; set; }
         public string Duration { get; set; }
         public string Status { get; set; }

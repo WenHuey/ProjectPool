@@ -27,6 +27,18 @@ namespace ProjectPool.Models
             optionsBuilder.UseSqlServer(configuration["ConnectionStrings:DefaultConnection"]);
         }
 
+        public DataSet GetProjectTitle(int id)
+        {
+            SqlConnection conn = new SqlConnection("Data Source=WENHUEY\\SQLEXPRESS;Initial Catalog=ProjectPool;Integrated Security=True;");
+            SqlCommand cmd = new SqlCommand("Sp_DisplayRunningTitle", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@UserID", id);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            return ds;
+        }
+
         public DbSet<User> User { get; set; }
         //public DbSet<Project> Project { get; set; }
         public DbSet<CreateProjectModel> Project { get; set; }
