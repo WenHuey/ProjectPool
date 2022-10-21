@@ -57,7 +57,7 @@
 
         <div class="outer-wrapper">
             <div class="table-wrapper">
-                <table class="table" id="datatable">
+                <table class="table display cell-border hover" id="datatable">
                     <thead>
                         <tr>
                             @{
@@ -88,7 +88,7 @@
                                                 <i class="fa-solid fa-eye"></i>
                                                 @*@Html.ActionLink("Edit", "EditActiveProject1", new { id = Data.ProjectID })*@
                                             </a>
-                                            <a href="@Url.Action("EditActiveProject1","EmployerDashboard", new { id = Data.ProjectID })" type="button" class="btn btn-edit">
+                                            <a href="@Url.Action("EditActiveProject","EmployerDashboard", new { id = Data.ProjectID })" type="button" class="btn btn-edit">
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                             </a>
                                             <a href="#" type="button" class="btn btn-delete" data-id="@Data.ProjectID" data-modal="modal-delete">

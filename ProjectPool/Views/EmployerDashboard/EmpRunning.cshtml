@@ -1,11 +1,13 @@
 ﻿@*@model ProjectPool.Models.CreateProjectModel*@
 
 @{
-    ViewData["Title"] = "Manage Project | ProjectPooL.";
+    ViewData["Title"] = "Manage Project";
     string[] TableHeaders = new string[] {"#"
-               ,"Category"
-               ,"Total bids"
+               ,"Project Title"
+               ,"Contractor Full Name"
+               ,"Sub Category"
                ,"Cost (RM)"
+               ,"Progress"
                ,"Actions"};
 
 }
@@ -17,7 +19,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    
+
     <!-- Datatable -->
     <!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">-->
     <!-- CSS -->
@@ -27,6 +29,8 @@
     <link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
     <!-- Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    <script src="~/script/percentageBars.js"></script>
+    
 
 </head>
 <body>
@@ -41,7 +45,7 @@
                 <button>Closed</button>
             </div>
             <div>
-                <a class="btn-project" href="CreateProject"><button>Create Project Post</button></a>
+                <a class="btn-project" asp-controller="Project" asp-action="CreateProject"><button>Create Project Post</button></a>
             </div>
         </div>
 
@@ -60,7 +64,7 @@
 
         <div class="outer-wrapper">
             <div class="table-wrapper">
-                <table class="table" id="datatable">
+                <table class="table display cell-border hover" id="datatable">
                     <thead>
                         <tr>
                             @{
@@ -83,11 +87,13 @@
                                     <tr>
                                         <td></td>
                                         <td>@Data.Title</td>
-                                        <td>@Data.Category</td>
-                                        <td>@Data.TotalCount</td>
+                                        <td>@Data.FullName</td>
+                                        <td>@Data.SubCategory</td>
                                         <td>@Data.Cost</td>
+                                        <td>80</td>
                                         <td>
-                                            <a type="button" class="btn btn-view" data-modal="modal-view">
+                                            @Html.ActionLink("Review", "EditActiveProject", new { id = Data.ProjectID })
+                                            @*<a type="button" class="btn btn-view" data-modal="modal-view">
                                                 <i class="fa-solid fa-eye"></i>
                                             </a>
                                             <a href="" type="button" class="btn btn-edit" data-modal="modal-edit">
@@ -98,7 +104,7 @@
                                             </a>
                                             <a href="" type="button" class="btn btn-tick" data-modal="modal-running">
                                                 <i class="fa-solid fa-square-check"></i>
-                                            </a>
+                                            </a>*@
                                         </td>
                                     </tr>
                                 }
@@ -190,11 +196,16 @@
     <script>
 
         $(document).ready(function () {
-            $("#datatable").DataTable();
+            $("#datatable").DataTable({
+                columnDefs: [{
+                    targets: 5,
+                    //render: $.fn.dataTable.render.percentBar('round', '#FFF', '#269ABC', '#31B0D5', '#286090', 1, 'groove')
+                    render: $.fn.dataTable.render.percentBar('round', '#fff', '#FF9CAB', '#FF0033', '#FF9CAB', 0, 'solid'),
+                }]
+            });
+
         });
-        //let table = new DataTable('#datatable', {
-        //    // options
-        //});
+
 
         let modalView = [...document.querySelectorAll(".btn-view")];
         modalView.forEach(function (btn) {

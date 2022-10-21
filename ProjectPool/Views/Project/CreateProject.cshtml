@@ -1,7 +1,7 @@
 ﻿@model ProjectPool.Models.CreateProjectModel
 
 @{
-
+    ViewData["Title"] = "Create Project Post";
 }
 
 
@@ -14,7 +14,6 @@
     <title>Document</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="~/css/NavProfile.css">
     <link rel="stylesheet" href="~/css/texteditor/site.css">
     <link rel="stylesheet" href="~/css/texteditor/richtext.min.css">
     <link rel="stylesheet" href="~/css/CreateProject.css">
@@ -45,7 +44,7 @@
             <div class="page col-12">
                 <div class="field title">
                     <div class="label">Project Title</div>
-                    @Html.TextAreaFor(model => model.Title, new { @id = "project-textarea" })
+                    @Html.TextAreaFor(model => model.Title, new { @id = "project-textarea", maxlength = 50 })
                     @Html.ValidationMessageFor(model => model.Title, "", new { @class = "validation" })
                     @*<textarea asp-for="Title" maxlength="80" cols="2" id="project-textarea"></textarea>*@
                     @*<span class="validation-title" style="float: left;">This field is required</span>*@
@@ -55,11 +54,22 @@
                     </div>
                 </div>
                 <br>
-                <div class="field">
-                    <div class="label">Project Description</div>
-                    @Html.TextAreaFor(model => model.Description, new { @id = "project-desc" })
-                    @*<textarea asp-for="Description" cols="2" id="project-desc" required></textarea>*@
+                <div class="field title">
+                    <div class="label">Brief Description</div>
+                    @Html.TextAreaFor(model => model.Description, new { @id = "desc-textarea", maxlength = 300 })
                     @Html.ValidationMessageFor(model => model.Description, "", new { @class = "validation" })
+                    @*<textarea asp-for="Title" maxlength="80" cols="2" id="project-textarea"></textarea>*@
+                    @*<span class="validation-title" style="float: left;">This field is required</span>*@
+                    <div id="counter-desc" style="float: right;">
+                        <span id="current-desc">0</span>
+                        <span id="maximum-desc">/ 300</span>
+                    </div>
+                </div>
+                <br />
+                <div class="field">
+                    <div class="label">Project Scope</div>
+                    @Html.TextAreaFor(model => model.Scope, new { @id = "project-scope" })
+                    @Html.ValidationMessageFor(model => model.Scope, "", new { @class = "validation" })
                 <span hidden class="validation-desc" style="float: left;">This field is required</span>
                 </div>
                 <br />
@@ -105,27 +115,54 @@
                         <option value="">-- Select Sub Category --</option>
                     </select>
 
-                    <select class="category hide-submenu" id="sub-category-1" hidden>
+                    <!--Programming-->
+                    <select disabled class="category hide-submenu" id="sub-category-1" hidden>
                         <option disabled selected value="">-- Select Sub Category --</option>
-                        <option value="">Website</option>
-                        <option value="">Mobile App</option>
-                        <option value="">Web mobile</option>
-                        <option value="">Wordpress</option>
-                        <option value="">Game development</option>
+                        <option value="Website">Website</option>
+                        <option value="Mobile App">Mobile App</option>
+                        <option value="Web mobile">Web mobile</option>
+                        <option value="Wordpress">Wordpress</option>
+                        <option value="Game development">Game development</option>
                     </select>
-
-                    <select class="category hide-submenu" id="sub-category-2" hidden>
+                    <!--Graphic-->
+                    <select disabled class="category hide-submenu" id="sub-category-2" hidden>
                         <option disabled selected value="">-- Select Sub Category --</option>
-                        <option value="">Illustration</option>
-                        <option value="">Logo design</option>
-                        <option value="">Card design</option>
-                        <option value="">UI/UX design</option>
-                        <option value="">Fonts & Typography</option>
+                        <option value="Illustration">Illustration</option>
+                        <option value="Logo design">Logo design</option>
+                        <option value="Card design">Card design</option>
+                        <option value="UI/UX design">UI/UX design</option>
+                        <option value="Fonts & Typography">Fonts & Typography</option>
+                    </select>
+                    <!--sales marketing-->
+                    <select disabled class="category hide-submenu" id="sub-category-3" hidden>
+                        <option disabled selected value="">-- Select Sub Category --</option>
+                        <option value="Data entry">Data entry</option>
+                        <option value="Social media campaign">Social media campaign</option>
+                        <option value="Adwords campaign">Adwords campaign</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <!--video animation-->
+                    <select disabled class="category hide-submenu" id="sub-category-4" hidden>
+                        <option disabled selected value="">-- Select Sub Category --</option>
+                        <option value="Ads & Commercial">Ads & Commercial</option>
+                        <option value="Video editing">Video editing</option>
+                        <option value="Animated GIFs">Animated GIFs</option>
+                        <option value="Logo animation">Logo animation</option>
+                        <option value="Character animation">Character animation</option>
+                    </select>
+                    <!--writing -->
+                    <select disabled class="category hide-submenu" id="sub-category-5" hidden>
+                        <option disabled selected value="">-- Select Sub Category --</option>
+                        <option value="Translation">Translation</option>
+                        <option value="Book Writing">Book Writing</option>
+                        <option value="Scriptwriting">Scriptwriting</option>
+                        <option value="Content writing">Content writing</option>
+                        <option value="Article and blog posts">Article and blog posts</option>
                     </select>
 
                     @*<select asp-for="SubCategoryName" class="category" id="sub-category">
-        <option value="">Select Sub Category</option>
-    </select>*@
+            <option value="">Select Sub Category</option>
+        </select>*@
                     <input hidden id="SubCategoryName" name="SubCategoryName" asp-for="SubCategoryName" />
                     @*@Html.HiddenFor(model => model.SubCategoryName)*@
                     @Html.ValidationMessageFor(model => model.SubCategoryName, "", new { @class = "validation" })
@@ -200,7 +237,7 @@
                 </div>
                 <br /><br />
                 <div class="field btns">
-                    <button class="prev-5 prev" onclick="location.href='@Url.Action("EmpManageProject", "Dashboard")'">Cancel</button>
+                    <button class="prev-5 prev" onclick="history.back()>Cancel</button>
                     <button asp-controller="Project" asp-action="CreateProject" class="submit">Submit</button>
                 </div>
             </div>
@@ -222,8 +259,8 @@
     <script>
 
         // $(document).ready(function() {
-        $("#project-desc").richText({
-            maxlength: 300,
+        $("#project-scope").richText({
+            maxlength: 800,
             height: 200,
             leftAlign: false,
             centerAlign: false,
@@ -250,14 +287,39 @@
             var character = $(this).val();
             var withOutSpace = character.replace(/\s+/g, '').length,
                 current = $('#current-title');
+            var length = character.length;
             maximum = $('#maximum-title');
             theCount = $('#the-count');
 
 
 
-            current.text(withOutSpace);
+            current.text(length);
 
-            if (withOutSpace > 49) {
+            if (length > 49) {
+                maximum.css('color', '#841c1c');
+                current.css('color', '#841c1c');
+            }
+            else {
+                current.css('color', 'black');
+                maximum.css('color', 'black');
+            }
+
+        });
+
+        $("#desc-textarea").keyup(function () {
+
+            var character = $(this).val();
+            var withOutSpace = character.replace(/\s+/g, '').length,
+                current = $('#current-desc');
+            var length = character.length;
+            maximum = $('#maximum-desc');
+            theCount = $('#the-count');
+
+
+
+            current.text(length);
+
+            if (length > 299) {
                 maximum.css('color', '#841c1c');
                 current.css('color', '#841c1c');
             }

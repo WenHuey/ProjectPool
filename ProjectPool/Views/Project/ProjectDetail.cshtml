@@ -1,7 +1,7 @@
 ﻿@model ProjectPool.Models.ProjectListModel
 
 @{
-    Layout = null;
+
 }
 
 <!DOCTYPE html>
@@ -20,36 +20,10 @@
 
 </head>
 <body>
-    <div>
-        <nav class="navbar">
-            <h2 class="narbar-logo"><a href="">ProjectPool</a></h2>
-            <div class="navbar-menu">
-                <a href="">Overview</a>
-                <a href="ProjectList">Projects</a>
-                <a href="ContractorProfile">Students</a>
-                <a href="Login">Login</a>
-                <a href="Signup">Sign Up</a>
-                <a href="Dashboard">Dashboard</a>
-            </div>
-            <div class="menu-toggle">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </div>
-        </nav>
-    </div>
-    <!-- navbar -->
 
-    <div class="main-body">
-        <!-- Breadcrumb -->
-        <nav aria-label="breadcrumb" class="main-breadcrumb">
-            <ol class="breadcrumb m-0">
-                <li class="breadcrumb-item"><a href="ProjectList">Projects</a></li>
-                <!-- <li class="breadcrumb-item"><a href="javascript:void(0)">Project Title</a></li> -->
-                <li class="breadcrumb-item active" aria-current="page">Project Title</li>
-            </ol>
-        </nav>
-        <!-- /Breadcrumb -->
+
+    <div class="content">
+        <input id="ProjectID" name="ProjectID" asp-for="ProjectID" />
         <!-- project title -->
         <div class="row gutters-sm">
             <div class="col-12">
@@ -141,7 +115,7 @@
                                 <p>Phone: <span><a href="">0123456789</a></span></p>
                                 <p>Email: <span><a href="">john@mail.com</a></span></p>
                                 <!-- <button class="btn btn-primary">Follow</button>
-                                <button class="btn btn-outline-primary">Message</button> -->
+                            <button class="btn btn-outline-primary">Message</button> -->
                             </div>
                         </div>
                         <hr>

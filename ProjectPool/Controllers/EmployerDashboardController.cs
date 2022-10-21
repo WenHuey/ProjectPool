@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -12,12 +13,13 @@ using System.Threading.Tasks;
 
 namespace ProjectPool.Controllers
 {
+    [Authorize]
     public class EmployerDashboardController : Controller
     {
         private readonly DataContext _db;
         private readonly IConfiguration _configuration;
         List<EmpActiveProjectModel> activeProject = new List<EmpActiveProjectModel>();
-        List<EmpActiveProjectModel> runningProject = new List<EmpActiveProjectModel>();
+        List<EmpRunningModel> runningProject = new List<EmpRunningModel>();
         List<EmpApplicationModel> applications = new List<EmpApplicationModel>();
         //List<DashboardModel> projectCount = new List<DashboardModel>();
 
@@ -29,6 +31,7 @@ namespace ProjectPool.Controllers
 
         //Active Project
         [Route("Employer/Active")]
+        [HttpGet]
         public IActionResult EmpActive()
         {
             //Retrieve userID
@@ -86,7 +89,7 @@ namespace ProjectPool.Controllers
         }
 
         [Route("Employer/Active/Edit/{id}")]
-        public async Task<IActionResult> EditActiveProject1(int? id)
+        public async Task<IActionResult> EditActiveProject(int? id)
         {
             if (id == null)
             {
@@ -119,7 +122,7 @@ namespace ProjectPool.Controllers
 
         [Route("Employer/Active/Edit/{id}")]
         [HttpPost]
-        public async Task<IActionResult> EditActiveProject1(int id, CreateProjectModel model)
+        public async Task<IActionResult> EditActiveProject(int id, CreateProjectModel model)
         {
             if(id != model.ProjectID)
             {
@@ -231,11 +234,13 @@ namespace ProjectPool.Controllers
             return RedirectToAction("EmpActive");
         }
 
+        //check whether skill exist in db
         private bool isSkillExist(int id)
         {
             return _db.SkillsList.Any(e => e.ProjectID == id);
         }
-
+        
+        //update skill to db
         private bool EditSkill(int id, string skill)
         {
             if (isSkillExist(id))
@@ -257,11 +262,13 @@ namespace ProjectPool.Controllers
             }
         }
 
+        //check whether Language exist in db
         private bool isLanguageExist(int id)
         {
             return _db.LanguageList.Any(e => e.ProjectID == id);
         }
 
+        //update language to db
         private bool EditLanguage(int id, string language)
         {
             if (isLanguageExist(id))
@@ -283,11 +290,6 @@ namespace ProjectPool.Controllers
             }
         }
 
-        public IActionResult Running()
-        {
-            return View();
-        }
-
         [Route("Employer/Running")]
         [HttpGet]
         public IActionResult EmpRunning(int projectid)
@@ -304,38 +306,28 @@ namespace ProjectPool.Controllers
             try
             {
                 SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-                SqlDataReader sdr;
-                conn.Open();
-                
-                DataSet ds = _db.GetProjectTitle(Convert.ToInt32(userID));
-                List<SelectListItem> list = new List<SelectListItem>();
-                foreach(DataRow dr in ds.Tables[0].Rows)
-                {
-                    list.Add(new SelectListItem { Text = dr["Title"].ToString(), Value = dr["ProjectID"].ToString() });
-                }
-                ViewBag.itemlist = list;
+                SqlDataReader dr;
 
-                
+                conn.Open();
                 //Create command
                 SqlCommand cmd = new SqlCommand("Sp_DisplayRunning", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@UserID", userID);
                 cmd.Parameters["@UserID"].Direction = ParameterDirection.Input;
-                cmd.Parameters.AddWithValue("@ProjectID", projectid);
-                cmd.Parameters["@ProjectID"].Direction = ParameterDirection.Input;
                 cmd.ExecuteNonQuery();
 
-                sdr = cmd.ExecuteReader();
-                while (sdr.Read())
+                dr = cmd.ExecuteReader();
+                while (dr.Read())
                 {
-                    runningProject.Add(new EmpActiveProjectModel()
+                    runningProject.Add(new EmpRunningModel()
                     {
-                        TotalBid = sdr["TotalBid"].ToString(),
-                        ProjectID = sdr["ProjectID"].ToString(),
-                        Title = sdr["Title"].ToString(),
-                        Category = sdr["Category"].ToString(),
-                        Cost = sdr["Cost"].ToString()
+                        ContractorID = dr["ContractorID"].ToString(),
+                        ProjectID = dr["ProjectID"].ToString(),
+                        Title = dr["Title"].ToString(),
+                        SubCategory = dr["SubCategory"].ToString(),
+                        Cost = dr["Cost"].ToString(),
+                        FullName = dr["FullName"].ToString(),
                     });
                 }
                 conn.Close();
@@ -347,55 +339,6 @@ namespace ProjectPool.Controllers
 
             return View(runningProject);
         }
-
-        //[Route("Employer/Running")]
-        //[HttpPost]
-        //public IActionResult EmpRunning(int projectid)
-        //{
-        //    var claimsIdentity = User.Identity as ClaimsIdentity;
-        //    var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
-
-        //    SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-        //    SqlDataReader dr;
-
-        //    if (activeProject.Count > 0)
-        //    {
-        //        activeProject.Clear();
-        //    }
-        //    try
-        //    {
-        //        conn.Open();
-        //        //Create command
-        //        SqlCommand cmd = new SqlCommand("Sp_DisplayRunning", conn);
-        //        cmd.CommandType = CommandType.StoredProcedure;
-
-        //        cmd.Parameters.AddWithValue("@UserID", userID);
-        //        cmd.Parameters["@UserID"].Direction = ParameterDirection.Input;
-        //        cmd.Parameters.AddWithValue("@ProjectID", projectid);
-        //        cmd.Parameters["@ProjectID"].Direction = ParameterDirection.Input;
-        //        cmd.ExecuteNonQuery();
-
-        //        dr = cmd.ExecuteReader();
-        //        while (dr.Read())
-        //        {
-        //            runningProject.Add(new EmpActiveProjectModel()
-        //            {
-        //                TotalBid = dr["TotalBid"].ToString(),
-        //                ProjectID = dr["ProjectID"].ToString(),
-        //                Title = dr["Title"].ToString(),
-        //                Category = dr["Category"].ToString(),
-        //                Cost = dr["Cost"].ToString()
-        //            });
-        //        }
-        //        conn.Close();
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //    return View();
-        //}
 
         [Route("Employer/Application")]
         [HttpGet]
@@ -474,6 +417,15 @@ namespace ProjectPool.Controllers
 
             return View(applications);
         }
+
+        [HttpGet]
+        public IActionResult ReviewApplication()
+        {
+            return View();
+        }
+
+
+
 
 
         [Route("Project")]

@@ -212,8 +212,3 @@ padding-top: 6px; */
 .sub-menu-link:hover span {
     transform: translateX(5px);
 }
-
-.main-body {
-    margin: 0 3%;
-    padding: 1rem;
-}

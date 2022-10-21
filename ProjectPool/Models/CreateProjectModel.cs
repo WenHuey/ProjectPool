@@ -20,12 +20,17 @@ namespace ProjectPool.Models
         [Required(ErrorMessage = "This field is required")]
         [StringLength(int.MaxValue)]
         public string Description { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "This field is required")]
+        [StringLength(int.MaxValue)]
+        public string Scope { get; set; }
+
+        [Required(ErrorMessage = "This field is required")]
         public string Duration { get; set; }
 
-        [Required]
+        
         public string Status { get; set; }
-        [Required]
+        [Required(ErrorMessage = "This field is required")]
         public int Cost { get; set; }
         [Required]
         public DateTime DatePosted { get; set; }
@@ -35,17 +40,18 @@ namespace ProjectPool.Models
         public bool Deleted { get; set; }
 
         //for other table
-        [Required]
+        [Required(ErrorMessage = "This field is required")]
         public int CategoryID { get; set; }
         //public string CategoryName { get; set; }
+        [Required(ErrorMessage = "This field is required")]
         public string SubCategoryName { get; set; }
 
         [NotMapped]
-        [Required]
+        [Required(ErrorMessage = "This field is required")]
         public string Skill { get; set; }
 
         [NotMapped]
-        [Required]
+        [Required(ErrorMessage = "This field is required")]
         public string Language { get; set; }
 
 

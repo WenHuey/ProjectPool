@@ -64,6 +64,8 @@ namespace ProjectPool.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUp(SignUpModel model)
         {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
             //Connect db
             string connStr = _configuration.GetConnectionString("DefaultConnection");
             SqlConnection conn = new SqlConnection(connStr);
@@ -111,8 +113,6 @@ namespace ProjectPool.Controllers
 
             //close connection
             conn.Close();
-            
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             return RedirectToAction("Login");
         }
@@ -248,6 +248,7 @@ namespace ProjectPool.Controllers
             return RedirectToAction("Login");
         }
 
+        //Testing use
         [Route("Welcome")]
         [Authorize]
         public IActionResult Welcome()
@@ -262,5 +263,7 @@ namespace ProjectPool.Controllers
             //return RedirectToAction("Login");
 
         }
+
+        
     }
 }

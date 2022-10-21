@@ -8,10 +8,20 @@
     --inputBorderColor: lightgray;
 }
 
-.main-body{
-    margin: 5% 0;
+.container-body {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: var(--bgColor);
 }
 
+::selection {
+    color: #fff;
+    background: var(--primary);
+}
 .container {
     width: var(--containerWidth);
     background: #fff;
@@ -102,12 +112,11 @@ form .page .btns button.next {
     margin-left: 3px;
 }
 
-#project-textarea,
-#desc-textarea {
+.desc{
     width: 100%;
-    height: auto;
+    height: 230px;
     resize: none;
-    min-height: 60px;
+    min-height: 230px;
     padding: 10px 15px;
     border: 1px solid var(--inputBorderColor);
     border-radius: 5px;
@@ -115,14 +124,10 @@ form .page .btns button.next {
     font-family: "Jost", sans-serif;
 }
 
-#desc-textarea {
-    min-height: 100px !important;
+
+.field-bottom {
+    margin-bottom: 85px !important;
 }
-
-
-    .field-bottom {
-        margin-bottom: 85px !important;
-    }
 
 .field-top {
     margin-top: 90px !important;
@@ -132,7 +137,7 @@ form .page .btns button.next {
     margin-top: 65px !important;
 }
 
-.category{
+.category, .list-item{
     box-sizing: border-box;
     height: 100%;
     width: 100%;
@@ -155,15 +160,17 @@ form .page .btns {
 }
 
 
-.create-project {
+.page-title {
     font-size: 1.5rem;
+}
+
+.sub-page-title{
+    margin-bottom: 0.5rem;
 }
 
 .content {
     margin: 0 1rem;
     padding: 0 1rem;
-    width: 60%;
-    margin: auto;
 }
 
 .field {
@@ -175,13 +182,16 @@ form .page .btns {
     height: 45px;
 }
 
+.richText .richText-toolbar {
+    text-align: center;
+}
 
 .label {
     margin-bottom: 0.8rem;
     font-weight: bold;
 }
 
-.input-duration, .project-cost {
+.text-input {
     height: 45px !important;
     width: 70px;
 }
@@ -190,9 +200,6 @@ form .page .btns {
     display: grid;
 }
 
-/*.duration{
-    display: flex;
-}*/
 
 .from-right{
     margin-right: 20px;

@@ -16,30 +16,150 @@ namespace ProjectPool.Controllers
     [Authorize]
     public class ProjectController : Controller
     {
+        private readonly DataContext _db;
         private readonly IConfiguration _configuration;
+        List<ProjectListModel> allProject = new List<ProjectListModel>();
 
-        public ProjectController(IConfiguration configuration)
+        public ProjectController(DataContext db, IConfiguration configuration)
         {
+            _db = db;
             _configuration = configuration;
         }
 
         [AllowAnonymous]
         [Route("ProjectList")]
+
         public IActionResult ProjectList()
         {
-            ClaimsPrincipal claimUser = HttpContext.User;
-            if (claimUser.Identity.IsAuthenticated)
-                return View();
 
-            return View("~/Views/Account/Login.cshtml");
+            //Connect db
+            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            SqlDataReader dr;
+
+            if (allProject.Count > 0)
+            {
+                allProject.Clear();
+            }
+            try
+            {
+                conn.Open();
+                //Create command
+                SqlCommand cmd = new SqlCommand("Sp_DisplayAllProject", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.ExecuteNonQuery();
+
+                dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    var day = dr["Days"].ToString();
+                    var hr = dr["Hours"].ToString();
+                    var min = dr["Minutes"].ToString();
+                    string time = min + " minute(s) ago";
+
+                    if (Convert.ToInt32(hr) >= 24)
+                    {
+                        time = day + " day(s) ago";
+                    }
+                    else if (Convert.ToInt32(min) >= 60)
+                    {
+                        time = hr + " hour(s) ago";
+                    }
+
+                    string str = dr["Description"].ToString();
+
+
+
+                    allProject.Add(new ProjectListModel()
+                    {
+                        ProjectID = dr["ProjectID"].ToString(),
+                        Title = dr["Title"].ToString(),
+                        Description = dr["Description"].ToString(),
+                        Duration = dr["Duration"].ToString(), 
+                        Status = dr["Status"].ToString(),
+                        Cost = dr["Cost"].ToString(),
+                        CategoryName = dr["CategoryName"].ToString(), 
+                        SubCategoryName = dr["SubCategoryName"].ToString(), 
+                        PostedAgo = time,
+                        TotalBid = dr["TotalBid"].ToString()
+                        
+                    });
+                }
+                conn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return View(allProject);
+
+
+
+            //ClaimsPrincipal claimUser = HttpContext.User;
+            //if (claimUser.Identity.IsAuthenticated)
+            //{
+            //    var claimsIdentity = User.Identity as ClaimsIdentity;
+
+            //    if (claimsIdentity.Claims.Count() == 0)
+            //    {
+            //        return RedirectToAction("Login", "Account");
+            //    }
+
+            //    var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
+            //    var getAllProject = await _db.get;
+
+
+            //    return View(getAllProject);
+            //}
+                
+
+            //return RedirectToAction("Login", "Account");
         }
 
 
 
-        [Route("ProjectDetail")]
-        public IActionResult ProjectDetail()
+        [Route("ProjectDetail/{id}")]
+        [HttpGet]
+        public IActionResult ProjectDetail(string id, ProjectListModel model)
         {
-            return View();
+            model.ProjectID = id;   
+            return View(model);
+        }
+
+        
+        [Route("ProjectDetail/{id}")]
+        [HttpPost]
+        public IActionResult ProjectDetail(ProjectListModel model)
+        {
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var contractorID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
+
+            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            conn.Open();
+            SqlCommand cmd = new SqlCommand("Sp_Createproject", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            try
+            {
+
+                cmd.Parameters.AddWithValue("@ProjectID", model.ProjectID);
+                cmd.Parameters["@Title"].Direction = ParameterDirection.Input;
+
+                cmd.Parameters.AddWithValue("@ContractorID", contractorID);
+                cmd.Parameters["@Description"].Direction = ParameterDirection.Input;
+
+               
+                cmd.ExecuteNonQuery();
+            }
+            catch
+            {
+                TempData["message"] = "Unsuccesful";
+            }
+            cmd.Connection.Close();
+
+            return View(model);
         }
 
 
@@ -126,6 +246,8 @@ namespace ProjectPool.Controllers
             //Back to active product page
             return RedirectToAction("EmpActive", "EmployerDashboard");
         }
+
+
 
         //public async Task<IActionResult> EditProject(int? id)
         //{

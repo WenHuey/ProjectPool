@@ -52,8 +52,8 @@
         <nav>
             <p>ProjectPooL.</p>
             <ul class="nav-title">
-                <li><a href="Overview">Overview</a></li>
-                <li><a href="ProjectList">Projects</a></li>
+                @*<li><a href="Overview">Overview</a></li>*@
+                <li><a asp-controller="Project" asp-action="ProjectList">Projects</a></li>
                 <li><a href="ContractorList">Contractor</a></li>
             </ul>
 
@@ -72,33 +72,43 @@
                             @{
                                 var claimsIdentity = User.Identity as System.Security.Claims.ClaimsIdentity;
                                 var userId = "";
-                                if (claimsIdentity != null)
+                                if (claimsIdentity.Claims.Count() != 0)
                                 {
                                     userId = claimsIdentity.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value;
                                     if (userId == "2")
                                     {
                                         <p class="user-type">Employer</p>
+                                        <hr />
+                                        <a asp-controller="Dashboard" asp-action="EmpDashboard" class="sub-menu-link">
+                                            <p>Dashboard</p>
+                                            <span>></span>
+                                        </a>
+                                        <a href="#" class="sub-menu-link">
+                                            <p>Profile</p>
+                                            <span>></span>
+                                        </a>
                                     }
                                     else if (userId == "3")
                                     {
                                         <p class="user-type">Contractor</p>
+                                        <hr />
+                                        <a asp-controller="Dashboard" asp-action="ConDashboard" class="sub-menu-link">
+                                            <p>Dashboard</p>
+                                            <span>></span>
+                                        </a>
+                                        <a asp-controller="ContractorDashboard" asp-action="UpdateProfile" class="sub-menu-link">
+                                            <p>Profile</p>
+                                            <span>></span>
+                                        </a>
                                     }
+
+                                    <hr>
+                                    <a asp-controller="Account" asp-action="Logout" class="sub-menu-link">
+                                        <p>Sign Out</p>
+                                    </a>
                                 }
 
                             }
-                            <hr>
-                            <a href="Dashboard" class="sub-menu-link">
-                                <p>Dashboard</p>
-                                <span>></span>
-                            </a>
-                            <a href="#" class="sub-menu-link">
-                                <p>Profile</p>
-                                <span>></span>
-                            </a>
-                            <hr>
-                            <a asp-controller="Account" asp-action="Logout" class="sub-menu-link">
-                                <p>Sign Out</p>
-                            </a>
                         </div>
                     </div>
                 }

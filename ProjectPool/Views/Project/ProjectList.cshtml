@@ -1,15 +1,7 @@
-﻿@model ProjectPool.Models.ProjectListModel
+﻿@*@model ProjectPool.Models.ProjectListModel*@
 
 @{
-    @using Microsoft.AspNetCore.Http
-    Layout = null;
-    bool isLoggedIn = true;
-    //string name = @Context.Session.GetString("name");
-    if (string.IsNullOrWhiteSpace(User.Identity.Name))
-    {
-        isLoggedIn = false;
-    }
-
+    ViewData["Title"] = "Search for Projects";
 }
 
 <!DOCTYPE html>
@@ -29,58 +21,18 @@
     <!-- Font -->
     <link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
 
+    @*<script>
+        $(document).ready(function () {
+            var $desc = $(".project-detail p");
+            var str = $(".project-detail p").text();
+            var html = $.parseHTML(str);
+            $desc.append(html);
+        })
+    </script>*@
 
 </head>
 <body>
     <!-- Nav bar -->
-    <header>
-        <nav>
-            <p>ProjectPooL.</p>
-            <ul class="nav-title">
-                <li><a href="Overview">Overview</a></li>
-                <li><a href="ProjectList">Projects</a></li>
-                <li><a href="ContractorList">Contractor</a></li>
-            </ul>
-
-
-            @{
-                if (isLoggedIn)
-                {
-                    <!-- profile name -->
-                    <div class="profile-img" onclick="toggleProfile()">
-                        @*<img src="~/image/white-bg.jpg">*@
-                        <p>@User.Identity.Name</p>
-                    </div>
-
-                    <div class="sub-menu-wrap" id="subProfile">
-                        <div class="sub-menu">
-
-                            <a href="Dashboard" class="sub-menu-link">
-                                <p>Dashboard</p>
-                                <span>></span>
-                            </a>
-                            <a href="#" class="sub-menu-link">
-                                <p>Profile</p>
-                                <span>></span>
-                            </a>
-                            <hr>
-                            <a href="#" class="sub-menu-link">
-                                <p>Sign Out</p>
-                            </a>
-                        </div>
-                    </div>
-                }
-                else
-                {
-                    <div class="account">
-                        <a asp-action="Login" asp-controller="Account"><span>Log In</span></a>
-                        <a class="cta" href="ChooseUser"><button>Sign Up now</button></a>
-                    </div>
-                }
-
-            }
-        </nav>
-    </header>
 
     <div class="header">
         <h1 class="header-title">
@@ -130,7 +82,7 @@
                 });
             }
 
-            @Html.DropDownListFor(model => model.Category, CatlistItems, "-- Filter Category --", new { @id = "category", @class = "filter-select" })
+            @*@Html.DropDownListFor(model => model.CategoryID, CatlistItems, "-- Filter Category --", new { @id = "category", @class = "filter-select" })*@
 
             <select class="filter-select" name="category" id="category">
                 <option value="1">Category</option>
@@ -142,32 +94,50 @@
         </div>
     </div>
     <section class="project-list" id="projects">
-        @for (var i = 0; i < 10; i++)
-        {
-            <div class="project-card">
-                <div class="project-name">
-                    <div class="project-detail">
-                        @Html.HiddenFor(model => model.ProjectID)
-                        <h4>@*@Model.Title*@</h4>
-                        <p>
-                            @*@Model.Description*@
-                        </p>
-                        <div class="project-label">
-                            <a class="label" href="">@*@Model.Category*@</a>
-                            <a class="label" href="">@*@Model.SubCategory*@</a>
+        <form asp-controller="Project" asp-action="ProjectDetail">
+            @foreach (var Data in Model)
+            {
+                <div class="project-card">
+                    <div class="project-name">
+                        <div class="project-detail">
+                            @*@Html.HiddenFor(model => model.ProjectID)*@
+                            <h4>@Data.Title</h4>
+                            <div class="desc-content">
+                                @Html.Raw(Data.Description)
+                            </div>
+                            <div class="project-label">
+                                @if (Data.CategoryName != "")
+                                {
+                                    <a class="label" href="">@Data.CategoryName</a>
+                                }
+                                @if (Data.SubCategoryName != "")
+                                {
+                                    <a class="label" href="">@Data.SubCategoryName</a>
+                                }
+
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="project-right">
-                    <div>@*RM&nbsp;@Model.Cost*@</div>
-                    <button class="apply-project" onclick="location.href='@Url.Action("ProjectDetail", "Project")'">Apply</button>
-                    <div>@*@Model.TotalBid&nbsp;Applied*@</div>
-                    <div class="project-posted">@*@Model.PostedAgo*@</div>
+                    <div class="project-right">
+                        <div>RM&nbsp;@Data.Cost</div>
+                        @*<div class="apply-project">*@
+                            @Html.ActionLink("View Details", "ProjectDetail", new { id = Data.ProjectID }, new { @class = "apply-project" })
+                        @*</div>*@
+                        
+                        @*<button class="apply-project" asp-controller="Project" asp-action="ProjectDetail" id="@Data.ProjectID">Apply</button>*@
+                        <div>@Data.TotalBid&nbsp;Applied</div>
+                        <div class="project-posted">@Data.PostedAgo</div>
+                    </div>
                 </div>
-            </div>
+            }
+        </form>
+        
 
-        }
+
+
     </section>
+
+    
 </body>
 </html>

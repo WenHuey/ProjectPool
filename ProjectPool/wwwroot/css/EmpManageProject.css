@@ -77,12 +77,14 @@
 
     .table tbody tr:nth-child(even) {
         background-color: #f5f5f5;
-    }
-
-    .table td a {
-        display: inline-block;
-        justify-content: center;
     }*/
+
+#datatable td a {
+    display: inline-block;
+    justify-content: center;
+    text-decoration: none;
+}
+
 .outer-wrapper{
     margin: 2%;
 }
