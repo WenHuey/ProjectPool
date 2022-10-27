@@ -27,8 +27,7 @@
     <link rel="stylesheet" href="~/css/EmpManageProject.css">
     <!-- Font -->
     <link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
-    <!-- Icon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    
 
 </head>
 <body>
@@ -38,7 +37,7 @@
             <p class="Msg" style="color:green">@TempData["SuccessMsg"]</p>
             <p class="Msg" style="color:red">@TempData["ErrorMsg"]</p>
         </div>
-        
+
 
         <div class="text-black font-weight-bold manage-project">Manage Project</div>
         <div class="tab">
@@ -84,7 +83,7 @@
                                         <td>@Data.TotalBid</td>
                                         <td>@Data.Cost</td>
                                         <td>
-                                            <a href='@Url.Action("ViewActiveProject","EmployerDashboard", new { id = Data.ProjectID })' type="button"  class="btn btn-view">
+                                            <a href='@Url.Action("ViewActiveProject","EmployerDashboard", new { id = Data.ProjectID })' type="button" class="btn btn-view">
                                                 <i class="fa-solid fa-eye"></i>
                                                 @*@Html.ActionLink("Edit", "EditActiveProject1", new { id = Data.ProjectID })*@
                                             </a>
@@ -94,7 +93,7 @@
                                             <a href="#" type="button" class="btn btn-delete" data-id="@Data.ProjectID" data-modal="modal-delete">
                                                 <i class="fa-solid fa-trash"></i>
                                             </a>
-                                            <a href="" type="button" class="btn btn-tick"  data-modal="modal-running">
+                                            <a href="#" type="button" class="btn btn-tick" data-id="@Data.ProjectID" data-modal="modal-running">
                                                 <i class="fa-solid fa-square-check"></i>
                                             </a>
                                         </td>
@@ -117,11 +116,11 @@
                 <a class="close">&times;</a>
                 <form asp-action="DeleteActiveProject">
                     <h2>Delete Project</h2>
-                    <div class="project-content">
+                    <div class="project-content-delete">
                         <p>
                             Are you sure you want to delete this project?
                             <br>
-                            This action cannot be undone.
+                            <strong>* This action cannot be undone.</strong>
                         </p>
 
                         @Html.Hidden("id", "", new { @class = "hiddenid" })
@@ -129,7 +128,35 @@
                     </div>
 
                     <div class="project-button">
-                        <button id="btn-confirm" type="submit" >Confirm</button>
+                        <button id="btn-confirm" type="submit">Confirm</button>
+                        <button type="submit" href="/resources/views/admin/orders.html">Cancel</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Set Running State Modal -->
+    <div id="modal-running" class="modal">
+        <div class="modal-content">
+            <div class="project">
+                <a class="close">&times;</a>
+                <form asp-action="SetRunningState">
+                    <h2>Set Project to Running State</h2>
+                    <div class="project-content-running">
+                        <p>
+                            Are you sure you want to set this project to <strong>Running State</strong>?
+                            <br>
+                            <strong>* This action cannot be undone.</strong>
+                        </p>
+
+                        @Html.Hidden("id", "", new { @class = "hiddenid" })
+
+                    </div>
+
+                    <div class="project-button">
+                        <button id="btn-confirm" type="submit">Confirm</button>
                         <button type="submit" href="/resources/views/admin/orders.html">Cancel</button>
                     </div>
 
@@ -151,12 +178,18 @@
             $(".btn-delete").on("click", function () {
                 var passedID = $(this).data('id');
                 console.log(passedID);
-                $(".project-content .hiddenid").val(passedID);
+                $(".project-content-delete .hiddenid").val(passedID);
+            });
+
+            $(".btn-tick").on("click", function () {
+                var passedID = $(this).data('id');
+                console.log(passedID);
+                $(".project-content-running .hiddenid").val(passedID);
             });
         });
 
-        let modalView = [...document.querySelectorAll(".btn-view")];
-        modalView.forEach(function (btn) {
+        let modalRunning = [...document.querySelectorAll(".btn-tick")];
+        modalRunning.forEach(function (btn) {
             btn.onclick = function () {
                 let modal = btn.getAttribute("data-modal");
                 document.getElementById(modal).style.display = "block";

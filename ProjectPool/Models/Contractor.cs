@@ -10,6 +10,7 @@ namespace ProjectPool.Models
     public class Contractor
     {
         [Key]
+        [Required]
         public int ContractorID { get; set; }
         public int UserID { get; set; }
 

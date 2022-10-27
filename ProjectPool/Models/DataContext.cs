@@ -44,7 +44,8 @@ namespace ProjectPool.Models
         public DbSet<CreateProjectModel> Project { get; set; }
         public DbSet<SkillsList> SkillsList { get; set; }
         public DbSet<LanguageList> LanguageList { get; set; }
+        public DbSet<ApplicationModel> Application { get; set; }
 
-
+        public DbSet<Contractor> Contractor { get; set; }
     }
 }

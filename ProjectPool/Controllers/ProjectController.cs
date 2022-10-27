@@ -19,6 +19,7 @@ namespace ProjectPool.Controllers
         private readonly DataContext _db;
         private readonly IConfiguration _configuration;
         List<ProjectListModel> allProject = new List<ProjectListModel>();
+        ProjectDetailsModel projectDetails = new ProjectDetailsModel();
 
         public ProjectController(DataContext db, IConfiguration configuration)
         {
@@ -118,50 +119,198 @@ namespace ProjectPool.Controllers
             //return RedirectToAction("Login", "Account");
         }
 
-
+        private bool isApplied(int? projectID, int conID)
+        {
+            return _db.Application.Any(e => e.ProjectID == projectID && e.ContractorID == conID);
+        }
 
         [Route("ProjectDetail/{id}")]
         [HttpGet]
-        public IActionResult ProjectDetail(string id, ProjectListModel model)
+        public IActionResult ProjectDetail(int? id)
         {
-            model.ProjectID = id;   
-            return View(model);
+            if (id == null)
+            {
+                TempData["ErrorMsg"] = "An error occurred while retrieving data";
+                return RedirectToAction("ProjectList");
+            }
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
+
+            var conID = _db.Contractor.Where(x => x.UserID.ToString() == userID).Select(x => x.ContractorID).SingleOrDefault();
+            try
+            {
+                SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+                SqlDataReader dr;
+
+                conn.Open();
+                //Create command
+                SqlCommand cmd = new SqlCommand("Sp_GetProjectDetails", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@ProjectID", id);
+                cmd.Parameters["@ProjectID"].Direction = ParameterDirection.Input;
+                cmd.ExecuteNonQuery();
+
+                dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    //projectDetails.Add(new ProjectDetailsModel()
+                    //{
+                    var Date = dr["DatePosted"].ToString();
+                    projectDetails.EmployerID = dr["EmployerID"].ToString();
+                    projectDetails.FullName = dr["FullName"].ToString();
+                    projectDetails.Phone = dr["Phone"].ToString();
+                    projectDetails.Email = dr["Email"].ToString();
+                    projectDetails.CompanyName = dr["CompanyName"].ToString();
+                    projectDetails.TotalBid = dr["TotalBid"].ToString();
+                    projectDetails.ProjectID = dr["ProjectID"].ToString();
+                    projectDetails.Title = dr["Title"].ToString();
+                    projectDetails.Description = dr["Description"].ToString();
+                    projectDetails.Scope = dr["Scope"].ToString();
+                    projectDetails.Duration = dr["Duration"].ToString();
+                    projectDetails.Cost = dr["Cost"].ToString();
+                    projectDetails.DatePosted = DateTime.Parse(Date).ToString("dd/MM/yyyy");
+                    projectDetails.SubCategoryName = dr["SubCategoryName"].ToString();
+                    projectDetails.CategoryName = dr["CategoryName"].ToString();
+                    projectDetails.Skills = dr["Skills"].ToString();
+                    projectDetails.Language = dr["Language"].ToString();
+                    projectDetails.isApplied = false;
+                    //});
+                }
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            if (isApplied(id, conID))
+            {
+                projectDetails.isApplied = true;
+            }
+
+
+            return View(projectDetails);
         }
 
-        
-        [Route("ProjectDetail/{id}")]
-        [HttpPost]
-        public IActionResult ProjectDetail(ProjectListModel model)
+
+        //[Route("ProjectDetail/{id}")]
+        //[HttpPost]
+        //public IActionResult ProjectDetail(ProjectListModel model)
+        //{
+        //    var claimsIdentity = User.Identity as ClaimsIdentity;
+        //    var contractorID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
+
+        //    SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+        //    conn.Open();
+        //    SqlCommand cmd = new SqlCommand("Sp_Createproject", conn);
+        //    cmd.CommandType = CommandType.StoredProcedure;
+
+        //    try
+        //    {
+
+        //        cmd.Parameters.AddWithValue("@ProjectID", model.ProjectID);
+        //        cmd.Parameters["@Title"].Direction = ParameterDirection.Input;
+
+        //        cmd.Parameters.AddWithValue("@ContractorID", contractorID);
+        //        cmd.Parameters["@Description"].Direction = ParameterDirection.Input;
+
+
+        //        cmd.ExecuteNonQuery();
+        //    }
+        //    catch
+        //    {
+        //        TempData["message"] = "Unsuccesful";
+        //    }
+        //    cmd.Connection.Close();
+
+        //    return View(model);
+        //}
+
+
+        [Route("ApplyProject/{id}")]
+        [HttpGet]
+        public IActionResult ApplyProject(int? id)
         {
-            var claimsIdentity = User.Identity as ClaimsIdentity;
-            var contractorID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
+            //var claimsIdentity = User.Identity as ClaimsIdentity;
+            //var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
+
+            //var conID = _db.Contractor.Where(x => x.UserID.ToString() == userID).Select(x => x.ContractorID).SingleOrDefault();
 
             SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            SqlDataReader dr;
             conn.Open();
-            SqlCommand cmd = new SqlCommand("Sp_Createproject", conn);
-            cmd.CommandType = CommandType.StoredProcedure;
+
+            
 
             try
             {
+                string query = "SELECT p.ProjectID, p.Title, e.CompanyName, p.Cost, p.Duration FROM Project p LEFT JOIN Employer e on e.EmployerID = p.EmployerID WHERE p.ProjectID ='"+id+"'";
+                SqlCommand cmd = new SqlCommand(query, conn);
 
-                cmd.Parameters.AddWithValue("@ProjectID", model.ProjectID);
-                cmd.Parameters["@Title"].Direction = ParameterDirection.Input;
+                dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
 
-                cmd.Parameters.AddWithValue("@ContractorID", contractorID);
-                cmd.Parameters["@Description"].Direction = ParameterDirection.Input;
+                    projectDetails.ProjectID = dr["ProjectID"].ToString();
+                    projectDetails.Title = dr["Title"].ToString();
+                    projectDetails.CompanyName = dr["CompanyName"].ToString();
+                    projectDetails.Duration = dr["Duration"].ToString();
+                    projectDetails.Cost = dr["Cost"].ToString();
 
-               
-                cmd.ExecuteNonQuery();
+                }
             }
             catch
             {
                 TempData["message"] = "Unsuccesful";
             }
-            cmd.Connection.Close();
+            conn.Close();
 
-            return View(model);
+            return View(projectDetails);
         }
 
+        [Route("ApplyProject/{id}")]
+        [HttpPost]
+        public IActionResult ApplyProject(int? id, ProjectDetailsModel model)
+        {
+            if(model.ProjectID == null)
+            {
+                TempData["ErrorMsg"] = "Error occured! Please seek for customer support. ";
+                return RedirectToAction("ProjectDetail", id);
+            }
+
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
+
+            var conID = _db.Contractor.Where(x => x.UserID.ToString() == userID).Select(x => x.ContractorID).SingleOrDefault();
+
+            try
+            {
+                SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+                SqlDataReader dr;
+
+                conn.Open();
+                //Create command
+                SqlCommand cmd = new SqlCommand("Sp_InsertApplication", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@ProjectID", id);
+                cmd.Parameters["@ProjectID"].Direction = ParameterDirection.Input;
+                cmd.Parameters.AddWithValue("@ContractorID", conID);
+                cmd.Parameters["@ContractorID"].Direction = ParameterDirection.Input;
+                cmd.Parameters.AddWithValue("@Pitch", model.Pitch);
+                cmd.Parameters["@Pitch"].Direction = ParameterDirection.Input;
+                
+                cmd.ExecuteNonQuery();
+
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMsg"] = "Error occured! Insert Unsuccesful.";
+            }
+            return RedirectToAction("ProjectList");
+        }
 
         [Route("CreateProject")]
         public IActionResult CreateProject()

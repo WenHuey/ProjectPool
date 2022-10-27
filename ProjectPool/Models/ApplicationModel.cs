@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace ProjectPool.Models
 {
-    public class ApplicationController
+    public class ApplicationModel
     {
         [Key]
-        public int ApplicationID { get; set; }
+        public int ApplicationID { get; set; }       
         public int ProjectID { get; set; }
         public int EmployerID { get; set; }
 
@@ -17,9 +17,16 @@ namespace ProjectPool.Models
 
         public string Status { get; set; }
 
+        [StringLength(int.MaxValue)]
+        public string Reason { get; set; }
+
         public DateTime CreatedAt { get; set; }
 
-       
+        [StringLength(int.MaxValue)]
+        public string Pitch { get; set; }
+
+
+
 
     }
 }

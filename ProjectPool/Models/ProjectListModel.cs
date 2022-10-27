@@ -37,5 +37,6 @@ namespace ProjectPool.Models
 
         public string TotalBid { get; set; }
 
+
     }
 }

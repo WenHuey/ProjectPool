@@ -119,6 +119,7 @@ namespace ProjectPool.Controllers
 
 
         [Route("/")]
+        [Route("Account/Login")]
         public IActionResult Login()
         {
             ClaimsPrincipal claimUser = HttpContext.User;
@@ -145,8 +146,9 @@ namespace ProjectPool.Controllers
 
             return View();
         }
-        
+
         [Route("/")]
+        [Route("Account/Login")]
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {

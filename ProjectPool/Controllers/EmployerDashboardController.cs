@@ -215,7 +215,7 @@ namespace ProjectPool.Controllers
 
         
         [HttpPost]
-        public async Task<IActionResult> DeleteActiveProject(int id)
+        public async Task<IActionResult> DeleteActiveProject(int? id)
         {
             var project = await _db.Project.FindAsync(id);
             project.Deleted = true;
@@ -224,8 +224,9 @@ namespace ProjectPool.Controllers
             return RedirectToAction("EmpActive");
         }
 
+        //to be editt and remove from active tab, will be done in interview page
         [HttpPost]
-        public async Task<IActionResult> SetRunningState(int id)
+        public async Task<IActionResult> SetRunningState(int? id)
         {
             var project = await _db.Project.FindAsync(id);
             project.Status = "Running";
@@ -235,13 +236,13 @@ namespace ProjectPool.Controllers
         }
 
         //check whether skill exist in db
-        private bool isSkillExist(int id)
+        private bool isSkillExist(int? id)
         {
             return _db.SkillsList.Any(e => e.ProjectID == id);
         }
         
         //update skill to db
-        private bool EditSkill(int id, string skill)
+        private bool EditSkill(int? id, string skill)
         {
             if (isSkillExist(id))
             {
@@ -263,13 +264,13 @@ namespace ProjectPool.Controllers
         }
 
         //check whether Language exist in db
-        private bool isLanguageExist(int id)
+        private bool isLanguageExist(int? id)
         {
             return _db.LanguageList.Any(e => e.ProjectID == id);
         }
 
         //update language to db
-        private bool EditLanguage(int id, string language)
+        private bool EditLanguage(int? id, string language)
         {
             if (isLanguageExist(id))
             {
@@ -340,6 +341,7 @@ namespace ProjectPool.Controllers
             return View(runningProject);
         }
 
+        #region Application
         [Route("Employer/Application")]
         [HttpGet]
         public IActionResult EmpApplication()
@@ -358,9 +360,9 @@ namespace ProjectPool.Controllers
             SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             SqlDataReader dr;
 
-            if (activeProject.Count > 0)
+            if (applications.Count > 0)
             {
-                activeProject.Clear();
+                applications.Clear();
             }
             try
             {
@@ -418,13 +420,35 @@ namespace ProjectPool.Controllers
             return View(applications);
         }
 
+
         [HttpGet]
-        public IActionResult ReviewApplication()
+        public async Task<IActionResult> ReviewApplication(int? id)
+        {
+            if (id == null)
+            {
+                TempData["ErrorMsg"] = "An error occurred while retrieving data";
+                return RedirectToAction("EmpApplication");
+            }
+
+            var getApplicationDetails = await _db.Contractor.FindAsync(id);
+
+            if (getApplicationDetails == null)
+            {
+                TempData["ErrorMsg"] = "An error occurred while retrieving data";
+                return RedirectToAction("EmpApplication");
+            }
+
+            return View(getApplicationDetails);
+        }
+
+
+        [HttpGet]
+        public IActionResult DeclineApplication()
         {
             return View();
         }
 
-
+        #endregion
 
 
 

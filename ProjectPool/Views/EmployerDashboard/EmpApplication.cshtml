@@ -9,7 +9,7 @@
                ,"Category"
                ,"Sub Category"
                ,"Skill"
-               ,"Applied (Time)"
+               ,"Applied Ago"
                ,"Actions"};
 }
 <!DOCTYPE html>
@@ -85,9 +85,9 @@
                                         <td>@Data.Skill</td>
                                         <td>@Data.DayHourMin</td>
                                         <td>
-                                            @Html.ActionLink("Approve", "EditActiveProject", new { id = Data.ProjectID })
+                                            @Html.ActionLink("Review", "ReviewApplication", new { id = Data.ContractorID })
                                             |
-                                            @Html.ActionLink("Decline", "EditActiveProject", new { id = Data.ProjectID })
+                                            @Html.ActionLink("Decline", "EditActiveProject", new { id = Data.ContractorID })
                                             @*<a href='@Url.Action("ViewActiveProject","EmployerDashboard", new { id = Data.ProjectID })' type="button" class="btn btn-view">
                                                 <i class="fa-solid fa-eye"></i>
                                                 @Html.ActionLink("Edit", "EditActiveProject1", new { id = Data.ProjectID })
