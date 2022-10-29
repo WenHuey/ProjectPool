@@ -57,7 +57,12 @@
                 <br>
                 <div class="field">
                     <div class="label">Project Description</div>
-                    @Html.TextAreaFor(model => model.Description, new { @id = "project-desc", @disabled = "disabled" })
+                    @Html.TextAreaFor(model => model.Description, new { @id = "desc-textarea", @disabled = "disabled" })
+                </div>
+                <br />
+                <div class="field">
+                    <div class="label">Project Description</div>
+                    @Html.TextAreaFor(model => model.Scope, new { @id = "project-scope", @disabled = "disabled" })
                 </div>
                 <br />
                 <div class="field">
@@ -149,8 +154,8 @@
                     </select>
 
                     @*<select asp-for="SubCategoryName" class="category" id="sub-category">
-                        <option value="">Select Sub Category</option>
-                    </select>*@
+                <option value="">Select Sub Category</option>
+            </select>*@
                     <input hidden id="SubCategoryName" name="SubCategoryName" asp-for="SubCategoryName" />
 
                 </div>
@@ -165,22 +170,22 @@
                             DurationlistItems.Add(new SelectListItem
                             {
                                 Text = "0-3 months",
-                                Value = "1"
+                                Value = "0 - 3 months"
                             });
                             DurationlistItems.Add(new SelectListItem
                             {
                                 Text = "3-6 months",
-                                Value = "2"
+                                Value = "3 - 6 months"
                             });
                             DurationlistItems.Add(new SelectListItem
                             {
                                 Text = "6-12 months",
-                                Value = "3"
+                                Value = "6 - 12 months"
                             });
                             DurationlistItems.Add(new SelectListItem
                             {
                                 Text = "Not Specified",
-                                Value = "4"
+                                Value = "Not Specified"
                             });
                         }
                         @Html.DropDownListFor(model => model.Duration, DurationlistItems, "-- Select Duration --", new { @id = "duration", @class = "category", @disabled = "disabled" })
@@ -231,8 +236,8 @@
     <script src="~/script/jquery.richtext.js"></script>
     <script src="~/script/tagify.min.js"></script>
     <script>
-        $("#project-desc").richText({
-            maxlength: 300,
+        $("#project-scope").richText({
+            maxlength: 800,
             height: 200,
             leftAlign: false,
             centerAlign: false,

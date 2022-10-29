@@ -239,3 +239,12 @@ form .page .field select {
     border: 1px solid #d3d3d3;
     border-radius: 5px;
 }
+
+td.nowrap{
+    white-space: nowrap;
+}
+
+.content-approve .conName,
+.content-approve .title {
+    font-weight: bold;
+}

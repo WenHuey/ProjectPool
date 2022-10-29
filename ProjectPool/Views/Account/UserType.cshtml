@@ -50,32 +50,38 @@
     <section id="signup">
         <div class="container" id="container">
             <div class="form-container account-container">
-                <form asp-action="SignUp" method="post">
-                    <h1>Create Account</h1>
+                <form>
+                    <h1>Create Your Account</h1>
+ 
+                    <p id="sub-title"></p>
+
+
                     @Html.ValidationSummary(true)
                     <input hidden id="typeID" asp-for="UserTypeID" value="" />
                     <div class="form-group">
                         <input asp-for="FirstName" class="form-control" placeholder="First Name" />
-                        @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "validation" })
+                        <br /><span hidden class="validation" id="validation-1">This field is required.</span>
                     </div>
                     <div class="form-group">
                         <input asp-for="LastName" class="form-control" placeholder="Last Name" />
-                        @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "validation" })
+                        <br /><span hidden class="validation" id="validation-2">This field is required.</span>
                     </div>
                     <div class="form-group">
                         <input asp-for="Email" class="form-control" placeholder="Email" />
-                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "validation" })
+                        @*@Html.ValidationMessageFor(model => model.Email, "", new { @class = "validation" })*@
+                        <p id="Status"></p>
+                        <br /><span hidden class="validation" id="validation-3">This field is required.</span>
                     </div>
                     <div class="form-group">
                         <input asp-for="Password" class="form-control" placeholder="Password" />
-                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "validation" })
+                        <br /><span hidden class="validation" id="validation-4">This field is required.</span>
                     </div>
                     <div class="form-group">
                         <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" />
-                        @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "validation" })
+                        <br /><span hidden class="validation" id="validation-5">This field is required.</span>
                     </div>
                     <br />
-                    <button asp-controller="Account" asp-action="SignUp">Sign Up</button>
+                    <button id="btn-signup" @*asp-controller="Account" asp-action="SignUp"*@>Sign Up</button>
                 </form>
             </div>
             <div class="overlay-container">
@@ -92,16 +98,162 @@
     </section>
 
     <script>
+
+        function checkUser() {
+
+            $("#Status").html("Checking...");
+            var email = $("#Email").val();
+
+            if (email != null || email != "") {
+                $.post("@Url.Action("IsUserExist", "Account")",
+                    {
+                        email: email
+                    },
+                    function (data) {
+                        if (data == 0) {
+                            $('#Status').removeAttr('hidden');
+                            $("#Status").html('<font color="Green">Email Available!</font>');
+                            valid = true;
+                        }
+                        else if (data == 2) {
+                            $('#validation-3').removeAttr('hidden');
+                            $('#Status').prop('hidden', 'hidden');
+                            valid = false;
+                        }
+                        else {
+                            $('#Status').removeAttr('hidden');
+                            $("#Status").html('<font color="Red">Email Taken! Try Another.</font>');
+                            valid = false;
+                        }
+                    }
+                )
+            }
+
+        }
+
+        function comparePass() {
+            var pass = $("#Password").val();
+            var conPass = $("#ConfirmPassword").val();
+            if (pass != conPass) {
+                $('#validation-5').removeAttr('hidden');
+                $("#validation-5").html('<font color="Red">Password does not match!</font>')
+            }
+            else {
+                $('#validation-5').prop('hidden', 'hidden');
+            }
+
+
+        }
+
         $(document).ready(function () {
             $("#signup").hide();
 
             $(".btn-ut").on("click", function () {
                 var id = $(this).val();
+                $('input[type="text"]').val('');
+                $('.validation').prop('hidden', 'hidden');
+                if (id == 2) {
+                    $("#sub-title").html("As an Employer");
+                }
+                else if(id == 3){
+                    $("#sub-title").html("As s Student / Freelancer");
+                }
                 $("#signup").show();
                 $("#typeID").val(id);
                 console.log(id);
             });
+
+            var valid;
+
+            $("#Email").change(function () {
+                checkUser();
+            });
+
+            $("#Password").change(function () {
+                comparePass();
+            });
+
+            $("#ConfirmPassword").change(function () {
+                comparePass();
+            });
+
+
+
+            $('#btn-signup').click(function () {
+                if (!$('#FirstName').val()) {
+                    $('#validation-1').removeAttr('hidden');
+                }
+                if (!$('#LastName').val()) {
+                    $('#validation-2').removeAttr('hidden');
+                }
+                if (!$('#Email').val()) {
+                    $('#validation-3').removeAttr('hidden');
+                }
+                if (!$('#Password').val()) {
+                    $('#validation-4').removeAttr('hidden');
+                }
+                if (!$('#ConfirmPassword').val()) {
+                    $('#validation-5').removeAttr('hidden');
+                }
+
+                if ($.trim($("#FirstName").val()) === "" || $.trim($("#LastName").val()) === "" || $.trim($("#Email").val()) === "" || $.trim($("#ConfirmPassword").val()) === "" || valid == false) {
+                    return false;
+                }
+                else {
+
+                    $.ajax({
+                        url: "@Url.Action("SignUp", "Account")",
+                        type: "POST",
+                        data: {
+                            UserTypeID: $("#typeID").val(),
+                            FirstName: $("#FirstName").val(),
+                            LastName: $("#LastName").val(),
+                            Email: $("#Email").val(),
+                            Password: $("#Password").val(),
+                            ConfirmPassword: $("#ConfirmPassword").val(),
+                        },
+                        success: function (response) {
+                            var url = "@Url.Action("Login", "Account")";
+                            window.location.href = url;
+                        }
+                    });
+                }
+
+            });
+
+            $("#FirstName").change(function () {
+                if (!$('#FirstName').val()) {
+                    $('#validation-1').removeAttr('hidden');
+                }
+                $('#validation-1').prop('hidden', 'hidden');
+            });
+            $("#LastName").change(function () {
+                if (!$('#FromTime').val()) {
+                    $('#validation-2').removeAttr('hidden');
+                }
+                $('#validation-2').prop('hidden', 'hidden');
+            });
+            $("#Email").change(function () {
+                if (!$('#Email').val()) {
+                    $('#validation-3').removeAttr('hidden');
+                }
+                $('#validation-3').prop('hidden', 'hidden');
+            });
+            $("#Password").keypress(function () {
+                if (!$('#Password').val()) {
+                    $('#validation-4').removeAttr('hidden');
+                }
+                $('#validation-4').prop('hidden', 'hidden');
+            });
+            $("#ConfirmPassword").keypress(function () {
+                if (!$('#ConfirmPassword').val()) {
+                    $('#validation-5').removeAttr('hidden');
+                }
+                $('#validation-5').prop('hidden', 'hidden');
+            });
         });
+
+
     </script>
 </body>
 

@@ -117,8 +117,11 @@
                 else
                 {
                     <div class="account">
-                        <a asp-action="Login" asp-controller="Account"><span>Log In</span></a>
-                        <a class="cta" href="ChooseUser"><button>Sign Up now</button></a>
+                        <form>
+                            <a asp-action="Login" asp-controller="Account"><span>Log In</span></a>
+                            <button class="cta" asp-action="UserType" asp-controller="Account">Sign Up now</button>
+                        </form>
+                        
                     </div>
                 }
 
@@ -142,6 +145,9 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     @*<script src="~/js/site.js" asp-append-version="true"></script>*@
     <script src="~/script/toggleProfile.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

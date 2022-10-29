@@ -1,0 +1,96 @@
+﻿body {
+    background: #a9c1d5;
+}
+
+.content{
+    width: 70%;
+    margin: auto;
+}
+
+/*.card {
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 2px 0 rgba(0,0,0,.06);
+}*/
+
+.card {
+    margin: 1rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 0 solid rgba(0,0,0,.125);
+    /*border-radius: .25rem;*/
+}
+
+.card-body {
+    flex: 1 1 auto;
+    min-height: 1px;
+    padding: 1.8rem 3rem;
+}
+
+.tag {
+    font-style: italic;
+    color: grey;
+    font-size: 0.9rem;
+}
+
+.con-table td:nth-child(2) {
+    padding: 0 10px;
+}
+
+.title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding-bottom: 10px;
+    text-decoration-line: underline;
+    font-style: italic;
+}
+
+.interview-section input {
+    box-sizing: border-box;
+    height: 35px;
+    width: 100%;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    padding-left: 10px;
+    margin: 5px auto;
+    font-size: 15px;
+    /* transition: border-color 150ms ease; */
+    font-family: 'Jost'
+}
+
+.interview-section .width {
+    width: 35% !important;
+}
+
+.btns {
+    display: flex;
+    justify-content: center;
+}
+
+.btn-review {
+    padding: 8px 23px;
+    width: 40%;
+    background-color: steelblue;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+#accept{
+    margin-right: 20px;
+}
+
+#reject {
+    background-color: indianred !important;
+}
+
+.btn-review:hover {
+    opacity: 80%;
+}
+
+.validation{
+    color: red;
+}

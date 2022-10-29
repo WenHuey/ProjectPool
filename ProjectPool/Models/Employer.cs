@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace ProjectPool.Models
 {
-    public class Contractor
+    public class Employer
     {
         [Key]
         [Required]
-        public int ContractorID { get; set; }
+        public int EmployerID { get; set; }
         public int UserID { get; set; }
 
         [Display(Name = "First Name")]
@@ -19,7 +19,7 @@ namespace ProjectPool.Models
 
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
- 
+
         [Display(Name = "State")]
         public string State { get; set; }
 
@@ -37,29 +37,11 @@ namespace ProjectPool.Models
         [StringLength(int.MaxValue)]
         public string ProfileDesc { get; set; }
 
-        [Display(Name = "Reviews")]
-        public string ReviewAverage { get; set; }
+        public string CompanyName { get; set; }
 
-        [Required]
         public bool Deleted { get; set; }
 
-
-        [Display(Name = "Category")]
-        public int CategoryID { get; set; }
-
-
-        [Display(Name = "Sub-Category")]
-        public string SubCategoryName { get; set; }
-
-        [NotMapped]
-        [Required]
-        [Display(Name = "Skill")]
-        public string Skill { get; set; }
-
-        [NotMapped]
-        [Required]
-        [Display(Name = "Language")]
-        public string Language { get; set; }
+        
 
 
 

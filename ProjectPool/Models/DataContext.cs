@@ -47,5 +47,9 @@ namespace ProjectPool.Models
         public DbSet<ApplicationModel> Application { get; set; }
 
         public DbSet<Contractor> Contractor { get; set; }
+        public DbSet<Employer> Employer { get; set; }
+
+        public DbSet<Interview> Interview { get; set; }
+
     }
 }

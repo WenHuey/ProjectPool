@@ -46,7 +46,7 @@
 
     <div class="container" id="container">
         <div class="form-container account-container">
-            <form asp-action="SignUp" method="post">
+            @*<form asp-action="SignUp" method="post">*@
                 <h1>Create Account</h1>
                 @Html.ValidationSummary(true)
                 <input hidden asp-for="UserTypeID" value="@ViewBag.typeID" />
@@ -60,7 +60,8 @@
                 </div>
                 <div class="form-group">
                     <input asp-for="Email" class="form-control" placeholder="Email" />
-                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "validation" })
+                    @*@Html.ValidationMessageFor(model => model.Email, "", new { @class = "validation" })*@
+                    <p id="Status"></p>
                 </div>
                 <div class="form-group">
                     <input asp-for="Password" class="form-control" placeholder="Password" />
@@ -71,8 +72,8 @@
                     @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "validation" })
                 </div>
                 <br />
-                <button asp-controller="Account" asp-action="SignUp">Sign Up</button>
-            </form>
+                <button id="btn-signup" @*asp-controller="Account" asp-action="SignUp"*@>Sign Up</button>
+            @*</form>*@
         </div>
         <div class="overlay-container">
             <div class="overlay">
@@ -85,6 +86,68 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            var valid = true;
+
+            $("#Email").live('change', function () {
+                alert('The option with value ');
+            });
+
+            $("#Email").keydown(function () {
+                //function checkUser() {
+                console.log("changing");
+                    $("#Status").html("Checking...");
+                    $.post("@Url.Action("IsUserExist", "Account")",
+                        {
+                            email: $("#Email").val()
+                        },
+                        function (data) {
+                            if (data == 0) {
+                                $("#Status").html('<font color="Green">Email Available!</font>');
+                            }
+                            else {
+                                $("#Status").html('<font color="Red">Email Taken! Try Another.</font>');
+                                valid = false;
+                            }
+                        }
+                    )
+                //}
+
+            });
+
+            var model = {
+                UserTypeID: @ViewBag.typeID,
+                FirstName: $("#FirstName").val(),
+                LastName: $("#LastName").val(),
+                Email: $("#Email").val(),
+                Password: $("#Password").val(),
+                ConfirmPassword: $("#ConfirmPassword").val(),
+            };
+
+            $('#btn-signup').click(function () {
+                if ($.trim($("#FirstName").val()) === "" || $.trim($("#LastName").val()) === "" || $.trim($("#Email").val()) === "" || $.trim($("#ConfirmPassword").val()) === "" || valid == false) {
+                    return false;
+                }
+                else {
+                    $.ajax({
+                        url: "@Url.Action("SignUp", "Account")",
+                        type: "POST",
+                        data: JSON.stringify(model),
+                        success: function (response) {
+                            //Do what needs to be done
+                            alert('Success')
+                        }
+                    });
+                }
+            });
+
+
+
+
+        });
+    </script>
 
 </body>
 </html>

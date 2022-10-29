@@ -1,102 +1,215 @@
-﻿@model ProjectPool.Models.Contractor
+﻿@model ProjectPool.Models.ReviewApplicationModel
 
 @{
     ViewData["Title"] = "ReviewApplication";
 }
 
-<h1>ReviewApplication</h1>
+<!-- CSS -->
+<link rel="stylesheet" href="~/css/ReviewApplication.css">
+<!-- Font -->
+<link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
 
-<div>
-    <h4>Contractor</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ContractorID)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ContractorID)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserID)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserID)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.State)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.State)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Country)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Country)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Phone)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Phone)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProfileDesc)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProfileDesc)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ReviewAverage)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ReviewAverage)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Deleted)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Deleted)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CategoryID)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CategoryID)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SubCategory)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SubCategory)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Skill)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Skill)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Language)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Language)
-        </dd>
-    </dl>
+<div class="content">
+    <!-- Project -->
+    <div class="row gutters-sm">
+        <div class="col-12">
+            <div class="card no-border-grey">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <p class="h4" style="font-weight:bold;">@Model.Title</p>
+                        <p class="mt-1">@Model.CompanyName </p>
+                        <table class="project-table">
+                            <tr>
+                                <td style="padding-right: 30px;">
+                                    <table>
+                                        <tr>
+                                            <td style="color:green;"><i class="fa-solid fa-dollar-sign"></i></td>
+                                            <td>&nbsp;RM&nbsp;@Model.Cost</td>
+                                        </tr>
+                                    </table>
+
+                                </td>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td style="color:steelblue;"><i class="fa-regular fa-clock"></i></td>
+                                            <td>&nbsp;@Model.Duration</td>
+                                        </tr>
+                                    </table>
+
+                                </td>
+                            </tr>
+                        </table>
+                        <p class="mt-1 tag">tags:&nbsp;@Model.Tags</p>
+                    </div>
+
+                    <br />
+                    <hr />
+                    <br />
+
+                    <div class="text-black title">Applicant Details</div>
+                    <table class="con-table">
+                        <tr>
+                            <td>@Html.DisplayNameFor(model => model.FullName)</td>
+                            <td>:</td>
+                            <td>@Html.DisplayFor(model => model.FullName)</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.DisplayNameFor(model => model.Address)</td>
+                            <td>:</td>
+                            <td>@Html.DisplayFor(model => model.Address)</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.DisplayNameFor(model => model.Email)</td>
+                            <td>:</td>
+                            <td>@Html.DisplayFor(model => model.Email)</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.DisplayNameFor(model => model.Phone)</td>
+                            <td>:</td>
+                            <td>@Html.DisplayFor(model => model.Phone)</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.DisplayNameFor(model => model.ProfileDesc)</td>
+                            <td>:</td>
+                            <td>@Html.DisplayFor(model => model.ProfileDesc)</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.DisplayNameFor(model => model.Tags)</td>
+                            <td>:</td>
+                            <td>@Html.DisplayFor(model => model.Tags)</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.DisplayNameFor(model => model.Skill)</td>
+                            <td>:</td>
+                            <td>@Html.DisplayFor(model => model.Skill)</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.DisplayNameFor(model => model.Language)</td>
+                            <td>:</td>
+                            <td>@Html.DisplayFor(model => model.Language)</td>
+                        </tr>
+
+                    </table>
+                    <br />
+                    @if (Model.hasPitch)
+                    {
+                        <p class="title">@Html.DisplayFor(model => model.FullName)'s Pitch</p> 
+                        <p style="line-height: 1.8;">@Html.DisplayFor(model => model.ConPitch, new { @disabled = "disabled" })</p>
+                    }
+
+
+                    <br />
+                    <div class="interview-section">
+                        <form id="form" asp-action="ReviewApplication" method="post">
+                            @*@Html.DisplayNameFor(model => model.Language)*@
+                            @Html.HiddenFor(model => model.ApplicationID)
+                            <p class="title">Interview session</p>
+                            @Html.DisplayNameFor(model => model.IvDate)
+                            <br />
+                            @Html.TextBoxFor(model => model.IvDate, new { type = "date", @class = "width" })
+                            <br /><span hidden class="validation" id="validation-1">This field is required.</span>
+                            <br />
+                            @Html.DisplayNameFor(model => model.FromTime)
+                            <br />
+                            @Html.TextBoxFor(model => model.FromTime, new { type = "time", @class = "width" })
+                            <br /><span hidden class="validation" id="validation-2">This field is required.</span>
+                            <br />
+                            @Html.DisplayNameFor(model => model.ToTime)
+                            <br />
+                            @Html.TextBoxFor(model => model.ToTime, new { type = "time", @class = "width" })
+                            <br /><span hidden class="validation" id="validation-3">This field is required.</span>
+                            <br />
+                            @Html.DisplayNameFor(model => model.Link)
+                            <br />
+                            @Html.TextBoxFor(model => model.Link, new { type = "text", @class = "link" })
+                            <br /><span hidden class="validation" id="validation-4">This field is required.</span>
+                            <br /><br />
+                            <div class="btns">
+                                <button class="btn-review" id="accept" asp-route-id="@Model.ApplicationID" asp-route-value="1">Accept</button>
+                                <button class="btn-review" id="reject" asp-route-id="@Model.ApplicationID" asp-route-value="0">Reject</button>
+                            </div>
+
+                        </form>
+                        <br /><br />
+                        <div>
+                            <a asp-action="EmpApplication">Back to List</a>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var now = new Date();
+
+        var day = ("0" + now.getDate()).slice(-2);
+        var month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+        var today = now.getFullYear() + "-" + (month) + "-" + (day);
+        $("#IvDate")[0].setAttribute('min', today);
+
+        $(document).ready(function () {
+
+            
+
+            $('#accept').click(function () {
+                if ($.trim($("#IvDate").val()) === "" || $.trim($("#FromTime").val()) === "" || $.trim($("#ToTime").val()) === "" || $.trim($("#Link").val()) === "") {                 
+                    return false;
+                }
+            });
+
+            $('#accept').click(function () {
+                if (!$('#IvDate').val()) {
+                    $('#validation-1').removeAttr('hidden');
+                }
+                if (!$('#FromTime').val()) {
+                    $('#validation-2').removeAttr('hidden');
+                }
+                if (!$('#ToTime').val()) {
+                    $('#validation-3').removeAttr('hidden');
+                }
+                if (!$('#Link').val()) {
+                    $('#validation-4').removeAttr('hidden');
+                }
+            })
+
+            $("#IvDate").change(function () {
+                if (!$('#IvDate').val()) {
+                    $('#validation-1').removeAttr('hidden');
+                }
+                $('#validation-1').prop('hidden', 'hidden');
+            });
+            $("#FromTime").change(function () {
+                if (!$('#FromTime').val()) {
+                    $('#validation-2').removeAttr('hidden');
+                }
+                $('#validation-2').prop('hidden', 'hidden');
+            });
+            $("#ToTime").change(function () {
+                if (!$('#ToTime').val()) {
+                    $('#validation-3').removeAttr('hidden');
+                }
+                $('#validation-3').prop('hidden', 'hidden');
+            });
+            $("#Link").keypress(function () {
+                if (!$('#Link').val()) {
+                    $('#validation-4').removeAttr('hidden');
+                }
+                $('#validation-4').prop('hidden', 'hidden');
+            });
+        })
+    </script>
+
+
+
+    
+
+    
 </div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+
+

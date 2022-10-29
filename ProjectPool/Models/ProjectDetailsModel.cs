@@ -42,6 +42,8 @@ namespace ProjectPool.Models
 
         public bool isApplied { get; set; }
 
+        public bool isEmp { get; set; }
+
 
     }
 }

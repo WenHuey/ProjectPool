@@ -19,7 +19,7 @@
 
 .form-container h1 {
     font-weight: bold;
-    margin: 20px 0;
+    margin: 20px 0 0 0;
 }
 
 
@@ -97,6 +97,7 @@
     max-width: 100%;
     min-height: 480px;
     margin: 20px auto;
+    height: 100vh;
 }
 
 .form-container {
@@ -226,4 +227,9 @@
 
 .validation{
     color: red;
+}
+
+#Status {
+    float: left;
+    font-size: 0.9rem;
 }

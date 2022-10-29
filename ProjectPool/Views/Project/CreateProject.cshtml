@@ -176,43 +176,27 @@
                             DurationlistItems.Add(new SelectListItem
                             {
                                 Text = "0-3 months",
-                                Value = "1"
+                                Value = "0 - 3 months"
                             });
                             DurationlistItems.Add(new SelectListItem
                             {
                                 Text = "3-6 months",
-                                Value = "2"
+                                Value = "3 - 6 months"
                             });
                             DurationlistItems.Add(new SelectListItem
                             {
                                 Text = "6-12 months",
-                                Value = "3"
+                                Value = "6 - 12 months"
                             });
                             DurationlistItems.Add(new SelectListItem
                             {
                                 Text = "Not Specified",
-                                Value = "4"
+                                Value = "Not Specified"
                             });
                         }
                         @Html.DropDownListFor(model => model.Duration, DurationlistItems, "-- Select Duration --", new { @id = "duration", @class = "category" })
                         @Html.ValidationMessageFor(model => model.Duration, "", new { @class = "validation" })
 
-                        <!--<div class="duration-grp from-right">
-<div class="label">From</div>
-<div class="from">
-    Html.TextBoxFor(model => model.DurationFrom, new { type = "number", class = "input-duration" })
-    Html.ValidationMessageFor(model => model.DurationFrom, "", new { class = "validation" })-->
-                        @*<span class="validation-desc" style="float: left;">asd</span>*@
-                        <!--</div>
-</div>
-<div class="duration-grp">
-    <div class="label">To</div>
-    <div class="to">
-        Html.TextBoxFor(model => model.DurationTo, new { type = "number", class = "input-duration" })
-        Html.ValidationMessageFor(model => model.DurationTo, "", new { class = "validation" })-->
-                        @*<span class="validation-desc" style="float: left;">asd</span>*@
-                        <!--</div>
-</div>-->
                     </div>
 
                 </div>
@@ -237,7 +221,7 @@
                 </div>
                 <br /><br />
                 <div class="field btns">
-                    <button class="prev-5 prev" onclick="history.back()>Cancel</button>
+                    <button class="prev-5 prev" onclick="history.back()">Cancel</button>
                     <button asp-controller="Project" asp-action="CreateProject" class="submit">Submit</button>
                 </div>
             </div>
@@ -251,8 +235,8 @@
     <!-- Script -->
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+    @*<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>*@
 
     <script src="~/script/jquery.richtext.js"></script>
     <script src="~/script/tagify.min.js"></script>

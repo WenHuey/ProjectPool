@@ -10,14 +10,14 @@ namespace ProjectPool.Models
         public string ContractorID { get; set; }
         public string EmployerID { get; set; }
         public string ProjectID { get; set; }
-
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string Title { get; set; }
+        public string FullName { get; set; }
         public string Category { get; set; }
         public string SubCategory { get; set; }
-        public string Skill { get; set; }
+        public string ContractorSkills { get; set; }
 
         public string DayHourMin { get; set; }
+
 
     }
 }

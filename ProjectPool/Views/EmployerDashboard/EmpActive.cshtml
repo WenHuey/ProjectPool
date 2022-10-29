@@ -45,6 +45,7 @@
                 <button class="active" onclick="location.href='@Url.Action("EmpActive", "EmployerDashboard")'">Active</button>
                 <button onclick="location.href='@Url.Action("EmpRunning", "EmployerDashboard")'">Running</button>
                 <button onclick="location.href='@Url.Action("EmpApplication", "EmployerDashboard")'">Applications</button>
+                <button onclick="location.href='@Url.Action("EmpInterview", "EmployerDashboard" )'">Interview</button>
                 <button>Closed</button>
             </div>
             <div class="btn-project">
@@ -93,9 +94,9 @@
                                             <a href="#" type="button" class="btn btn-delete" data-id="@Data.ProjectID" data-modal="modal-delete">
                                                 <i class="fa-solid fa-trash"></i>
                                             </a>
-                                            <a href="#" type="button" class="btn btn-tick" data-id="@Data.ProjectID" data-modal="modal-running">
+                                            @*<a href="#" type="button" class="btn btn-tick" data-id="@Data.ProjectID" data-modal="modal-running">
                                                 <i class="fa-solid fa-square-check"></i>
-                                            </a>
+                                            </a>*@
                                         </td>
                                     </tr>
                                 }

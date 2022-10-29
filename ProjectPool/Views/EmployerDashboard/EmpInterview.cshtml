@@ -5,11 +5,11 @@
     ViewData["Title"] = "Manage Project | ProjectPooL.";
     string[] TableHeaders = new string[] {"#"
                ,"Project Title"
-               ,"Category"
-               ,"Sub Category"
-               ,"Contractor Name"
-               ,"Contractor Skill"
-               ,"Applied Ago"
+               ,"Full Name"
+               ,"Date"
+               ,"Time"
+               ,"Link"
+               ,""
                ,"Actions"};
 }
 <!DOCTYPE html>
@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="~/css/EmpManageProject.css">
     <!-- Font -->
     <link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
+    <script src="https://editor.datatables.net/extensions/Editor/js/dataTables.editor.min.js"></script>
 
 
 </head>
@@ -43,8 +44,8 @@
             <div class="btn-box">
                 <button onclick="location.href='@Url.Action("EmpActive", "EmployerDashboard")'">Active</button>
                 <button onclick="location.href='@Url.Action("EmpRunning", "EmployerDashboard")'">Running</button>
-                <button class="active" onclick="location.href='@Url.Action("EmpApplication", "EmployerDashboard")'">Applications</button>
-                <button onclick="location.href='@Url.Action("EmpInterview", "EmployerDashboard" )'">Interview</button>
+                <button onclick="location.href='@Url.Action("EmpApplication", "EmployerDashboard")'">Applications</button>
+                <button class="active" onclick="location.href='@Url.Action("EmpInterview", "EmployerDashboard" )'">Interview</button>
                 <button>Closed</button>
             </div>
             <div class="btn-project">
@@ -79,14 +80,26 @@
                                     <tr>
                                         <td></td>
                                         <td>@Data.Title</td>
-                                        <td>@Data.Category</td>
-                                        <td>@Data.SubCategory</td>
                                         <td>@Data.FullName</td>
-                                        <td>@Data.ContractorSkills</td>
-                                        <td>@Data.DayHourMin</td>
+                                        <td>@Data.Date</td>
+                                        <td>@Data.Time</td>
+                                        <td><a href="@Data.Link">@Data.Link</a></td>
+                                        @if (Data.DatePassed)
+                                        {
+                                            <td style="color:red;">@Data.TimeLeft</td>
+                                        }
+                                        else
+                                        {
+                                            <td>@Data.TimeLeft</td>
+                                        }
+
                                         <td>
-                                            @Html.ActionLink("Review", "ReviewApplication", new { id = Data.ContractorID, projectID = Data.ProjectID })
-                                            
+                                            @Html.ActionLink("Edit", "EditInterview", new { id = Data.ApplicationID })
+                                            |
+                                            @Html.ActionLink("Approve", "ReviewApplication", new { id = Data.InterviewID, projectID = Data.ProjectID }, new { @class = "btn-approve", @data_target = "modal-approve", @data_id = Data.InterviewID, @data_id2 = Data.ProjectID, @data_name = Data.FullName, @data_title = Data.Title })
+                                            |
+                                            @Html.ActionLink("Reject", "EditActiveProject", new { id = Data.ContractorID })
+
                                         </td>
                                     </tr>
                                 }
@@ -99,35 +112,37 @@
         </div>
     </div>
 
-
     <!-- Delete Modal -->
-    <div id="modal-delete" class="modal">
+    <div id="modal-approve" class="modal">
         <div class="modal-content">
             <div class="project">
                 <a class="close">&times;</a>
-                <form asp-action="DeleteActiveProject">
-                    <h2>Delete Project</h2>
-                    <div class="project-content">
+                <form asp-action="ApproveInterview" method="post">
+                    <h2>Approve Contractor</h2>
+                    <div class="content-approve">
                         <p>
-                            Are you sure you want to delete this project?
+                            Are you sure you want to approve applicant <span class="conName"></span> ?
+                            <span class="conName"></span> will be assigned to Project - <span class="title"></span> .
                             <br>
-                            This action cannot be undone.
+                            <strong style="color:red">* This action cannot be undone.</strong>
                         </p>
 
                         @Html.Hidden("id", "", new { @class = "hiddenid" })
-
+                        @Html.Hidden("id2", "", new { @class = "hiddenprojectId" })
+                        <input id="id" class="hiddenid" />
+                        <input id="id2" class="hiddenprojectId" />
                     </div>
 
-                    <div class="project-button">
-                        <button id="btn-confirm" type="submit">Confirm</button>
-                        <button type="submit" href="/resources/views/admin/orders.html">Cancel</button>
+                    <div class="btns">
+                        <button class="btn-confirm" type="submit" >Accept</button>
+                        <button class="close" >Cancel</button>
                     </div>
+
 
                 </form>
             </div>
         </div>
     </div>
-
 
     <script>
         $(document).ready(function () {
@@ -136,33 +151,38 @@
                 scrollX: true,
                 columnDefs: [{ targets: [7], class: "nowrap" }]
             });
+           
 
             $(".Msg").fadeTo(2000, 500).slideUp(500, function () {
                 $(".Msg").slideUp(500);
             });
 
-            $(".btn-delete").on("click", function () {
+            $('.btn-approve').on("click", function (e) {
+                e.preventDefault();
+                //perform the url load  then
+                $('#modal-approve').modal({
+                    keyboard: true
+                }, 'show');
                 var passedID = $(this).data('id');
-                console.log(passedID);
-                $(".project-content .hiddenid").val(passedID);
-            });
+                var projectID = $(this).data('id2');
+                var conName = $(this).data('name');
+                var title = $(this).data('title');
+                $(".content-approve .hiddenid").val(passedID);
+                $(".content-approve .hiddenprojectId").val(projectID);
+                $(".content-approve .conName").html(conName);
+                $(".content-approve .title").html(title);
+                return false;
+            })
         });
 
-        let modalView = [...document.querySelectorAll(".btn-view")];
-        modalView.forEach(function (btn) {
-            btn.onclick = function () {
-                let modal = btn.getAttribute("data-modal");
-                document.getElementById(modal).style.display = "block";
-            };
-        });
 
-        let modalDelete = [...document.querySelectorAll(".btn-delete")];
-        modalDelete.forEach(function (btn) {
-            btn.onclick = function () {
-                let modal = btn.getAttribute("data-modal");
-                document.getElementById(modal).style.display = "block";
-            };
-        });
+        //let modalApprove = [...document.querySelectorAll(".btn-approve")];
+        //modalDelete.forEach(function (btn) {
+        //    btn.onclick = function () {
+        //        let modal = btn.getAttribute("data-modal");
+        //        document.getElementById(modal).style.display = "block";
+        //    };
+        //});
 
         let closeBtns = [...document.querySelectorAll(".close")];
         closeBtns.forEach(function (btn) {

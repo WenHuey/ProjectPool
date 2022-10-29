@@ -51,6 +51,25 @@ namespace ProjectPool.Controllers
             return RedirectToAction("SignUp");
         }
 
+        public JsonResult IsUserExist(string email)
+        {
+            System.Threading.Thread.Sleep(200);
+            if (email == null)
+            {
+                return Json(2);
+            }
+
+            var data = _db.User.Where(e => e.Email.ToLower() == email.ToLower()).SingleOrDefault();
+            if(data == null)
+            {
+                return Json(0);
+            }
+            else
+            {
+                return Json(1);
+            }
+        }
+
         //[Route("ChooseUser/Signup")]
         [HttpGet]
         public IActionResult SignUp(int typeID)
@@ -66,6 +85,7 @@ namespace ProjectPool.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
+            
             //Connect db
             string connStr = _configuration.GetConnectionString("DefaultConnection");
             SqlConnection conn = new SqlConnection(connStr);
@@ -97,24 +117,16 @@ namespace ProjectPool.Controllers
                 //Execute query
                 cmd.ExecuteNonQuery();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
-            //Create command
-            //string query = "Insert into Employer (FirstName, LastName, Email, [Password]) VALUES (@FirstName, @LastName, @Email, hashbytes('sha2_512', @Password))";
-
-            //SqlCommand cmd = new SqlCommand(query, conn);
-            //cmd.Parameters.AddWithValue("@FirstName", model.FirstName);
-            //cmd.Parameters.AddWithValue("@LastName", model.LastName);
-            //cmd.Parameters.AddWithValue("@Email", model.Email);
-            //cmd.Parameters.AddWithValue("@Password", model.Password);
-
 
             //close connection
             conn.Close();
 
             return RedirectToAction("Login");
+           
         }
 
 

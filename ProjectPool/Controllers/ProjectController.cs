@@ -135,6 +135,7 @@ namespace ProjectPool.Controllers
             }
             var claimsIdentity = User.Identity as ClaimsIdentity;
             var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
+            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             var conID = _db.Contractor.Where(x => x.UserID.ToString() == userID).Select(x => x.ContractorID).SingleOrDefault();
             try
@@ -157,6 +158,7 @@ namespace ProjectPool.Controllers
                     //projectDetails.Add(new ProjectDetailsModel()
                     //{
                     var Date = dr["DatePosted"].ToString();
+                    
                     projectDetails.EmployerID = dr["EmployerID"].ToString();
                     projectDetails.FullName = dr["FullName"].ToString();
                     projectDetails.Phone = dr["Phone"].ToString();
@@ -175,6 +177,12 @@ namespace ProjectPool.Controllers
                     projectDetails.Skills = dr["Skills"].ToString();
                     projectDetails.Language = dr["Language"].ToString();
                     projectDetails.isApplied = false;
+                    projectDetails.isEmp = false;
+
+                    if (usertype == "2")
+                    {
+                        projectDetails.isEmp = true;
+                    }
                     //});
                 }
                 conn.Close();

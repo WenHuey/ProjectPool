@@ -1,0 +1,112 @@
+﻿@model ProjectPool.Models.Interview
+
+@{
+    ViewData["Title"] = "EditInterview";
+}
+
+<style>
+    .main-body{
+        margin: 5% 0;
+    }
+
+    .content {
+        padding: 0 1rem;
+        width: 60%;
+        margin: auto;
+    }
+
+    .edit-title{
+        padding-bottom: 1.5rem;
+        font-size: 1.5rem;
+    }
+
+    .interview-section input {
+        box-sizing: border-box;
+        height: 35px;
+        width: 100%;
+        border: 1px solid lightgrey;
+        border-radius: 5px;
+        padding-left: 10px;
+        margin: 5px auto;
+        font-size: 15px;
+        /* transition: border-color 150ms ease; */
+        font-family: 'Jost'
+    }
+
+    .interview-section .width {
+        width: 35% !important;
+    }
+
+    .btn-save {
+        padding: 8px 23px;
+        width: 110px;
+        background-color: steelblue;
+        border: none;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+</style>
+
+<div class="content">
+    <div class="col-12">
+        <div class="text-black font-weight-bold edit-title">Edit Interview Details</div>
+    </div>
+
+    <div class="row interview-section">
+        <div class="col-md-4">
+            <form asp-action="EditInterview">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <input hidden asp-for="InterviewID" />
+                <input hidden asp-for="ApplicationID" />
+                <input hidden asp-for="Status" />
+
+                @Html.DisplayNameFor(model => model.Date)
+                <br />
+                <input asp-for="Date" type="date" class="width" />
+                <br /><span hidden class="validation" id="validation-1">This field is required.</span>
+                <br />
+                @Html.DisplayNameFor(model => model.FromTime)
+                <br />
+                @Html.TextBoxFor(model => model.FromTime, new { type = "time", @class = "width" })
+                <br /><span hidden class="validation" id="validation-2">This field is required.</span>
+                <br />
+                @Html.DisplayNameFor(model => model.ToTime)
+                <br />
+                @Html.TextBoxFor(model => model.ToTime, new { type = "time", @class = "width" })
+                <br /><span hidden class="validation" id="validation-3">This field is required.</span>
+                <br />
+                @Html.DisplayNameFor(model => model.Link)
+                <br />
+                @Html.TextBoxFor(model => model.Link, new { type = "text", @class = "link" })
+                <br /><span hidden class="validation" id="validation-4">This field is required.</span>
+                <br />
+                <div class="form-group">
+                    <button class="btn-save" id="save" asp-route-id="@Model.InterviewID">Save</button>
+                </div>
+            </form>
+            <br />
+            <div>
+                <a asp-action="EmpInterview">Back to List</a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+    var now = new Date();
+
+    var day = ("0" + now.getDate()).slice(-2);
+    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+    var today = now.getFullYear() + "-" + (month) + "-" + (day);
+    //console.log(today);
+    $("#Date")[0].setAttribute('min', today);
+
+</script>
+
+
+
+

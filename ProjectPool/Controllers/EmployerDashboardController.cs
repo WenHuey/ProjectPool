@@ -21,7 +21,8 @@ namespace ProjectPool.Controllers
         List<EmpActiveProjectModel> activeProject = new List<EmpActiveProjectModel>();
         List<EmpRunningModel> runningProject = new List<EmpRunningModel>();
         List<EmpApplicationModel> applications = new List<EmpApplicationModel>();
-        //List<DashboardModel> projectCount = new List<DashboardModel>();
+        ReviewApplicationModel reviewApp = new ReviewApplicationModel();
+        List<EmpInterviewModel> interviews = new List<EmpInterviewModel>();
 
         public EmployerDashboardController(DataContext db, IConfiguration configuration)
         {
@@ -342,6 +343,7 @@ namespace ProjectPool.Controllers
         }
 
         #region Application
+
         [Route("Employer/Application")]
         [HttpGet]
         public IActionResult EmpApplication()
@@ -399,11 +401,11 @@ namespace ProjectPool.Controllers
                         ContractorID = dr["ContractorID"].ToString(),
                         EmployerID = dr["EmployerID"].ToString(),
                         ProjectID = dr["ProjectID"].ToString(),
-                        FirstName = dr["FirstName"].ToString(),
-                        LastName = dr["LastName"].ToString(),
+                        Title = dr["Title"].ToString(),
+                        FullName = dr["FullName"].ToString(),
                         Category = dr["Category"].ToString(),
                         SubCategory = dr["SubCategory"].ToString(),
-                        Skill = dr["Skills"].ToString(),
+                        ContractorSkills = dr["ContractorSkills"].ToString(),
                         DayHourMin = time,
                     });
                 }
@@ -420,9 +422,9 @@ namespace ProjectPool.Controllers
             return View(applications);
         }
 
-
+        [Route("Employer/Application/ReviewApplication")]
         [HttpGet]
-        public async Task<IActionResult> ReviewApplication(int? id)
+        public IActionResult ReviewApplication(int? id, int? projectID)
         {
             if (id == null)
             {
@@ -430,30 +432,300 @@ namespace ProjectPool.Controllers
                 return RedirectToAction("EmpApplication");
             }
 
-            var getApplicationDetails = await _db.Contractor.FindAsync(id);
-
-            if (getApplicationDetails == null)
+            if (projectID == null)
             {
-                TempData["ErrorMsg"] = "An error occurred while retrieving data";
+                TempData["ErrorMsg"] = "An error occurred while retrieving project details";
                 return RedirectToAction("EmpApplication");
             }
 
-            return View(getApplicationDetails);
+            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            SqlDataReader dr;
+            conn.Open();
+
+            try
+            {
+                SqlCommand cmd = new SqlCommand("Sp_GetReviewAppDetails", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@conID", id);
+                cmd.Parameters["@conID"].Direction = ParameterDirection.Input;
+                cmd.Parameters.AddWithValue("@ProjectID", projectID);
+                cmd.Parameters["@ProjectID"].Direction = ParameterDirection.Input;
+
+                dr = cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    var pitch = dr["ConPitch"].ToString();
+
+                    reviewApp.ApplicationID = dr["ApplicationID"].ToString();
+                    reviewApp.ProjectID = dr["ProjectID"].ToString();
+                    reviewApp.EmployerID = dr["EmployerID"].ToString();
+                    reviewApp.ContractorID = dr["ContractorID"].ToString();
+                    reviewApp.Title = dr["Title"].ToString();
+                    reviewApp.CompanyName = dr["CompanyName"].ToString();
+                    reviewApp.Cost = dr["Cost"].ToString();
+                    reviewApp.Duration = dr["Duration"].ToString();
+                    reviewApp.FullName = dr["FullName"].ToString();
+                    reviewApp.Address = dr["Address"].ToString();
+                    reviewApp.Email = dr["Email"].ToString();
+                    reviewApp.Phone = dr["Phone"].ToString();
+                    reviewApp.ProfileDesc = dr["ProfileDesc"].ToString();
+                    reviewApp.Tags = dr["Tags"].ToString();
+                    reviewApp.Skill = dr["Skill"].ToString();
+                    reviewApp.Language = dr["Language"].ToString();
+                    reviewApp.ConPitch = pitch;
+                    reviewApp.hasPitch = true;
+                    if (string.IsNullOrWhiteSpace(pitch))
+                    {
+                        reviewApp.hasPitch = false;
+                    }
+
+                }
+            }
+            catch
+            {
+                TempData["ErrorMsg"] = "Error! Data retrieve unsuccesful";
+            }
+            conn.Close();
+
+            return View(reviewApp);
+        }
+
+        [Route("Employer/Application/ReviewApplication")]
+        [HttpPost]
+        public async Task<IActionResult> ReviewApplication(string id, int value, ReviewApplicationModel model)
+        {
+            if (id != model.ApplicationID)
+            {
+                TempData["ErrorMsg"] = "Error! Application Id is Invalid";
+                return RedirectToAction("EmpApplication");
+            }
+
+            if (value == 0)
+            {
+                var reject = await _db.Application.FindAsync(id);
+                reject.Status = "Reject";
+                await _db.SaveChangesAsync();
+                return RedirectToAction("EmpApplication");
+            }
+
+            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            conn.Open();
+            SqlCommand cmd = new SqlCommand("Sp_InsertInterview", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            try
+            {
+
+                cmd.Parameters.AddWithValue("@Date", DateTime.Parse(model.IvDate));
+                cmd.Parameters["@Date"].Direction = ParameterDirection.Input;
+
+                cmd.Parameters.AddWithValue("@FromTime", DateTime.Parse(model.FromTime));
+                cmd.Parameters["@FromTime"].Direction = ParameterDirection.Input;
+
+                cmd.Parameters.AddWithValue("@ToTime", DateTime.Parse(model.ToTime));
+                cmd.Parameters["@ToTime"].Direction = ParameterDirection.Input;
+
+                cmd.Parameters.AddWithValue("@ApplicationID", id);
+                cmd.Parameters["@ApplicationID"].Direction = ParameterDirection.Input;
+
+                cmd.Parameters.AddWithValue("@Link", model.Link);
+                cmd.Parameters["@Link"].Direction = ParameterDirection.Input;
+
+                
+                cmd.ExecuteNonQuery();
+            }
+            catch
+            {
+                TempData["message"] = "Unsuccesful";
+            }
+            cmd.Connection.Close();
+
+            return RedirectToAction("EmpApplication");
+
+
+        }
+
+        #endregion
+
+        #region Interview
+
+        [Route("Employer/Interview")]
+        [HttpGet]
+        public IActionResult EmpInterview()
+        {
+
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
+
+            var empID = _db.Employer.Where(x => x.UserID.ToString() == userID).Select(x => x.EmployerID).SingleOrDefault();
+
+
+            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            SqlDataReader dr;
+
+            conn.Open();
+            SqlCommand cmd = new SqlCommand("Sp_DisplayInterview", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            try
+            {
+
+                cmd.Parameters.AddWithValue("@EmpID", empID);
+                cmd.Parameters["@EmpID"].Direction = ParameterDirection.Input;
+
+                dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    var Date = dr["Date"].ToString();
+                    var day = dr["Days"].ToString();
+                    var hr = dr["Hours"].ToString();
+                    var min = dr["Minutes"].ToString();
+                    bool datePassed = false;
+                    string time = min + " minute(s) more";
+
+                    if (Convert.ToInt32(day) <= 0 && Convert.ToInt32(hr) <= 0 && Convert.ToInt32(min) <= 0)
+                    {
+                        datePassed = true;
+                        time = "Interview Date Passed! Please make action!";
+                    }
+                    else
+                    {
+                        if (Convert.ToInt32(hr) >= 24)
+                        {
+                            time = day + " day(s) more";
+                        }
+                        else if (Convert.ToInt32(min) >= 60)
+                        {
+                            time = hr + " hour(s) more";
+                        }
+                    }
+
+                    
+
+                    interviews.Add(new EmpInterviewModel()
+                    {
+                        InterviewID = dr["InterviewID"].ToString(),
+                        ApplicationID = dr["ApplicationID"].ToString(),
+                        ContractorID = dr["ContractorID"].ToString(),
+                        ProjectID = dr["ProjectID"].ToString(),
+                        FullName = dr["FullName"].ToString(),
+                        Title = dr["Title"].ToString(),
+                        Date = DateTime.Parse(Date).ToString("dd/MM/yyyy"),
+                        Time = dr["Time"].ToString(),
+                        TimeLeft = time,
+                        Link = dr["Link"].ToString(),
+                        DatePassed = datePassed
+                    });
+                }
+            }
+            catch
+            {
+                TempData["ErrorMsg"] = "Error! Retrieve Data Unsuccesful";
+            }
+            cmd.Connection.Close();
+
+            return View(interviews);
+        }
+
+        [Route("Employer/Interview/Edit/{id}")]
+        [HttpGet]
+        public IActionResult EditInterview(int id)
+        {
+            if (id == null)
+            {
+                TempData["ErrorMsg"] = "An error occurred while retrieving key";
+                return RedirectToAction("EmpActive");
+            }
+
+            var getIvDetails = _db.Interview.Where(x => x.ApplicationID == id).SingleOrDefault();
+
+            if (getIvDetails == null)
+            {
+                TempData["ErrorMsg"] = "An error occurred while retrieving interview data";
+                return RedirectToAction("EmpInterview");
+            }
+
+            return View(getIvDetails);
+
+        }
+
+        [Route("Employer/Interview/Edit/{id}")]
+        [HttpPost]
+        public async Task<IActionResult> EditInterview(int id, Interview model)
+        {
+            if(id != model.InterviewID)
+            {
+                TempData["ErrorMsg"] = "An error occurred! Please seek for customer support.";
+                return RedirectToAction("EmpInterview");
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _db.Update(model);
+                    await _db.SaveChangesAsync();
+
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMsg"] = "An error occurred while saving data";
+                    throw ex;  
+                }
+            }
+            else
+            {
+                TempData["ErrorMsg"] = "An error occurred while retrieving data, model state invalid";
+                return RedirectToAction("EmpInterview");
+            }
+
+            return RedirectToAction("EmpInterview");
         }
 
 
-        [HttpGet]
-        public IActionResult DeclineApplication()
+        //[Route("Employer/Interview/Approve/{id}")]
+        [HttpPost]
+        public IActionResult ApproveInterview(int id, int id2)
         {
-            return View();
+            if(id == null || id2 == null)
+            {
+                TempData["ErrorMsg"] = "An error occurred while retrieving ids";
+                return RedirectToAction("EmpInterview");
+            }
+
+            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+
+            conn.Open();
+            SqlCommand cmd = new SqlCommand("Sp_ApproveInterview", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            try
+            {
+
+                cmd.Parameters.AddWithValue("@IvID", id);
+                cmd.Parameters["@IvID"].Direction = ParameterDirection.Input;
+                cmd.Parameters.AddWithValue("@ProjectID", id2);
+                cmd.Parameters["@ProjectID"].Direction = ParameterDirection.Input;
+                cmd.ExecuteNonQuery();
+                
+            }
+            catch
+            {
+                TempData["ErrorMsg"] = "Error! Retrieve Data Unsuccesful";
+            }
+
+            conn.Close();
+
+            return RedirectToAction("EmpRunning");
         }
 
         #endregion
 
 
-
-        [Route("Project")]
-        public IActionResult ConPendingProject()
+        //[Route("Project")]
+        public IActionResult EmpProfile(int? id)
         {
             return View();
         }
