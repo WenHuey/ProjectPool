@@ -28,6 +28,33 @@
     <link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
     <script src="https://editor.datatables.net/extensions/Editor/js/dataTables.editor.min.js"></script>
 
+    <style>
+        .btns {
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn-modal {
+            padding: 8px 23px;
+            width: 40%;
+            background-color: steelblue !important;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        #btn-confirm, #btn-decline {
+            margin-right: 20px;
+        }
+
+        #btn-close {
+            background-color: indianred !important;
+        }
+
+        .btn-modal:hover {
+            opacity: 80%;
+        }
+    </style>
 
 </head>
 <body>
@@ -96,9 +123,9 @@
                                         <td>
                                             @Html.ActionLink("Edit", "EditInterview", new { id = Data.ApplicationID })
                                             |
-                                            @Html.ActionLink("Approve", "ReviewApplication", new { id = Data.InterviewID, projectID = Data.ProjectID }, new { @class = "btn-approve", @data_target = "modal-approve", @data_id = Data.InterviewID, @data_id2 = Data.ProjectID, @data_name = Data.FullName, @data_title = Data.Title })
+                                            @Html.ActionLink("Approve", "#", new { id = Data.InterviewID, projectID = Data.ProjectID }, new { @class = "btn-approve", @data_target = "modal-approve", @data_id = Data.InterviewID, @data_id2 = Data.ProjectID, @data_name = Data.FullName, @data_title = Data.Title })
                                             |
-                                            @Html.ActionLink("Reject", "EditActiveProject", new { id = Data.ContractorID })
+                                            @Html.ActionLink("Reject", "EditActiveProject", new { id = Data.InterviewID }, new { @class = "btn-reject", @data_target = "modal-reject", @data_id = Data.InterviewID, @data_name = Data.FullName, @data_title = Data.Title })
 
                                         </td>
                                     </tr>
@@ -112,7 +139,7 @@
         </div>
     </div>
 
-    <!-- Delete Modal -->
+    <!-- Approve Modal -->
     <div id="modal-approve" class="modal">
         <div class="modal-content">
             <div class="project">
@@ -122,23 +149,51 @@
                     <div class="content-approve">
                         <p>
                             Are you sure you want to approve applicant <span class="conName"></span> ?
+                            <br />
                             <span class="conName"></span> will be assigned to Project - <span class="title"></span> .
-                            <br>
+                            <br /><br />
                             <strong style="color:red">* This action cannot be undone.</strong>
                         </p>
 
                         @Html.Hidden("id", "", new { @class = "hiddenid" })
                         @Html.Hidden("id2", "", new { @class = "hiddenprojectId" })
-                        <input id="id" class="hiddenid" />
-                        <input id="id2" class="hiddenprojectId" />
-                    </div>
 
+                    </div>
+                    <br />
                     <div class="btns">
-                        <button class="btn-confirm" type="submit" >Accept</button>
-                        <button class="close" >Cancel</button>
+                        <button class="btn-modal" id="btn-confirm" type="submit">Accept</button>
+                        <button class="close btn-modal" id="btn-close">Cancel</button>
                     </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reject Modal -->
+    <div id="modal-reject" class="modal">
+        <div class="modal-content">
+            <div class="project">
+                <a class="close">&times;</a>
+                <form asp-action="RejectInterview" method="post">
+                    <h2>Reject Contractor</h2>
+                    <div class="content-reject">
+                        <p>
+                            Are you sure you want to reject applicant <span class="conName"></span> ?
+                            <br />
+                            <span class="conName"></span> For Project - <span class="title"></span> .
+                            <br /><br />
+                            <strong style="color:red">* This action cannot be undone.</strong>
+                        </p>
+
+                        @Html.Hidden("id", "", new { @class = "hiddenid" })
 
 
+                    </div>
+                    <br />
+                    <div class="btns">
+                        <button class="btn-modal" id="btn-decline" type="submit">Reject</button>
+                        <button class="close btn-modal" id="btn-close">Cancel</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -151,7 +206,7 @@
                 scrollX: true,
                 columnDefs: [{ targets: [7], class: "nowrap" }]
             });
-           
+
 
             $(".Msg").fadeTo(2000, 500).slideUp(500, function () {
                 $(".Msg").slideUp(500);
@@ -171,6 +226,21 @@
                 $(".content-approve .hiddenprojectId").val(projectID);
                 $(".content-approve .conName").html(conName);
                 $(".content-approve .title").html(title);
+                return false;
+            })
+
+            $('.btn-reject').on("click", function (e) {
+                e.preventDefault();
+                //perform the url load  then
+                $('#modal-reject').modal({
+                    keyboard: true
+                }, 'show');
+                var passedID = $(this).data('id');
+                var conName = $(this).data('name');
+                var title = $(this).data('title');
+                $(".content-reject .hiddenid").val(passedID);
+                $(".content-reject .conName").html(conName);
+                $(".content-reject .title").html(title);
                 return false;
             })
         });

@@ -226,15 +226,15 @@ namespace ProjectPool.Controllers
         }
 
         //to be editt and remove from active tab, will be done in interview page
-        [HttpPost]
-        public async Task<IActionResult> SetRunningState(int? id)
-        {
-            var project = await _db.Project.FindAsync(id);
-            project.Status = "Running";
-            await _db.SaveChangesAsync();
-            TempData["SuccessMsg"] = "Project status succesfully changed to 'Running'";
-            return RedirectToAction("EmpActive");
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> SetRunningState(int? id)
+        //{
+        //    var project = await _db.Project.FindAsync(id);
+        //    project.Status = "Running";
+        //    await _db.SaveChangesAsync();
+        //    TempData["SuccessMsg"] = "Project status succesfully changed to 'Running'";
+        //    return RedirectToAction("EmpActive");
+        //}
 
         //check whether skill exist in db
         private bool isSkillExist(int? id)
@@ -719,6 +719,45 @@ namespace ProjectPool.Controllers
             conn.Close();
 
             return RedirectToAction("EmpRunning");
+        }
+
+        [HttpPost]
+        public IActionResult RejectInterview(int id)
+        {
+            if (id == null)
+            {
+                TempData["ErrorMsg"] = "An error occurred while retrieve ID";
+                return RedirectToAction("EmpInterview");
+            }
+
+            //Connect db
+            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+
+            try
+            {
+                conn.Open();
+                //Create command
+                string query = "UPDATE Interview SET [Status] = 'Reject' WHERE InterviewID = '"+id+"';";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                
+                cmd.ExecuteNonQuery();
+                
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+                TempData["ErrorMsg"] = "An error occurred while saving data";
+            }
+            
+            return RedirectToAction("EmpInterview");
+        }
+
+        [Route("Employer/Running/FinalReview/{id}")]
+        [HttpGet]
+        public IActionResult FinalReviewProject(int id)
+        {
+            return View();
         }
 
         #endregion

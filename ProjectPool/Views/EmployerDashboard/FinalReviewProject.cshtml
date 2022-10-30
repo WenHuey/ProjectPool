@@ -1,0 +1,77 @@
+﻿@model ProjectPool.Models.FinalReviewProjectModel
+
+@{
+    ViewData["Title"] = "FinalReviewProject";
+}
+
+<h1>FinalReviewProject</h1>
+
+<h4>FinalReviewProjectModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="FinalReviewProject">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                @Html.DisplayNameFor(model => model.FullName)
+                @Html.DisplayFor(model => model.Title)
+            </div>
+            <div class="form-group">
+                @Html.DisplayNameFor(model => model.FullName)
+                @Html.Raw(Model.Scope)
+            </div>
+            <div class="form-group">
+                @Html.DisplayNameFor(model => model.FullName)
+                @Html.DisplayFor(model => model.Title)
+            </div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Scope" class="control-label"></label>
+                <input asp-for="Scope" class="form-control" />
+                <span asp-validation-for="Scope" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tags" class="control-label"></label>
+                <input asp-for="Tags" class="form-control" />
+                <span asp-validation-for="Tags" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cost" class="control-label"></label>
+                <input asp-for="Cost" class="form-control" />
+                <span asp-validation-for="Cost" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FullName" class="control-label"></label>
+                <input asp-for="FullName" class="form-control" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FinalAmount" class="control-label"></label>
+                <input asp-for="FinalAmount" class="form-control" />
+                <span asp-validation-for="FinalAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PaymentDesc" class="control-label"></label>
+                <input asp-for="PaymentDesc" class="form-control" />
+                <span asp-validation-for="PaymentDesc" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CompleteRate" class="control-label"></label>
+                <input asp-for="CompleteRate" class="form-control" />
+                <span asp-validation-for="CompleteRate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
