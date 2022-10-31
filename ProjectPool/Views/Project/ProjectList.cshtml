@@ -21,14 +21,29 @@
     <!-- Font -->
     <link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
 
-    @*<script>
+    <style>
+        
+    </style>
+
+    <script>
         $(document).ready(function () {
-            var $desc = $(".project-detail p");
-            var str = $(".project-detail p").text();
-            var html = $.parseHTML(str);
-            $desc.append(html);
-        })
-    </script>*@
+            //$("#search").on("keyup", function () {
+            //    var value = $(this).val().toLowerCase();
+            //    $(".project-card").filter(function () {
+            //        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            //    });
+            //});
+
+            //$("#category").change(function () {
+            //    $("#category").find(":selected").attr("selected", "selected");
+            //    var value = $("#category option:selected").text().toLowerCase();
+            //    $(".project-card").filter(function () {
+            //        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1); 
+            //    });             
+            //});
+
+        });
+    </script>
 
 </head>
 <body>
@@ -45,8 +60,8 @@
     <div class="search-wrapper">
         <div class="search-box">
             <div class="search-card">
-                <input class="search-input" type="text" placeholder="Search...">
-                <button class="search-button">Search</button>
+                <input class="search-input" id="search" type="text" placeholder="Search...">
+                @*<button class="search-button">Search</button>*@
             </div>
         </div>
     </div>
@@ -82,22 +97,74 @@
                 });
             }
 
-            @*@Html.DropDownListFor(model => model.CategoryID, CatlistItems, "-- Filter Category --", new { @id = "category", @class = "filter-select" })*@
+            @*@Html.DropDownListFor(SelectListItem, CatlistItems, "-- Filter Category --", new { @id = "category", @class = "filter-select" })*@
 
             <select class="filter-select" name="category" id="category">
-                <option value="1">Category</option>
-                <option value="2">Web & Programming</option>
-                <option value="3">Graphic & Design</option>
-                <option value="4">Business</option>
+                <option value="1">Programming & Tech</option>
+                <option value="2">Graphic & Design</option>
+                <option value="3">Sales & Marketing</option>
+                <option value="4">Video & Animation</option>
+                <option value="5">Writing & Translation</option>
             </select>
+         
+            <!--<select class="filter-select" id="sub-category">
+                <option value="">Select Sub-Category</option>
+            </select>-->
 
+            <!--Programming-->
+            <!--<select disabled class="filter-select hide-submenu" id="sub-category-1" hidden>
+                <option disabled selected value="">Select Sub-Category</option>
+                <option value="Website">Website</option>
+                <option value="Mobile App">Mobile App</option>
+                <option value="Web mobile">Web mobile</option>
+                <option value="Wordpress">Wordpress</option>
+                <option value="Game development">Game development</option>
+            </select>-->
+            <!--Graphic-->
+            <!--<select disabled class="filter-select hide-submenu" id="sub-category-2" hidden>
+                <option disabled selected value="">Select Sub-Category</option>
+                <option value="Illustration">Illustration</option>
+                <option value="Logo design">Logo design</option>
+                <option value="Card design">Card design</option>
+                <option value="UI/UX design">UI/UX design</option>
+                <option value="Fonts & Typography">Fonts & Typography</option>
+            </select>-->
+            <!--sales marketing-->
+            <!--<select disabled class="filter-select hide-submenu" id="sub-category-3" hidden>
+                <option disabled selected value="">Select Sub-Category</option>
+                <option value="Data entry">Data entry</option>
+                <option value="Social media campaign">Social media campaign</option>
+                <option value="Adwords campaign">Adwords campaign</option>
+                <option value="Other">Other</option>
+            </select>-->
+            <!--video animation-->
+            <!--<select disabled class="filter-select hide-submenu" id="sub-category-4" hidden>
+                <option disabled selected value="">Select Sub-Category</option>
+                <option value="Ads & Commercial">Ads & Commercial</option>
+                <option value="Video editing">Video editing</option>
+                <option value="Animated GIFs">Animated GIFs</option>
+                <option value="Logo animation">Logo animation</option>
+                <option value="Character animation">Character animation</option>
+            </select>-->
+            <!--writing -->
+            <!--<select disabled class="filter-select hide-submenu" id="sub-category-5" hidden>
+                <option disabled selected value="">Select Sub-Category</option>
+                <option value="Translation">Translation</option>
+                <option value="Book Writing">Book Writing</option>
+                <option value="Scriptwriting">Scriptwriting</option>
+                <option value="Content writing">Content writing</option>
+                <option value="Article and blog posts">Article and blog posts</option>
+            </select>-->
+
+            <p class="p-total">Total Result(s): <span class="numberResult"></span></p>
         </div>
     </div>
     <section class="project-list" id="projects">
+        
         <form asp-controller="Project" asp-action="ProjectDetail">
             @foreach (var Data in Model)
             {
-                <div class="project-card">
+                <div class="project-card" style="display:none">
                     <div class="project-name">
                         <div class="project-detail">
                             @*@Html.HiddenFor(model => model.ProjectID)*@
@@ -108,7 +175,7 @@
                             <div class="project-label">
                                 @if (Data.CategoryName != "")
                                 {
-                                    <a class="label" href="">@Data.CategoryName</a>
+                                    <a class="label" href="" >@Data.CategoryName</a>
                                 }
                                 @if (Data.SubCategoryName != "")
                                 {
@@ -120,24 +187,130 @@
                     </div>
 
                     <div class="project-right">
-                        <div>RM&nbsp;@Data.Cost</div>
+                        <div style="color:indianred">@Data.TotalBid&nbsp;Applied</div>
                         @*<div class="apply-project">*@
                             @Html.ActionLink("View Details", "ProjectDetail", new { id = Data.ProjectID }, new { @class = "apply-project" })
                         @*</div>*@
                         
                         @*<button class="apply-project" asp-controller="Project" asp-action="ProjectDetail" id="@Data.ProjectID">Apply</button>*@
-                        <div>@Data.TotalBid&nbsp;Applied</div>
+                        <div>RM&nbsp;@Data.Cost</div>
                         <div class="project-posted">@Data.PostedAgo</div>
                     </div>
                 </div>
             }
         </form>
-        
-
-
 
     </section>
 
+    <div class="pagination">
+        @*<ol>
+            <li class="page-item previous-page disabled"><a disabled class="page-link" href="#">Prev</a></li>
+            <li class="page-item current-page active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item dots"><a class="page-link" href="#">...</a></li>
+            <li class="page-item current-page"><a class="page-link" href="#">5</a></li>
+            <li class="page-item current-page"><a class="page-link" href="#">6</a></li>
+            <li class="page-item current-page"><a class="page-link" href="#">10</a></li>
+            <li class="page-item next-page"><a class="page-link" href="#">Next</a></li>
+        </ol>*@
+        
+    </div>
+
+    <script>
+        function getPageList(totalPages, page, maxLength) {
+
+            function range(start, end) {
+                return Array.from(Array(end - start + 1), (_, i) => i + start);
+            }
+
+            var sideWidth = maxLength < 9 ? 1 : 2;
+            var leftWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+            var rightWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+
+            if (totalPages <= maxLength) {
+                return range(1, totalPages);
+            }
+
+            if (page <= maxLength - sideWidth - 1 - rightWidth) {
+                return range(1, maxLength = sideWidth - 1).concat(0, range(totalPages - sideWidth + 1, totalPages));
+            }
+
+            if (page >= totalPages - sideWidth - 1 - rightWidth) {
+                return range(1, sideWidth).concat(0, range(totalPages - sideWidth - 1 - rightWidth - leftWidth, totalPages));
+            }
+
+            return range(1, sideWidth).concat(0, range(page - leftWidth, page + rightWidth), 0, range(totalPages - sideWidth + 1, totalPages));
+        }
+
+        $(function () {
+            var numberOfItems = $(".project-card").length;
+            var limitPerPage = 5; //card visible per page
+            var totalPages = Math.ceil(numberOfItems / limitPerPage);
+            var paginationSize = 7; //no of page element visible
+            var currentPage;
+            $(".numberResult").html(numberOfItems);
+
+            function showPage(whichPage) {
+                if (whichPage < 1 || whichPage > totalPages) return false;
+
+                currentPage = whichPage;
+
+                $(".project-card").hide().slice((currentPage - 1) * limitPerPage, currentPage * limitPerPage).show();
+
+                $(".pagination li").slice(1, -1).remove();
+
+                getPageList(totalPages, currentPage, paginationSize).forEach(item => {
+                    $("<li>").addClass("page-item").addClass(item ? "current-page" : "dots")
+                        .toggleClass("active", item === currentPage).append($("<a>").addClass("page-link")
+                            .attr({ href: "javascript:void(0)" }).text(item || "...")).insertBefore(".next-page")
+                });
+
+                $(".previous-page").toggleClass("disabled", currentPage === 1);
+                $(".next-page").toggleClass("disabled", currentPage === totalPages);
+
+                return true;
+            }
+
+            $(".pagination").append(
+                $("<li>").addClass("page-item").addClass("previous-page").append($("<a>").addClass("page-link").attr({ href: "javascript:void(0)" }).text("Prev")),
+                $("<li>").addClass("page-item").addClass("next-page").append($("<a>").addClass("page-link").attr({ href: "javascript:void(0)" }).text("Next"))
+            );
+
+            $(".project-card").show();
+            showPage(1);
+
+            $(document).on("click", ".pagination li.current-page:not(.active)", function () {
+                $("html, body").animate({ scrollTop: 400 }, 300); //back to top
+                return showPage(+$(this).text());
+            });
+
+            $(".next-page").on("click", function () {
+                $("html, body").animate({ scrollTop: 400 }, 300); //back to top
+                return showPage(currentPage + 1);        
+            });
+
+            $(".previous-page").on("click", function () {
+                $("html, body").animate({ scrollTop: 400 }, 300); //back to top
+                return showPage(currentPage - 1);
+            });
+
+            $("#search").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $(".project-card").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+
+            $("#category").change(function () {
+                $('#category option[selected]').removeAttr("selected");
+                $("#category").find(":selected").attr("selected", "selected");
+                var value = $("#category option:selected").text().toLowerCase();
+                $(".project-card").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+
+        });
+    </script>
     
 </body>
 </html>

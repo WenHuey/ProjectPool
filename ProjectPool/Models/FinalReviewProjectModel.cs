@@ -18,15 +18,20 @@ namespace ProjectPool.Models
         public string Scope { get; set; }
         public string Tags { get; set; }
         public string Cost { get; set; }
+        public string Duration { get; set; }
 
         [Display(Name = "FullName")]
         public string FullName { get; set; }
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+        [Display(Name = "Contact Number")]
+        public string Phone { get; set; }
 
-        [Display(Name = "FinalAmount")]
+        [Display(Name = "Final Amount to Pay")]
         public string FinalAmount { get; set; }
-        [Display(Name = "PaymentDesc")]
+        [Display(Name = "Payment Description")]
         public string PaymentDesc { get; set; }
-        [Display(Name = "CompleteRate")]
+        [Display(Name = "Project Completion Rate")]
         public string CompleteRate { get; set; }
 
 

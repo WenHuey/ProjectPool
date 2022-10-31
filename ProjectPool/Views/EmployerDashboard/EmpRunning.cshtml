@@ -43,7 +43,7 @@
                 <button class="active" onclick="location.href='@Url.Action("EmpRunning", "EmployerDashboard")'">Running</button>
                 <button onclick="location.href='@Url.Action("EmpApplication", "EmployerDashboard")'">Applications</button>
                 <button onclick="location.href='@Url.Action("EmpInterview", "EmployerDashboard" )'">Interview</button>
-                <button>Closed</button>
+                <button onclick="location.href='@Url.Action("EmpClosed", "EmployerDashboard" )'">Closed</button>
             </div>
             <div>
                 <a class="btn-project" asp-controller="Project" asp-action="CreateProject"><button>Create Project Post</button></a>
@@ -93,7 +93,7 @@
                                         <td>@Data.Cost</td>
                                         <td>80</td>
                                         <td>
-                                            @Html.ActionLink("Review", "EditActiveProject", new { id = Data.ProjectID })
+                                            @Html.ActionLink("Review", "FinalReviewProject", new { id = Data.ProjectID, conID = Data.ContractorID })
                                             @*<a type="button" class="btn btn-view" data-modal="modal-view">
                                                 <i class="fa-solid fa-eye"></i>
                                             </a>

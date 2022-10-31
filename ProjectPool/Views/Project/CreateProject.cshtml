@@ -423,9 +423,9 @@
                 }
 
                 $("#sub-category-" + num).change(function () {
-                    console.log("changed")
+                    //console.log("changed")
                     $("#SubCategoryName").val($("#sub-category-" + num +" option:selected").text());
-                    console.log($("#sub-category-" + num  + " option:selected").text())
+                    //console.log($("#sub-category-" + num  + " option:selected").text())
                     $('.hide-submenu option[selected]').removeAttr("selected");
                     $(".hide-submenu").find(":selected").attr("selected", "selected");
                     //$("#sub-category").attr("value", $("#sub-category option:selected").text());
@@ -435,7 +435,7 @@
 
         $(".submit").on("click", function () {
             if ($("#project-textarea").val() == "" || $("#project-textarea").val() == null || $("#project-textarea").val() == "<div><br></div>") {
-                console.log("empty");
+                //console.log("empty");
                 $("#validation-desc").removeAttr(this.hidden);
                 $("#validation-desc").css("color", "red");
             } else {
@@ -449,11 +449,11 @@
             var descval = $("#project-desc").val();
             var array = tag.split(",");
 
-            console.log("desc", descval);
+            //console.log("desc", descval);
 
-            $.each(array, function (i) {
-                console.log(array[i]);
-            });
+            //$.each(array, function (i) {
+            //    console.log(array[i]);
+            //});
 
         });
 

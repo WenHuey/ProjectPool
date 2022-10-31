@@ -37,7 +37,20 @@ namespace ProjectPool.Controllers
             ClaimsPrincipal claimUser = HttpContext.User;
             if (claimUser.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Welcome");
+                var claimsIdentity = User.Identity as ClaimsIdentity;
+                var userID = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+                if (userID != null)
+                {
+                    if (userID == "2") //employer
+                    {
+                        return RedirectToAction("EmpDashboard", "Dashboard");
+                    }
+                    else if (userID == "3") //contractor
+                    {
+                        return RedirectToAction("ConDashboard", "Dashboard");
+                    }
+                }
             }
                 
             return View();

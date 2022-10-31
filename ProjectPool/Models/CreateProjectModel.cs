@@ -31,7 +31,7 @@ namespace ProjectPool.Models
         
         public string Status { get; set; }
         [Required(ErrorMessage = "This field is required")]
-        public int Cost { get; set; }
+        public string Cost { get; set; }
         [Required]
         public DateTime DatePosted { get; set; }
 

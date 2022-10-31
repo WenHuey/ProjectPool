@@ -5,12 +5,12 @@
     ViewData["Title"] = "Manage Project | ProjectPooL.";
     string[] TableHeaders = new string[] {"#"
                ,"Project Title"
-               ,"Category"
-               ,"Sub Category"
-               ,"Contractor Name"
-               ,"Contractor Skill"
-               ,"Applied Ago"
-               ,"Actions"};
+               ,"Cost"
+               ,"Status"
+               ,"Contractor Assigned"
+               ,"Completion Rate"
+               ,"Total Payment"
+               ,"Payment Date"};
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -26,7 +26,35 @@
     <link rel="stylesheet" href="~/css/EmpManageProject.css">
     <!-- Font -->
     <link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
+    <script src="https://editor.datatables.net/extensions/Editor/js/dataTables.editor.min.js"></script>
 
+    @*<style>
+        .btns {
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn-modal {
+            padding: 8px 23px;
+            width: 40%;
+            background-color: steelblue !important;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        #btn-confirm, #btn-decline {
+            margin-right: 20px;
+        }
+
+        #btn-close {
+            background-color: indianred !important;
+        }
+
+        .btn-modal:hover {
+            opacity: 80%;
+        }
+    </style>*@
 
 </head>
 <body>
@@ -43,9 +71,9 @@
             <div class="btn-box">
                 <button onclick="location.href='@Url.Action("EmpActive", "EmployerDashboard")'">Active</button>
                 <button onclick="location.href='@Url.Action("EmpRunning", "EmployerDashboard")'">Running</button>
-                <button class="active" onclick="location.href='@Url.Action("EmpApplication", "EmployerDashboard")'">Applications</button>
+                <button onclick="location.href='@Url.Action("EmpApplication", "EmployerDashboard")'">Applications</button>
                 <button onclick="location.href='@Url.Action("EmpInterview", "EmployerDashboard" )'">Interview</button>
-                <button onclick="location.href='@Url.Action("EmpClosed", "EmployerDashboard" )'">Closed</button>
+                <button class="active" onclick="location.href='@Url.Action("EmpClosed", "EmployerDashboard" )'">Closed</button>
             </div>
             <div class="btn-project">
                 <a asp-controller="Project" asp-action="CreateProject"><button>Create Project Post</button></a>
@@ -79,15 +107,13 @@
                                     <tr>
                                         <td></td>
                                         <td>@Data.Title</td>
-                                        <td>@Data.Category</td>
-                                        <td>@Data.SubCategory</td>
+                                        <td>@Data.Cost</td>
+                                        <td>@Data.Status</td>
                                         <td>@Data.FullName</td>
-                                        <td>@Data.ContractorSkills</td>
-                                        <td>@Data.DayHourMin</td>
-                                        <td>
-                                            @Html.ActionLink("Review", "ReviewApplication", new { id = Data.ContractorID, projectID = Data.ProjectID })
-                                            
-                                        </td>
+                                        <td>@Data.CompletionRate</td>
+                                        <td>@Data.Amount</td>
+                                        <td>@Data.PaymentDate</td>
+                                        
                                     </tr>
                                 }
                             }
@@ -99,83 +125,24 @@
         </div>
     </div>
 
-
-    <!-- Delete Modal -->
-    <div id="modal-delete" class="modal">
-        <div class="modal-content">
-            <div class="project">
-                <a class="close">&times;</a>
-                <form asp-action="DeleteActiveProject">
-                    <h2>Delete Project</h2>
-                    <div class="project-content">
-                        <p>
-                            Are you sure you want to delete this project?
-                            <br>
-                            This action cannot be undone.
-                        </p>
-
-                        @Html.Hidden("id", "", new { @class = "hiddenid" })
-
-                    </div>
-
-                    <div class="project-button">
-                        <button id="btn-confirm" type="submit">Confirm</button>
-                        <button type="submit" class="close">Cancel</button>
-                    </div>
-
-                </form>
-            </div>
-        </div>
-    </div>
-
+    
 
     <script>
         $(document).ready(function () {
 
             $('#datatable').DataTable({
                 scrollX: true,
-                columnDefs: [{ targets: [7], class: "nowrap" }]
+                //columnDefs: [{ targets: [7], class: "nowrap" }]
             });
+
 
             $(".Msg").fadeTo(2000, 500).slideUp(500, function () {
                 $(".Msg").slideUp(500);
             });
 
-            $(".btn-delete").on("click", function () {
-                var passedID = $(this).data('id');
-                console.log(passedID);
-                $(".project-content .hiddenid").val(passedID);
-            });
+            
         });
 
-        let modalView = [...document.querySelectorAll(".btn-view")];
-        modalView.forEach(function (btn) {
-            btn.onclick = function () {
-                let modal = btn.getAttribute("data-modal");
-                document.getElementById(modal).style.display = "block";
-            };
-        });
-
-        let modalDelete = [...document.querySelectorAll(".btn-delete")];
-        modalDelete.forEach(function (btn) {
-            btn.onclick = function () {
-                let modal = btn.getAttribute("data-modal");
-                document.getElementById(modal).style.display = "block";
-            };
-        });
-
-        let closeBtns = [...document.querySelectorAll(".close")];
-        closeBtns.forEach(function (btn) {
-            btn.onclick = function () {
-                let modal = btn.closest(".modal");
-                modal.style.display = "none";
-            };
-        });
-        window.onclick = function (event) {
-            if (event.target.className === "modal") {
-                event.target.style.display = "none";
-            }
-        };
 
     </script>
 </body>

@@ -53,8 +53,9 @@ namespace ProjectPool.Controllers
         }
 
         [Route("Contractor/UpdateProfile")]
-        public async Task<IActionResult> UpdateProfile(int id)
+        public IActionResult UpdateProfile(int id)
         {
+
             var claimsIdentity = User.Identity as ClaimsIdentity;
 
             if (claimsIdentity.Claims.Count() == 0)

@@ -1,0 +1,113 @@
+﻿{
+  "TrainingTime": 60,
+  "Scenario": "Recommendation",
+  "DataSource": {
+    "Type": "SQL",
+    "Version": 1,
+    "ColumnProperties": [
+      {
+        "ColumnName": "ContractorID",
+        "ColumnPurpose": "User",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 2
+      },
+      {
+        "ColumnName": "CategoryID",
+        "ColumnPurpose": "Item",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 2
+      },
+      {
+        "ColumnName": "Rating",
+        "ColumnPurpose": "Label",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 2
+      }
+    ],
+    "ConnectionString": "Data Source=WENHUEY\\SQLEXPRESS;Initial Catalog=ProjectPool;Integrated Security=True",
+    "CommandString": "SELECT CAST(ContractorID as REAL), CAST(CategoryID as REAL), CAST(Rating as REAL) FROM [dbo].[Recommend]",
+    "DatabaseName": "ProjectPool",
+    "SelectedTableDbo": "dbo",
+    "TableName": "Recommend"
+  },
+  "Environment": {
+    "Type": "LocalCPU",
+    "Version": 1
+  },
+  "RunHistory": {
+    "Version": 1,
+    "Type": "Result",
+    "Trials": [
+      {
+        "Version": 0,
+        "Type": "Trial",
+        "TrainerName": "MatrixFactorization",
+        "Score": 0.0,
+        "RuntimeInSeconds": 3.7669999599456787
+      },
+      {
+        "Version": 0,
+        "Type": "Trial",
+        "TrainerName": "MatrixFactorization",
+        "Score": 0.0,
+        "RuntimeInSeconds": 16.721000671386719
+      },
+      {
+        "Version": 0,
+        "Type": "Trial",
+        "TrainerName": "MatrixFactorization",
+        "Score": -0.1,
+        "RuntimeInSeconds": 4.98199987411499
+      },
+      {
+        "Version": 0,
+        "Type": "Trial",
+        "TrainerName": "MatrixFactorization",
+        "Score": "NaN",
+        "RuntimeInSeconds": 2.1070001125335693
+      },
+      {
+        "Version": 0,
+        "Type": "Trial",
+        "TrainerName": "MatrixFactorization",
+        "Score": "NaN",
+        "RuntimeInSeconds": 13.13599967956543
+      }
+    ],
+    "Pipeline": {
+      "parameter": {
+        "0": {
+          "OutputColumnName": "CategoryID",
+          "InputColumnName": "CategoryID"
+        },
+        "1": {
+          "OutputColumnName": "ContractorID",
+          "InputColumnName": "ContractorID"
+        },
+        "2": {
+          "LabelColumnName": "Rating",
+          "MatrixColumnIndexColumnName": "ContractorID",
+          "MatrixRowIndexColumnName": "CategoryID",
+          "ApproximationRank": 24,
+          "LearningRate": 0.99999977667298645,
+          "NumberOfIterations": 413,
+          "Quiet": true
+        }
+      },
+      "estimators": [
+        "MapValueToKey",
+        "MapValueToKey",
+        "MatrixFactorization"
+      ]
+    },
+    "MetricName": "RSquared"
+  },
+  "Type": "TrainingConfig",
+  "Version": 2
+}

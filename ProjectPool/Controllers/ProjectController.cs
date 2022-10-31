@@ -33,6 +33,8 @@ namespace ProjectPool.Controllers
         public IActionResult ProjectList()
         {
 
+            ClaimsPrincipal claimUser = HttpContext.User;
+           
             //Connect db
             SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             SqlDataReader dr;
@@ -46,6 +48,28 @@ namespace ProjectPool.Controllers
                 conn.Open();
                 //Create command
                 SqlCommand cmd = new SqlCommand("Sp_DisplayAllProject", conn);
+
+                if (claimUser.Identity.IsAuthenticated) {
+                    var claimsIdentity = User.Identity as ClaimsIdentity;
+                    var usertypeID = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+                    
+                    if(usertypeID == "3")
+                    {
+                        var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
+                        var catID = _db.Contractor.Where(x => x.UserID.ToString() == userID).Select(x => x.CategoryID).SingleOrDefault();
+                        var subName = _db.Contractor.Where(x => x.UserID.ToString() == userID).Select(x => x.SubCategoryName).SingleOrDefault();
+
+                        cmd = new SqlCommand("Sp_DisplayAllProjectFiltered", conn);
+
+                        cmd.Parameters.AddWithValue("@CatID", catID);
+                        cmd.Parameters["@CatID"].Direction = ParameterDirection.Input;
+                        cmd.Parameters.AddWithValue("@SubName", subName);
+                        cmd.Parameters["@SubName"].Direction = ParameterDirection.Input;
+                        
+                    }
+                    
+                }
+
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.ExecuteNonQuery();
@@ -391,7 +415,10 @@ namespace ProjectPool.Controllers
 
                 cmd.Parameters.AddWithValue("@SubCategoryName", model.SubCategoryName);
                 cmd.Parameters["@SubCategoryName"].Direction = ParameterDirection.Input;
-                
+
+                cmd.Parameters.AddWithValue("@Scope", model.Scope);
+                cmd.Parameters["@Scope"].Direction = ParameterDirection.Input;
+
                 cmd.ExecuteNonQuery();
             }
             catch

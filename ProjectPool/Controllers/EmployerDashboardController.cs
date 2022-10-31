@@ -23,6 +23,8 @@ namespace ProjectPool.Controllers
         List<EmpApplicationModel> applications = new List<EmpApplicationModel>();
         ReviewApplicationModel reviewApp = new ReviewApplicationModel();
         List<EmpInterviewModel> interviews = new List<EmpInterviewModel>();
+        FinalReviewProjectModel finalReview = new FinalReviewProjectModel();
+        List<EmpClosedModel> closedProject = new List<EmpClosedModel>();
 
         public EmployerDashboardController(DataContext db, IConfiguration configuration)
         {
@@ -225,16 +227,38 @@ namespace ProjectPool.Controllers
             return RedirectToAction("EmpActive");
         }
 
-        //to be editt and remove from active tab, will be done in interview page
-        //[HttpPost]
-        //public async Task<IActionResult> SetRunningState(int? id)
-        //{
-        //    var project = await _db.Project.FindAsync(id);
-        //    project.Status = "Running";
-        //    await _db.SaveChangesAsync();
-        //    TempData["SuccessMsg"] = "Project status succesfully changed to 'Running'";
-        //    return RedirectToAction("EmpActive");
-        //}
+
+        [HttpPost]
+        public IActionResult SetClosedState(int? id)
+        {
+            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));\
+            
+            try
+            {
+                conn.Open();
+                //Create command
+                SqlCommand cmd = new SqlCommand("Sp_SetClosedState", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@ProjectID", id);
+                cmd.Parameters["@ProjectID"].Direction = ParameterDirection.Input;
+                cmd.ExecuteNonQuery();
+
+            
+                cmd.Connection.Close();
+                TempData["SuccessMsg"] = "Project successfully set to Closed";
+
+            }
+            catch(Exception ex)
+            {
+                TempData["ErrorMsg"] = "An error occurred while closing project";
+                throw ex;
+            }
+            
+
+            
+            return RedirectToAction("EmpActive");
+        }
 
         //check whether skill exist in db
         private bool isSkillExist(int? id)
@@ -755,17 +779,238 @@ namespace ProjectPool.Controllers
 
         [Route("Employer/Running/FinalReview/{id}")]
         [HttpGet]
-        public IActionResult FinalReviewProject(int id)
+        public IActionResult FinalReviewProject(int id, int conID)
         {
-            return View();
+            if (id == null || conID == null)
+            {
+                TempData["ErrorMsg"] = "An error occurred while retrieving Ids";
+                return RedirectToAction("EmpRunning");
+            }
+
+            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            SqlDataReader dr;
+
+            conn.Open();
+            SqlCommand cmd = new SqlCommand("Sp_DisplayFinalReview", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            try
+            {
+
+                cmd.Parameters.AddWithValue("@ConID", conID);
+                cmd.Parameters["@ConID"].Direction = ParameterDirection.Input;
+                cmd.Parameters.AddWithValue("@ProjectID", id);
+                cmd.Parameters["@ProjectID"].Direction = ParameterDirection.Input;
+                //cmd.ExecuteNonQuery();
+
+                dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    finalReview.ContractorID = conID.ToString();
+                    finalReview.ProjectID = id.ToString();
+                    //finalReview.EmployerID = dr["EmployerID"].ToString();
+                    finalReview.Title = dr["Title"].ToString();
+                    finalReview.Scope = dr["Scope"].ToString();
+                    finalReview.Tags = dr["Tags"].ToString();
+                    finalReview.Cost = dr["Cost"].ToString();
+                    finalReview.Duration = dr["Duration"].ToString();
+                    finalReview.FullName = dr["FullName"].ToString();
+                    finalReview.Email = dr["Email"].ToString();
+                    finalReview.Phone = dr["Phone"].ToString();
+                    finalReview.FinalAmount = dr["Cost"].ToString();
+
+                }
+
+            }
+            catch
+            {
+                TempData["ErrorMsg"] = "Error! Retrieve Data Unsuccesful";
+            }
+
+            conn.Close();
+
+            return View(finalReview);
+        }
+
+
+        [Route("Employer/Running/FinalReview/{id}")]
+        [HttpPost]
+        public IActionResult FinalReviewProject(int conID, int id, FinalReviewProjectModel model)
+        {
+            if (id == null || conID == null)
+            {
+                TempData["ErrorMsg"] = "An error occurred while retrieving Ids";
+                return View();
+            }
+
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
+
+            var empID = _db.Employer.Where(x => x.UserID.ToString() == userID).Select(x => x.EmployerID).SingleOrDefault();
+
+            if (empID != null)
+            {
+                SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));                SqlDataReader dr;
+
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("Sp_InsertPayment", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                //try
+                //{
+                var cRate = model.CompleteRate;
+                var pDesc = model.PaymentDesc;
+
+                
+                if(cRate == "1")
+                {
+                    cRate = "100%";
+                }
+                else if(cRate == "0.7")
+                {
+                    cRate = "> 50%";
+                }
+                else if (cRate == "0.4"){
+                    cRate = "< 50%";
+                }
+
+                    
+
+                cmd.Parameters.AddWithValue("@ContractorID", conID);
+                cmd.Parameters["@ContractorID"].Direction = ParameterDirection.Input;
+                cmd.Parameters.AddWithValue("@EmployerID", empID);
+                cmd.Parameters["@EmployerID"].Direction = ParameterDirection.Input;
+                cmd.Parameters.AddWithValue("@Amount", model.FinalAmount);
+                cmd.Parameters["@Amount"].Direction = ParameterDirection.Input;
+                
+                //if (pDesc == null)
+                //{
+                //    cmd.Parameters["@Desc"].Value = DBNull.Value;
+                //}
+                cmd.Parameters.AddWithValue("@Desc", model.PaymentDesc == null ? DBNull.Value.ToString() : model.PaymentDesc);
+                cmd.Parameters["@Desc"].Direction = ParameterDirection.Input;
+                cmd.Parameters.AddWithValue("@ProjectID", id);
+                cmd.Parameters["@ProjectID"].Direction = ParameterDirection.Input;
+                cmd.Parameters.AddWithValue("@CompleteRate", cRate);
+                cmd.Parameters["@CompleteRate"].Direction = ParameterDirection.Input;
+                cmd.ExecuteNonQuery();
+
+                //}
+                //catch
+                //{
+                //    TempData["ErrorMsg"] = "Error! Retrieve Data Unsuccesful";
+                //}
+
+                conn.Close();
+            }
+            else
+            {
+                TempData["ErrorMsg"] = "Error! Fail to retrieve empID";
+            }
+
+            
+
+            return RedirectToAction("EmpRunning");
         }
 
         #endregion
 
 
-        //[Route("Project")]
-        public IActionResult EmpProfile(int? id)
+        public IActionResult EmpClosed()
         {
+            //Retrieve userID
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
+
+            var empID = _db.Employer.Where(x => x.UserID.ToString() == userID).Select(x => x.EmployerID).SingleOrDefault();
+
+
+            //Connect db
+            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            SqlDataReader dr;
+
+            if (closedProject.Count > 0)
+            {
+                closedProject.Clear();
+            }
+            try
+            {
+                conn.Open();
+                //Create command
+                SqlCommand cmd = new SqlCommand("Sp_DisplayClosed", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@EmpID", empID);
+                cmd.Parameters["@EmpID"].Direction = ParameterDirection.Input;
+                cmd.ExecuteNonQuery();
+
+                dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    var Date = dr["PaymentDate"].ToString();
+                    var cRate = dr["CompletionRate"].ToString();
+                    var amount = dr["Amount"].ToString();
+                    var fullName = dr["FullName"].ToString();
+                    var status = "Closed";
+
+                    if (!string.IsNullOrWhiteSpace(Date) || !string.IsNullOrWhiteSpace(cRate) || !string.IsNullOrWhiteSpace(amount) || !string.IsNullOrWhiteSpace(fullName))
+                    {
+                        status = "Completed";
+                    }
+
+                    if (string.IsNullOrWhiteSpace(Date))
+                    {
+                        Date = "-";
+                    }
+                    else
+                    {
+                        Date = DateTime.Parse(Date).ToString("dd/MM/yyyy hh:mm f");
+                    }
+
+                    if (string.IsNullOrWhiteSpace(cRate))
+                    {
+                        cRate = "-";
+                    }
+                    if (string.IsNullOrWhiteSpace(amount))
+                    {
+                        amount = "-";
+                    }
+                    if (string.IsNullOrWhiteSpace(fullName))
+                    {
+                        fullName = "-";
+                    }
+
+
+
+                    closedProject.Add(new EmpClosedModel()
+                    {
+                        
+                        ProjectID = dr["ProjectID"].ToString(),
+                        Title = dr["Title"].ToString(),
+                        Cost = dr["Cost"].ToString(),
+                        CompletionRate = cRate,
+                        Amount = amount,
+                        PaymentDate = Date,
+                        FullName = fullName,
+                        Status = status
+                    });
+                }
+                conn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return View(closedProject);
+        }
+
+
+        //[Route("Project")]
+        public IActionResult EmpProfile()
+        {
+
             return View();
         }
 

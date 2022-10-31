@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using ProjectPool.Models;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace ProjectPool.Controllers
 {
+    [Authorize]
     public class DashboardController : Controller
     {
         private readonly DataContext _db;
