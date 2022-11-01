@@ -1,0 +1,97 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Manage Project";
+    string[] TableHeaders = new string[] {"#"
+               ,"Project Title"
+               ,"Employer Name"
+               ,"Project Status"
+               ,"Applied On"
+               ,"Application Request"};
+}
+
+    <link rel="stylesheet" href="~/css/EmpManageProject.css">
+    
+    
+
+    <div class="content">
+        <div class="TempMsg" style="margin: 0 1rem; font-size: 1.2rem;">
+            <p class="Msg" style="color:green">@TempData["SuccessMsg"]</p>
+            <p class="Msg" style="color:red">@TempData["ErrorMsg"]</p>
+        </div>
+
+
+        <div class="text-black font-weight-bold manage-project">Manage Project</div>
+        <div class="tab">
+            <div class="btn-box">
+                <button class="active" onclick="location.href='@Url.Action("ConAll", "ContractorDashboard" )'">All Projects</button>
+                <button onclick="location.href='@Url.Action("ConRunning", "ContractorDashboard")'">Running</button>
+                <button onclick="location.href='@Url.Action("ConApplication", "ContractorDashboard")'">Applications</button>
+                <button onclick="location.href='@Url.Action("ConInterview", "ContractorDashboard" )'">Interview</button>
+                
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="outer-wrapper">
+            <div class="table-wrapper">
+                <table class="table display cell-border hover" id="datatable" style="width:100%">
+                    <thead>
+                        <tr>
+                            @{
+                                foreach (var item in TableHeaders)
+                                {
+                                    <th>
+                                        @item
+                                    </th>
+                                }
+                            }
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            if (Model != null)
+                            {
+                                foreach (var Data in Model)
+                                {
+                                    <tr>
+                                        <td></td>
+                                        <td>@Data.Title</td>
+                                        <td>@Data.Name</td>
+                                        <td>@Data.ProjectStatus</td>
+                                        <td>@Data.AppliedOn</td>
+                                        <td>@Data.Application</td>
+                                    </tr>
+                                }
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        $(document).ready(function () {
+
+            $('#datatable').DataTable({
+                scrollX: true
+            });
+
+            $(".Msg").fadeTo(2000, 500).slideUp(500, function () {
+                $(".Msg").slideUp(500);
+            });
+
+            
+        });
+
+       
+
+    </script>

@@ -100,33 +100,7 @@
     </div>
 
 
-    <!-- Delete Modal -->
-    <div id="modal-delete" class="modal">
-        <div class="modal-content">
-            <div class="project">
-                <a class="close">&times;</a>
-                <form asp-action="DeleteActiveProject">
-                    <h2>Delete Project</h2>
-                    <div class="project-content">
-                        <p>
-                            Are you sure you want to delete this project?
-                            <br>
-                            This action cannot be undone.
-                        </p>
-
-                        @Html.Hidden("id", "", new { @class = "hiddenid" })
-
-                    </div>
-
-                    <div class="project-button">
-                        <button id="btn-confirm" type="submit">Confirm</button>
-                        <button type="submit" class="close">Cancel</button>
-                    </div>
-
-                </form>
-            </div>
-        </div>
-    </div>
+    
 
 
     <script>
@@ -141,41 +115,9 @@
                 $(".Msg").slideUp(500);
             });
 
-            $(".btn-delete").on("click", function () {
-                var passedID = $(this).data('id');
-                console.log(passedID);
-                $(".project-content .hiddenid").val(passedID);
-            });
         });
 
-        let modalView = [...document.querySelectorAll(".btn-view")];
-        modalView.forEach(function (btn) {
-            btn.onclick = function () {
-                let modal = btn.getAttribute("data-modal");
-                document.getElementById(modal).style.display = "block";
-            };
-        });
 
-        let modalDelete = [...document.querySelectorAll(".btn-delete")];
-        modalDelete.forEach(function (btn) {
-            btn.onclick = function () {
-                let modal = btn.getAttribute("data-modal");
-                document.getElementById(modal).style.display = "block";
-            };
-        });
-
-        let closeBtns = [...document.querySelectorAll(".close")];
-        closeBtns.forEach(function (btn) {
-            btn.onclick = function () {
-                let modal = btn.closest(".modal");
-                modal.style.display = "none";
-            };
-        });
-        window.onclick = function (event) {
-            if (event.target.className === "modal") {
-                event.target.style.display = "none";
-            }
-        };
 
     </script>
 </body>

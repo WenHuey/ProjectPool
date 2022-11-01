@@ -29,7 +29,7 @@
     <link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
     <!-- Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
-    <script src="~/script/percentageBars.js"></script>
+    
     
 
 </head>
@@ -91,7 +91,7 @@
                                         <td>@Data.FullName</td>
                                         <td>@Data.SubCategory</td>
                                         <td>@Data.Cost</td>
-                                        <td>80</td>
+                                        <td>@Data.Progress</td>
                                         <td>
                                             @Html.ActionLink("Review", "FinalReviewProject", new { id = Data.ProjectID, conID = Data.ContractorID })
                                             @*<a type="button" class="btn btn-view" data-modal="modal-view">
@@ -120,76 +120,7 @@
 
 
 
-    <!-- View Modal -->
-    <div id="modal-view" class="modal">
-        <div class="modal-content">
-            <div class="project">
-                <a class="close">&times;</a>
-                <form>
-                    <h2>View Project Details</h2>
-                    <div>
 
-                        <div class="form-group row text-left">
-                            <table class="project-content">
-                                <tr>
-                                    <th>Project Title </th>
-                                    <td>: Project Title 1</td>
-                                </tr>
-
-                                <tr>
-                                    <th>Description </th>
-                                    <td>: We have a content-sharing mobile App that required AR features we want to develop those AR features</td>
-                                </tr>
-
-                                <tr>
-                                    <th>Total Bids </th>
-                                    <td>: 10</td>
-                                </tr>
-
-                                <tr>
-                                    <th>Cost (RM) </th>
-                                    <td>: 900</td>
-                                </tr>
-
-                                <tr>
-                                    <th>Project Status </th>
-                                    <td>: Open </td>
-                                </tr>
-
-                            </table>
-                        </div>
-                    </div>
-                    <button type="submit" href="/resources/views/admin/orders.html">Save</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Modal -->
-    <div id="modal-delete" class="modal">
-        <div class="modal-content">
-            <div class="project">
-                <a class="close">&times;</a>
-                <form>
-                    <h2>Delete Project</h2>
-                    <div class="project-content">
-                        <p>
-                            Are you sure you want to delete this project?
-                            <br>
-                            This action cannot be undone.
-                        </p>
-
-                    </div>
-
-                    <div class="project-button">
-                        <button type="submit" href="/resources/views/admin/orders.html">Confirm</button>
-                        <button type="submit" href="/resources/views/admin/orders.html">Cancel</button>
-                    </div>
-
-                </form>
-            </div>
-        </div>
-    </div>
 
     <!--<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>-->
     @*<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>*@
@@ -198,6 +129,7 @@
 
         $(document).ready(function () {
             $("#datatable").DataTable({
+                scrollX: true,
                 columnDefs: [{
                     targets: 5,
                     //render: $.fn.dataTable.render.percentBar('round', '#FFF', '#269ABC', '#31B0D5', '#286090', 1, 'groove')
@@ -208,34 +140,7 @@
         });
 
 
-        let modalView = [...document.querySelectorAll(".btn-view")];
-        modalView.forEach(function (btn) {
-            btn.onclick = function () {
-                let modal = btn.getAttribute("data-modal");
-                document.getElementById(modal).style.display = "block";
-            };
-        });
-
-        let modalDelete = [...document.querySelectorAll(".btn-delete")];
-        modalDelete.forEach(function (btn) {
-            btn.onclick = function () {
-                let modal = btn.getAttribute("data-modal");
-                document.getElementById(modal).style.display = "block";
-            };
-        });
-
-        let closeBtns = [...document.querySelectorAll(".close")];
-        closeBtns.forEach(function (btn) {
-            btn.onclick = function () {
-                let modal = btn.closest(".modal");
-                modal.style.display = "none";
-            };
-        });
-        window.onclick = function (event) {
-            if (event.target.className === "modal") {
-                event.target.style.display = "none";
-            }
-        };
+        
 
 
 
@@ -273,14 +178,6 @@
                 //});
                 })*@
             //})
-
-
-
-
-
-
-
-
 
 
     </script>

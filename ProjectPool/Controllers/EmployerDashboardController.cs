@@ -39,10 +39,11 @@ namespace ProjectPool.Controllers
         {
             //Retrieve userID
             var claimsIdentity = User.Identity as ClaimsIdentity;
+            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            if(claimsIdentity.Claims.Count() == 0)
+            if (usertype != "2")
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("ConDashboard", "Dashboard");
             }
 
             var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
@@ -100,6 +101,14 @@ namespace ProjectPool.Controllers
                 return RedirectToAction("EmpActive");
             }
 
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            if (usertype != "2")
+            {
+                return RedirectToAction("ConDashboard", "Dashboard");
+            }
+
             var getActiveDetails = await _db.Project.FindAsync(id);
 
             if(getActiveDetails == null)
@@ -130,6 +139,14 @@ namespace ProjectPool.Controllers
             if(id != model.ProjectID)
             {
                 return RedirectToAction("EmpActive");
+            }
+
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            if (usertype != "2")
+            {
+                return RedirectToAction("ConDashboard", "Dashboard");
             }
 
             if (ModelState.IsValid)
@@ -194,6 +211,14 @@ namespace ProjectPool.Controllers
                 return RedirectToAction("EmpActive");
             }
 
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            if (usertype != "2")
+            {
+                return RedirectToAction("ConDashboard", "Dashboard");
+            }
+
             var getActiveDetails = await _db.Project.FindAsync(id);
 
             if (getActiveDetails == null)
@@ -220,6 +245,12 @@ namespace ProjectPool.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteActiveProject(int? id)
         {
+            if (id == null)
+            {
+                TempData["ErrorMsg"] = "An error occurred while retrieving data";
+                return RedirectToAction("EmpActive");
+            }
+
             var project = await _db.Project.FindAsync(id);
             project.Deleted = true;
             await _db.SaveChangesAsync();
@@ -231,7 +262,21 @@ namespace ProjectPool.Controllers
         [HttpPost]
         public IActionResult SetClosedState(int? id)
         {
-            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));\
+            if (id == null)
+            {
+                TempData["ErrorMsg"] = "An error occurred while retrieving data";
+                return RedirectToAction("EmpActive");
+            }
+
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            if (usertype != "2")
+            {
+                return RedirectToAction("ConDashboard", "Dashboard");
+            }
+
+            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             
             try
             {
@@ -322,9 +367,11 @@ namespace ProjectPool.Controllers
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
 
-            if (claimsIdentity.Claims.Count() == 0)
+            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            if (usertype != "2")
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("ConRunning", "ContractorDashboard");
             }
 
             var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
@@ -354,6 +401,7 @@ namespace ProjectPool.Controllers
                         SubCategory = dr["SubCategory"].ToString(),
                         Cost = dr["Cost"].ToString(),
                         FullName = dr["FullName"].ToString(),
+                        Progress = dr["Progress"].ToString(),
                     });
                 }
                 conn.Close();
@@ -375,9 +423,12 @@ namespace ProjectPool.Controllers
             //Retrieve userID
             
             var claimsIdentity = User.Identity as ClaimsIdentity;
-            if (claimsIdentity.Claims.Count() == 0)
+            
+            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            if (usertype != "2")
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("ConApplication", "ContractorDashboard");
             }
 
             var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
@@ -462,6 +513,14 @@ namespace ProjectPool.Controllers
                 return RedirectToAction("EmpApplication");
             }
 
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            if (usertype != "2")
+            {
+                return RedirectToAction("ConDashboard", "Dashboard");
+            }
+
             SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             SqlDataReader dr;
             conn.Open();
@@ -534,6 +593,14 @@ namespace ProjectPool.Controllers
                 return RedirectToAction("EmpApplication");
             }
 
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            if (usertype != "2")
+            {
+                return RedirectToAction("ConDashboard", "Dashboard");
+            }
+
             SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             conn.Open();
             SqlCommand cmd = new SqlCommand("Sp_InsertInterview", conn);
@@ -581,8 +648,14 @@ namespace ProjectPool.Controllers
         {
 
             var claimsIdentity = User.Identity as ClaimsIdentity;
-            var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
+            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
+            if (usertype != "2")
+            {
+                return RedirectToAction("ConDashboard", "Dashboard");
+            }
+
+            var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
             var empID = _db.Employer.Where(x => x.UserID.ToString() == userID).Select(x => x.EmployerID).SingleOrDefault();
 
 
@@ -644,9 +717,10 @@ namespace ProjectPool.Controllers
                     });
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 TempData["ErrorMsg"] = "Error! Retrieve Data Unsuccesful";
+                throw ex;
             }
             cmd.Connection.Close();
 
@@ -661,6 +735,14 @@ namespace ProjectPool.Controllers
             {
                 TempData["ErrorMsg"] = "An error occurred while retrieving key";
                 return RedirectToAction("EmpActive");
+            }
+
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            if (usertype != "2")
+            {
+                return RedirectToAction("ConDashboard", "Dashboard");
             }
 
             var getIvDetails = _db.Interview.Where(x => x.ApplicationID == id).SingleOrDefault();
@@ -683,6 +765,14 @@ namespace ProjectPool.Controllers
             {
                 TempData["ErrorMsg"] = "An error occurred! Please seek for customer support.";
                 return RedirectToAction("EmpInterview");
+            }
+
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            if (usertype != "2")
+            {
+                return RedirectToAction("ConDashboard", "Dashboard");
             }
 
             if (ModelState.IsValid)
@@ -717,6 +807,14 @@ namespace ProjectPool.Controllers
             {
                 TempData["ErrorMsg"] = "An error occurred while retrieving ids";
                 return RedirectToAction("EmpInterview");
+            }
+
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            if (usertype != "2")
+            {
+                return RedirectToAction("ConDashboard", "Dashboard");
             }
 
             SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
@@ -754,6 +852,14 @@ namespace ProjectPool.Controllers
                 return RedirectToAction("EmpInterview");
             }
 
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            if (usertype != "2")
+            {
+                return RedirectToAction("ConDashboard", "Dashboard");
+            }
+
             //Connect db
             SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
 
@@ -761,9 +867,12 @@ namespace ProjectPool.Controllers
             {
                 conn.Open();
                 //Create command
-                string query = "UPDATE Interview SET [Status] = 'Reject' WHERE InterviewID = '"+id+"';";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                
+                SqlCommand cmd = new SqlCommand("Sp_RejectInterview", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@IvID", id);
+                cmd.Parameters["@IvID"].Direction = ParameterDirection.Input;
+
                 cmd.ExecuteNonQuery();
                 
                 conn.Close();
@@ -785,6 +894,14 @@ namespace ProjectPool.Controllers
             {
                 TempData["ErrorMsg"] = "An error occurred while retrieving Ids";
                 return RedirectToAction("EmpRunning");
+            }
+
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            if (usertype != "2")
+            {
+                return RedirectToAction("ConDashboard", "Dashboard");
             }
 
             SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
@@ -844,6 +961,13 @@ namespace ProjectPool.Controllers
             }
 
             var claimsIdentity = User.Identity as ClaimsIdentity;
+            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            if (usertype != "2")
+            {
+                return RedirectToAction("ConDashboard", "Dashboard");
+            }
+
             var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
 
             var empID = _db.Employer.Where(x => x.UserID.ToString() == userID).Select(x => x.EmployerID).SingleOrDefault();
@@ -920,6 +1044,13 @@ namespace ProjectPool.Controllers
         {
             //Retrieve userID
             var claimsIdentity = User.Identity as ClaimsIdentity;
+            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            if (usertype != "2")
+            {
+                return RedirectToAction("ConAll", "ContractorDashboard");
+            }
+
             var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
 
             var empID = _db.Employer.Where(x => x.UserID.ToString() == userID).Select(x => x.EmployerID).SingleOrDefault();
@@ -1008,6 +1139,7 @@ namespace ProjectPool.Controllers
 
 
         //[Route("Project")]
+        [HttpGet]
         public IActionResult EmpProfile()
         {
 

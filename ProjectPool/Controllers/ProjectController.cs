@@ -59,11 +59,16 @@ namespace ProjectPool.Controllers
                         var catID = _db.Contractor.Where(x => x.UserID.ToString() == userID).Select(x => x.CategoryID).SingleOrDefault();
                         var subName = _db.Contractor.Where(x => x.UserID.ToString() == userID).Select(x => x.SubCategoryName).SingleOrDefault();
 
+                        if(catID == null)
+                        {
+                            return RedirectToAction("ViewProfile", "ContractorDashboard");
+                        }
+
                         cmd = new SqlCommand("Sp_DisplayAllProjectFiltered", conn);
 
                         cmd.Parameters.AddWithValue("@CatID", catID);
                         cmd.Parameters["@CatID"].Direction = ParameterDirection.Input;
-                        cmd.Parameters.AddWithValue("@SubName", subName);
+                        cmd.Parameters.AddWithValue("@SubName", subName == null ? DBNull.Value.ToString() : subName);
                         cmd.Parameters["@SubName"].Direction = ParameterDirection.Input;
                         
                     }
@@ -308,7 +313,7 @@ namespace ProjectPool.Controllers
             if(model.ProjectID == null)
             {
                 TempData["ErrorMsg"] = "Error occured! Please seek for customer support. ";
-                return RedirectToAction("ProjectDetail", id);
+                return RedirectToAction("ProjectDetail");
             }
 
             var claimsIdentity = User.Identity as ClaimsIdentity;
@@ -330,7 +335,7 @@ namespace ProjectPool.Controllers
                 cmd.Parameters["@ProjectID"].Direction = ParameterDirection.Input;
                 cmd.Parameters.AddWithValue("@ContractorID", conID);
                 cmd.Parameters["@ContractorID"].Direction = ParameterDirection.Input;
-                cmd.Parameters.AddWithValue("@Pitch", model.Pitch);
+                cmd.Parameters.AddWithValue("@Pitch", model.Pitch == null ? DBNull.Value.ToString() : model.Pitch);
                 cmd.Parameters["@Pitch"].Direction = ParameterDirection.Input;
                 
                 cmd.ExecuteNonQuery();
@@ -340,8 +345,9 @@ namespace ProjectPool.Controllers
             catch (Exception ex)
             {
                 TempData["ErrorMsg"] = "Error occured! Insert Unsuccesful.";
+                return RedirectToAction("ApplyProject/{id}", id);
             }
-            return RedirectToAction("ProjectList");
+            return RedirectToAction("ConApplication", "ContractorDashboard");
         }
 
         [Route("CreateProject")]

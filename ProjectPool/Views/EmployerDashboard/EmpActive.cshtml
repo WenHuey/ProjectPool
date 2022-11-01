@@ -91,10 +91,10 @@
                                             <a href="@Url.Action("EditActiveProject","EmployerDashboard", new { id = Data.ProjectID })" type="button" class="btn btn-edit">
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                             </a>
-                                            <a href="#" type="button" class="btn btn-delete" data-id="@Data.ProjectID" data-modal="modal-delete">
+                                            <a href="#" type="button" class="btn btn-delete" data-id="@Data.ProjectID" data-target="modal-delete">
                                                 <i class="fa-solid fa-trash"></i>
                                             </a>
-                                            <a href="#" type="button" class="btn btn-xmark" data-id="@Data.ProjectID" data-modal="modal-closed">
+                                            <a href="#" type="button" class="btn btn-xmark" data-id="@Data.ProjectID" data-target="modal-closed">
                                                 <i class="fa-solid fa-square-xmark"></i>
                                             </a>
                                         </td>
@@ -176,17 +176,34 @@
                 $(".Msg").slideUp(500);
             });
 
-            $(".btn-delete").on("click", function () {
+            $('.btn-delete').on("click", function (e) {
+                e.preventDefault();
+                //perform the url load  then
+                $('#modal-delete').modal({
+                    keyboard: true
+                }, 'show');
                 var passedID = $(this).data('id');
-                console.log(passedID);
                 $(".project-content-delete .hiddenid").val(passedID);
-            });
+                return false;
+            })
 
-            $(".btn-xmark").on("click", function () {
+            $('.btn-xmark').on("click", function (e) {
+                e.preventDefault();
+                //perform the url load  then
+                $('#modal-closed').modal({
+                    keyboard: true
+                }, 'show');
                 var passedID = $(this).data('id');
-                console.log(passedID);
                 $(".project-content-closed .hiddenid").val(passedID);
-            });
+                return false;
+            })
+
+
+            //$(".btn-xmark").on("click", function () {
+            //    var passedID = $(this).data('id');
+            //    console.log(passedID);
+            //    $(".project-content-closed .hiddenid").val(passedID);
+            //});
         });
 
         let modalClosed = [...document.querySelectorAll(".btn-xmark")];
@@ -205,18 +222,15 @@
             };
         });
 
-        let closeBtns = [...document.querySelectorAll(".close")];
-        closeBtns.forEach(function (btn) {
-            btn.onclick = function () {
-                let modal = btn.closest(".modal");
-                modal.style.display = "none";
-            };
-        });
-        window.onclick = function (event) {
-            if (event.target.className === "modal") {
-                event.target.style.display = "none";
-            }
-        };
+        $('.close').on("click", function (e) {
+            e.preventDefault();
+            //perform the url load  then
+            $('.modal').modal('hide');
+
+            return false;
+        })
+
+        //};
 
     </script>
 </body>

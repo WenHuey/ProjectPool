@@ -44,13 +44,13 @@
             <div class="page col-12">
                 <div class="field title">
                     <div class="label">Project Title</div>
-                    @Html.TextAreaFor(model => model.Title, new { @id = "project-textarea", maxlength = 50 })
+                    @Html.TextAreaFor(model => model.Title, new { @id = "project-textarea", maxlength = 100 })
                     @Html.ValidationMessageFor(model => model.Title, "", new { @class = "validation" })
                     @*<textarea asp-for="Title" maxlength="80" cols="2" id="project-textarea"></textarea>*@
                     @*<span class="validation-title" style="float: left;">This field is required</span>*@
                     <div id="counter" style="float: right;">
                         <span id="current-title">0</span>
-                        <span id="maximum-title">/ 50</span>
+                        <span id="maximum-title">/ 100</span>
                     </div>
                 </div>
                 <br>
@@ -116,7 +116,7 @@
                     </select>
 
                     <!--Programming-->
-                    <select disabled class="category hide-submenu" id="sub-category-1" hidden>
+                    <select class="category hide-submenu" id="sub-category-1" hidden>
                         <option disabled selected value="">-- Select Sub Category --</option>
                         <option value="Website">Website</option>
                         <option value="Mobile App">Mobile App</option>
@@ -125,7 +125,7 @@
                         <option value="Game development">Game development</option>
                     </select>
                     <!--Graphic-->
-                    <select disabled class="category hide-submenu" id="sub-category-2" hidden>
+                    <select class="category hide-submenu" id="sub-category-2" hidden>
                         <option disabled selected value="">-- Select Sub Category --</option>
                         <option value="Illustration">Illustration</option>
                         <option value="Logo design">Logo design</option>
@@ -134,7 +134,7 @@
                         <option value="Fonts & Typography">Fonts & Typography</option>
                     </select>
                     <!--sales marketing-->
-                    <select disabled class="category hide-submenu" id="sub-category-3" hidden>
+                    <select class="category hide-submenu" id="sub-category-3" hidden>
                         <option disabled selected value="">-- Select Sub Category --</option>
                         <option value="Data entry">Data entry</option>
                         <option value="Social media campaign">Social media campaign</option>
@@ -142,7 +142,7 @@
                         <option value="Other">Other</option>
                     </select>
                     <!--video animation-->
-                    <select disabled class="category hide-submenu" id="sub-category-4" hidden>
+                    <select class="category hide-submenu" id="sub-category-4" hidden>
                         <option disabled selected value="">-- Select Sub Category --</option>
                         <option value="Ads & Commercial">Ads & Commercial</option>
                         <option value="Video editing">Video editing</option>
@@ -151,7 +151,7 @@
                         <option value="Character animation">Character animation</option>
                     </select>
                     <!--writing -->
-                    <select disabled class="category hide-submenu" id="sub-category-5" hidden>
+                    <select class="category hide-submenu" id="sub-category-5" hidden>
                         <option disabled selected value="">-- Select Sub Category --</option>
                         <option value="Translation">Translation</option>
                         <option value="Book Writing">Book Writing</option>
@@ -279,7 +279,7 @@
 
             current.text(length);
 
-            if (length > 49) {
+            if (length > 99) {
                 maximum.css('color', '#841c1c');
                 current.css('color', '#841c1c');
             }
@@ -352,65 +352,13 @@
 
         //Sub category change based on category
         $(function () {
-            var subjectObject = {
-                "0": [
-                    "-- Select Sub Category --"
-                ],
-                "1": [
-                    "Website",
-                    "Mobile App",
-                    "Web mobile",
-                    "Wordpress",
-                    "Game development"
-                ],
-                "2": [
-                    "Illustration",
-                    "Logo design",
-                    "Card design",
-                    "UI / UX design",
-                    "Fonts & Typography"
-                ],
-                "3": [
-                    "Data entry",
-                    "Social media campaign",
-                    "Adwords campaign",
-                    "Other"
-                ],
-                "4": [
-                    "Ads & commercial",
-                    "Video editing",
-                    "Animated GIFs",
-                    "Logo animation",
-                    "Character animation"
-                ],
-                "5": [
-                    "Translation",
-                    "Book Writing",
-                    "Scriptwriting",
-                    "Content writing",
-                    "Article and blog posts"
-                ]
-            };
 
-            //$('#main-category').change(function () {
-            //    var OrderType = $(this).val()
-            //    var CurrencyType = subjectObject[OrderType] || [];
-
-            //    var html = $.map(CurrencyType, function (cnt) {
-            //        return '<option value="' + OrderType + '">' + cnt + '</option>'
-            //    }).join('');
-
-            //    $('#sub-category').html(html)
-            //});
-
-            //$(".hide-submenu").change(function () {
-            //    console.log("changed")
-            //    $("#SubCategoryName").attr("value", $(".hide-submenu option:selected").text());
-            //    console.log($(".hide-submenu option:selected").text())
-            //    $('.hide-submenu option[selected]').removeAttr("selected");
-            //    $(".hide-submenu").find(":selected").attr("selected", "selected");
-            //    //$("#sub-category").attr("value", $("#sub-category option:selected").text());
-            //})
+            $("#Cost").keydown(function (event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
 
             $('#main-category').change(function () {
                 var num = this.value;
@@ -433,11 +381,13 @@
             });
         })
 
-        $(".submit").on("click", function () {
+        $(".submit").on("click", function (e) {
+
             if ($("#project-textarea").val() == "" || $("#project-textarea").val() == null || $("#project-textarea").val() == "<div><br></div>") {
-                //console.log("empty");
+                
                 $("#validation-desc").removeAttr(this.hidden);
                 $("#validation-desc").css("color", "red");
+
             } else {
                 $("#validation-desc").attr(this.hidden);
                 $("#validation-desc").css("color", "black");

@@ -1,0 +1,185 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Manage Project";
+    string[] TableHeaders = new string[] {"#"
+               ,"Project Title"
+               ,"Employer Name"
+               ,"Sub Category"
+               ,"Cost (RM)"
+               ,"Progress"
+               ,"Actions"};
+}
+
+    <link rel="stylesheet" href="~/css/EmpManageProject.css">
+    
+    
+
+    <div class="content">
+        <div class="TempMsg" style="margin: 0 1rem; font-size: 1.2rem;">
+            <p class="Msg" style="color:green">@TempData["SuccessMsg"]</p>
+            <p class="Msg" style="color:red">@TempData["ErrorMsg"]</p>
+        </div>
+
+
+        <div class="text-black font-weight-bold manage-project">Manage Project</div>
+        <div class="tab">
+            <div class="btn-box">
+                <button onclick="location.href='@Url.Action("ConAll", "ContractorDashboard" )'">All Projects</button>
+                <button class="active" onclick="location.href='@Url.Action("ConRunning", "ContractorDashboard")'">Running</button>
+                <button onclick="location.href='@Url.Action("ConApplication", "ContractorDashboard")'">Applications</button>
+                <button onclick="location.href='@Url.Action("ConInterview", "ContractorDashboard" )'">Interview</button>
+                
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="outer-wrapper">
+            <div class="table-wrapper">
+                <table class="table display cell-border hover" id="datatable" style="width:100%">
+                    <thead>
+                        <tr>
+                            @{
+                                foreach (var item in TableHeaders)
+                                {
+                                    <th>
+                                        @item
+                                    </th>
+                                }
+                            }
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            if (Model != null)
+                            {
+                                foreach (var Data in Model)
+                                {
+                                    <tr>
+                                        <td></td>
+                                        <td>@Data.Title</td>
+                                        <td>@Data.Name</td>
+                                        <td>@Data.SubCategory</td>
+                                        <td>@Data.Cost</td>
+                                        <td>@Data.Progress</td>
+                                        <td>
+                                            @Html.ActionLink("Update", "#", new { id = Data.ApplicationID }, new { @class = "btn-update", @data_target = "modal-update", @data_id = Data.ApplicationID })
+
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Delete Modal -->
+    <div id="modal-update" class="modal">
+        <div class="modal-content">
+            <div class="project">
+                <a class="close">&times;</a>
+                <form asp-action="UpdateProjectProgress" method="post">
+                    <h2>Update Project Progress</h2>
+                    <div class="project-content">
+                        @Html.Hidden("id", "", new { @class = "hiddenid" })
+
+                        <p>Project Progress</p>
+                        <select class="filter-select" name="select-progress" id="select-progress">
+                            <option value="0">0 %</option>
+                            <option value="10">10 %</option>
+                            <option value="20">20 %</option>
+                            <option value="30">30 %</option>
+                            <option value="40">40 %</option>
+                            <option value="50">50 %</option>
+                            <option value="60">60 %</option>
+                            <option value="70">70 %</option>
+                            <option value="80">80 %</option>
+                            <option value="90">90 %</option>
+                            <option value="100">100 %</option>
+                        </select>
+                        @Html.Hidden("perc", "", new { @class = "percid" })
+
+                    </div>
+
+                    <div class="project-button">
+                        <button id="btn-update" type="submit" >Update</button>
+                        <button type="submit" class="close">Cancel</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        $(document).ready(function () {
+
+            $('#datatable').DataTable({
+                scrollX: true,
+                columnDefs: [{
+                    targets: 5,
+                    //render: $.fn.dataTable.render.percentBar('round', '#FFF', '#269ABC', '#31B0D5', '#286090', 1, 'groove')
+                    render: $.fn.dataTable.render.percentBar('round', '#fff', '#FF9CAB', '#FF0033', '#FF9CAB', 0, 'solid'),
+                }]
+            });
+
+            $(".Msg").fadeTo(2000, 500).slideUp(500, function () {
+                $(".Msg").slideUp(500);
+            });
+
+            $("#select-progress").on("change", function () {
+                $('#select-progress option[selected]').removeAttr("selected");
+                $("#select-progress").find(":selected").attr("selected", "selected");
+                $(".project-content .percid").attr("value", $("#select-progress option:selected").val());
+            });
+
+            $(".btn-update").on("click", function (e) {
+                e.preventDefault();
+                //perform the url load  then
+                $('#modal-update').modal({
+                    keyboard: true
+                }, 'show');
+
+                var passedID = $(this).data('id');
+                
+
+                $(".project-content .hiddenid").val(passedID);
+                return false;
+            });
+        });
+
+        //let modalView = [...document.querySelectorAll(".btn-view")];
+        //modalView.forEach(function (btn) {
+        //    btn.onclick = function () {
+        //        let modal = btn.getAttribute("data-modal");
+        //        document.getElementById(modal).style.display = "block";
+        //    };
+        //});
+
+        //let modalDelete = [...document.querySelectorAll(".btn-delete")];
+        //modalDelete.forEach(function (btn) {
+        //    btn.onclick = function () {
+        //        let modal = btn.getAttribute("data-modal");
+        //        document.getElementById(modal).style.display = "block";
+        //    };
+        //});
+
+        $('.close').on("click", function (e) {
+            e.preventDefault();
+            //perform the url load  then
+            $('.modal').modal('hide');
+
+            return false;
+        })
+
+    </script>

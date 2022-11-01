@@ -125,7 +125,7 @@
                                             |
                                             @Html.ActionLink("Approve", "#", new { id = Data.InterviewID, projectID = Data.ProjectID }, new { @class = "btn-approve", @data_target = "modal-approve", @data_id = Data.InterviewID, @data_id2 = Data.ProjectID, @data_name = Data.FullName, @data_title = Data.Title })
                                             |
-                                            @Html.ActionLink("Reject", "EditActiveProject", new { id = Data.InterviewID }, new { @class = "btn-reject", @data_target = "modal-reject", @data_id = Data.InterviewID, @data_name = Data.FullName, @data_title = Data.Title })
+                                            @Html.ActionLink("Reject", "#", new { id = Data.InterviewID }, new { @class = "btn-reject", @data_target = "modal-reject", @data_id = Data.InterviewID, @data_name = Data.FullName, @data_title = Data.Title })
 
                                         </td>
                                     </tr>
@@ -243,6 +243,14 @@
                 $(".content-reject .title").html(title);
                 return false;
             })
+
+            $('.close').on("click", function (e) {
+                e.preventDefault();
+                //perform the url load  then
+                $('.modal').modal('hide');
+
+                return false;
+            })
         });
 
 
@@ -254,18 +262,18 @@
         //    };
         //});
 
-        let closeBtns = [...document.querySelectorAll(".close")];
-        closeBtns.forEach(function (btn) {
-            btn.onclick = function () {
-                let modal = btn.closest(".modal");
-                modal.style.display = "none";
-            };
-        });
-        window.onclick = function (event) {
-            if (event.target.className === "modal") {
-                event.target.style.display = "none";
-            }
-        };
+        //let closeBtns = [...document.querySelectorAll(".close")];
+        //closeBtns.forEach(function (btn) {
+        //    btn.onclick = function () {
+        //        let modal = btn.closest(".modal");
+        //        modal.style.hide();
+        //    };
+        //});
+        //window.onclick = function (event) {
+        //    if (event.target.className === "modal") {
+        //        event.target.style.display = "none";
+        //    }
+        //};
 
     </script>
 </body>

@@ -25,6 +25,8 @@ namespace ProjectPool.Models
         [StringLength(int.MaxValue)]
         public string Pitch { get; set; }
 
+        public int Progress { get; set; }
+
 
 
 

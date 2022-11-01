@@ -63,6 +63,13 @@ namespace ProjectPool.Controllers
         public IActionResult EmpDashboard()
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
+            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            if (usertype != "2")
+            {
+                return RedirectToAction("ConDashboard");
+            }
+
             var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
 
             var empID = _db.Employer.Where(x => x.UserID.ToString() == userID).Select(x => x.EmployerID).SingleOrDefault();
@@ -71,17 +78,21 @@ namespace ProjectPool.Controllers
             SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             SqlDataReader dr;
 
-            getActive(empID);
-            getRunning(empID);
-            getApplication(empID);
-            getInterview(empID);
+            getEmpActive(empID);
+            getEmpRunning(empID);
+            getEmpApplication(empID);
+            getEmpInterview(empID);
 
             try
             {
                 conn.Open();
                 //Create command
-                string query = "SELECT (SELECT COUNT(*) FROM Project WHERE[Status] = 'Active') AS ActiveCount, (SELECT COUNT(*) FROM Project WHERE[Status] = 'Running') AS RunningCount, (SELECT COUNT(*) FROM Interview WHERE[Status] = 'Pending') AS InterviewCount, (SELECT COUNT(*) FROM Application WHERE[Status] = 'Pending') AS ApplicationCount";
-                SqlCommand cmd = new SqlCommand(query, conn);
+                SqlCommand cmd = new SqlCommand("Sp_GetDashboardCount", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@EmpID", empID);
+                cmd.Parameters["@EmpID"].Direction = ParameterDirection.Input;
+
                 dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
@@ -107,14 +118,14 @@ namespace ProjectPool.Controllers
             return View();
         }
 
-        public void getActive(int empID)
+        public void getEmpActive(int empID)
         {
             SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             SqlDataReader dr;
             
             conn.Open();
             //Create command
-            string query = "SELECT TOP 1 Title, [Description], Cost, Duration FROM Project WHERE EmployerID='"+empID+"' AND [Status]='Active'";
+            string query = "SELECT TOP 1 Title, [Description], Cost, Duration FROM Project WHERE EmployerID='" + empID + "' AND [Status]='Active' AND Deleted=0";
             SqlCommand cmd = new SqlCommand(query, conn);
             dr = cmd.ExecuteReader();
             while (dr.Read())
@@ -133,14 +144,14 @@ namespace ProjectPool.Controllers
 
         }
 
-        public void getRunning(int empID)
+        public void getEmpRunning(int empID)
         {
             SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             SqlDataReader dr;
 
             conn.Open();
             //Create command
-            string query = "SELECT TOP 1 Title, [Description], Cost, Duration FROM Project WHERE EmployerID='" + empID + "' AND [Status]='Running'";
+            string query = "SELECT TOP 1 Title, [Description], Cost, Duration FROM Project WHERE EmployerID='" + empID + "' AND [Status]='Running' AND Deleted=0";
             SqlCommand cmd = new SqlCommand(query, conn);
             dr = cmd.ExecuteReader();
             while (dr.Read())
@@ -159,14 +170,14 @@ namespace ProjectPool.Controllers
 
         }
 
-        public void getApplication(int empID)
+        public void getEmpApplication(int empID)
         {
             SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             SqlDataReader dr;
 
             conn.Open();
             //Create command
-            string query = "SELECT TOP 1 CONCAT(cat.[Name], ', ',p.SubCategoryName) as Tags, p.Title, CONCAT(c.LastName, ' ', c.FirstName) as FullName,(SELECT ABS(DATEDIFF(dd, CURRENT_TIMESTAMP, a.CreatedAt))) as Days, (SELECT ABS(DATEDIFF(hh, CURRENT_TIMESTAMP, a.CreatedAt)))as Hours, (SELECT ABS(DATEDIFF(mi, CURRENT_TIMESTAMP, a.CreatedAt))) as Minutes FROM [Application] a LEFT JOIN Project p on p.ProjectID = a.ProjectID LEFT JOIN Contractor c on c.ContractorID = a.ContractorID LEFT JOIN Category cat on cat.CategoryID = p.CategoryID WHERE a.EmployerID = '" + empID + "' AND a.[Status]= 'Pending'";
+            string query = "SELECT TOP 1 CONCAT(cat.[Name], ', ',p.SubCategoryName) as Tags, p.Title, CONCAT(c.LastName, ' ', c.FirstName) as FullName,(SELECT ABS(DATEDIFF(dd, CURRENT_TIMESTAMP, a.CreatedAt))) as Days, (SELECT ABS(DATEDIFF(hh, CURRENT_TIMESTAMP, a.CreatedAt)))as Hours, (SELECT ABS(DATEDIFF(mi, CURRENT_TIMESTAMP, a.CreatedAt))) as Minutes FROM [Application] a LEFT JOIN Project p on p.ProjectID = a.ProjectID LEFT JOIN Contractor c on c.ContractorID = a.ContractorID LEFT JOIN Category cat on cat.CategoryID = p.CategoryID WHERE a.EmployerID = '" + empID + "' AND a.[Status]= 'Pending' AND p.Deleted = 0";
             SqlCommand cmd = new SqlCommand(query, conn);
             dr = cmd.ExecuteReader();
             while (dr.Read())
@@ -199,14 +210,14 @@ namespace ProjectPool.Controllers
 
         }
 
-        public void getInterview(int empID)
+        public void getEmpInterview(int empID)
         {
             SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             SqlDataReader dr;
 
             conn.Open();
             //Create command
-            string query = "SELECT TOP 1 iv.[Date],CONCAT(CONVERT(varchar(7),iv.FromTime,100),' - ',CONVERT(varchar(7),iv.ToTime,100)) as [IvTime], CONCAT(c.LastName, ' ', c.FirstName) as FullName, (SELECT DATEDIFF(dd, CURRENT_TIMESTAMP, iv.[Date])) as Days, (SELECT DATEDIFF(hh, CURRENT_TIMESTAMP, iv.[Date]))as Hours, (SELECT DATEDIFF(mi, CURRENT_TIMESTAMP, iv.[Date])) as Minutes FROM Interview iv LEFT JOIN[Application] a on a.ApplicationID = iv.ApplicationID LEFT JOIN Contractor c on c.ContractorID = a.ContractorID LEFT JOIN Project p on p.ProjectID = a.ProjectID WHERE a.EmployerID = '" + empID + "' AND iv.[Status]= 'Pending'";
+            string query = "SELECT TOP 1 iv.[Date],CONCAT(CONVERT(varchar(7),iv.FromTime,100),' - ',CONVERT(varchar(7),iv.ToTime,100)) as [IvTime], CONCAT(c.LastName, ' ', c.FirstName) as FullName, (SELECT DATEDIFF(dd, CURRENT_TIMESTAMP, iv.[Date])) as Days, (SELECT DATEDIFF(hh, CURRENT_TIMESTAMP, iv.[Date]))as Hours, (SELECT DATEDIFF(mi, CURRENT_TIMESTAMP, iv.[Date])) as Minutes FROM Interview iv LEFT JOIN[Application] a on a.ApplicationID = iv.ApplicationID LEFT JOIN Contractor c on c.ContractorID = a.ContractorID LEFT JOIN Project p on p.ProjectID = a.ProjectID WHERE a.EmployerID = '" + empID + "' AND iv.[Status]= 'Pending' AND p.Deleted = 0 AND a.[Status] = 'Pending'";
             SqlCommand cmd = new SqlCommand(query, conn);
             dr = cmd.ExecuteReader();
             while (dr.Read())
@@ -255,9 +266,198 @@ namespace ProjectPool.Controllers
         [Route("Contractor/Dashboard")]
         public IActionResult ConDashboard()
         {
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            if (usertype != "3")
+            {
+                return RedirectToAction("EmpDashboard");
+            }
+
+            var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
+
+            var conID = _db.Contractor.Where(x => x.UserID.ToString() == userID).Select(x => x.ContractorID).SingleOrDefault();
+
+            getConApplication(conID);
+            getConRunning(conID);
+            getConInterview(conID);
+
+            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            SqlDataReader dr;
+
+            try
+            {
+                conn.Open();
+                //Create command
+                SqlCommand cmd = new SqlCommand("Sp_GetConDashboardCount", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@ConID", conID);
+                cmd.Parameters["@ConID"].Direction = ParameterDirection.Input;
+
+                dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    var projectCount = new DashboardModel()
+                    {
+                        RunningCount = Convert.ToInt32(dr["RunningCount"]),
+                        InterviewCount = Convert.ToInt32(dr["InterviewCount"]),
+                        ApplicationCount = Convert.ToInt32(dr["ApplicationCount"]),
+                    };
+                    ViewData["ProjectCount"] = projectCount;
+                }
+
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
             return View();
         }
 
-       
+        public void getConApplication(int conID)
+        {
+            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            SqlDataReader dr;
+
+            conn.Open();
+            //Create command
+            string query = "SELECT TOP 1 p.Title, e.CompanyName, CONCAT (e.LastName, ' ', e.FirstName) as FullName, (SELECT COUNT(*) FROM [Application] a WHERE a.ProjectID = p.ProjectID ) AS TotalBid, (SELECT ABS(DATEDIFF(dd, CURRENT_TIMESTAMP, a.CreatedAt))) as Days, (SELECT ABS(DATEDIFF(hh, CURRENT_TIMESTAMP, a.CreatedAt)))as Hours, (SELECT ABS(DATEDIFF(mi, CURRENT_TIMESTAMP, a.CreatedAt))) as Minutes FROM [Application] a LEFT JOIN Project p on p.ProjectID = a.ProjectID LEFT JOIN Employer e on e.EmployerID = p.EmployerID WHERE ContractorID = '" + conID+"' AND p.[Status] = 'Active' AND a.[Status] = 'Pending' AND p.Deleted = 0";
+            SqlCommand cmd = new SqlCommand(query, conn);
+            dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                var day = dr["Days"].ToString();
+                var hr = dr["Hours"].ToString();
+                var min = dr["Minutes"].ToString();
+                var company = dr["CompanyName"].ToString();
+                var fullName = dr["FullName"].ToString();
+                var name = company;
+
+                string time = min + " minute(s) ago";
+
+                if (Convert.ToInt32(hr) >= 24)
+                {
+                    time = day + " day(s) ago";
+                }
+                else if (Convert.ToInt32(min) >= 60)
+                {
+                    time = hr + " hour(s) ago";
+                }
+
+                if (string.IsNullOrWhiteSpace(company))
+                {
+                    name = fullName;
+                }
+
+                var appProject = new DashboardModel()
+                {
+                    AP_Title = dr["Title"].ToString(),
+                    AP_TotalBid = dr["TotalBid"].ToString(),
+                    AP_Duration = time,
+                    AP_FullName = name,
+                };
+                ViewData["ApplicationProject"] = appProject;
+            }
+
+            conn.Close();
+        }
+
+        public void getConRunning(int conID)
+        {
+            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            SqlDataReader dr;
+
+            conn.Open();
+            //Create command
+            string query = "SELECT TOP 1 p.Title, p.Cost, a.Progress, CONCAT(e.LastName, ' ',e.FirstName)as FullName, e.CompanyName FROM [Application] a LEFT JOIN Project p on a.ProjectID = p.ProjectID LEFT JOIN Employer e on e.EmployerID = p.EmployerID WHERE a.ContractorID = '"+conID+"' AND p.[Status] = 'Running' AND p.Deleted = '0' AND a.[Status] = 'Accepted'";
+            SqlCommand cmd = new SqlCommand(query, conn);
+            dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                var company = dr["CompanyName"].ToString();
+                var fullName = dr["FullName"].ToString();
+                var name = company;
+
+                if (string.IsNullOrWhiteSpace(company))
+                {
+                    name = fullName;
+                }
+
+                var runningProject = new DashboardModel()
+                {
+                    R_Title = dr["Title"].ToString(),
+                    R_Name = name,
+                    R_Cost = dr["Cost"].ToString(),
+                    R_Progress = dr["Progress"].ToString(),
+                };
+                ViewData["RunningProject"] = runningProject;
+            }
+
+            conn.Close();
+
+        }
+
+        public void getConInterview(int conID)
+        {
+            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            SqlDataReader dr;
+
+            conn.Open();
+            //Create command
+            string query = "SELECT  TOP 1 iv.[Date], CONCAT(CONVERT(varchar(7),iv.FromTime,100),' - ',CONVERT(varchar(7),iv.ToTime,100)) as [Time], (SELECT DATEDIFF(dd, CURRENT_TIMESTAMP, iv.[Date])) as Days, (SELECT DATEDIFF(hh, CURRENT_TIMESTAMP, iv.[Date]))as Hours, (SELECT DATEDIFF(mi, CURRENT_TIMESTAMP, iv.[Date])) as Minutes, (SELECT CONCAT(LastName,' ',FirstName) FROM Employer WHERE EmployerID = a.EmployerID) as FullName, (SELECT CompanyName FROM Employer WHERE EmployerID = a.EmployerID) as CompanyName, (SELECT Title FROM Project WHERE ProjectID = a.ProjectID) as Title FROM Interview iv LEFT JOIN [Application] a on a.ApplicationID = iv.ApplicationID WHERE a.ContractorID = '"+conID+"' AND iv.[Status] = 'Pending' AND a.[Status] = 'Pending' ORDER BY Days, Hours, Minutes";
+            SqlCommand cmd = new SqlCommand(query, conn);
+            dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                var Date = dr["Date"].ToString();
+                var day = dr["Days"].ToString();
+                var hr = dr["Hours"].ToString();
+                var min = dr["Minutes"].ToString();
+                var company = dr["CompanyName"].ToString();
+                var fullName = dr["FullName"].ToString();
+                var name = company;
+                bool datePassed = false;
+                string time = min + " minute(s) more";
+
+                if (Convert.ToInt32(day) <= 0 && Convert.ToInt32(hr) <= 0 && Convert.ToInt32(min) <= 0)
+                {
+                    datePassed = true;
+                    time = "Interview Date Passed! Please contact employer for action!";
+                }
+                else
+                {
+                    if (Convert.ToInt32(hr) >= 24)
+                    {
+                        time = day + " day(s) more";
+                    }
+                    else if (Convert.ToInt32(min) >= 60)
+                    {
+                        time = hr + " hour(s) more";
+                    }
+                }
+
+                if (string.IsNullOrWhiteSpace(company))
+                {
+                    name = fullName;
+                }
+
+                var interview = new DashboardModel()
+                {
+                    I_Date = DateTime.Parse(Date).ToString("dd/MM/yyyy"),
+                    I_FullName = name,
+                    I_IvTime = dr["IvTime"].ToString(),
+                    I_Time = time,
+                    datePassed = datePassed,
+                    I_Title = dr["Title"].ToString(),
+                };
+                ViewData["Interview"] = interview;
+            }
+
+            conn.Close();
+        }
+
     }
 }

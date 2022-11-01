@@ -96,6 +96,25 @@
     </style>
 </head>
 <body>
+    @{
+        if (projectCount.ActiveCount >= 1)
+        {
+            hasActive = true;
+        }
+        if (projectCount.RunningCount >= 1)
+        {
+            hasRunning = true;
+        }
+        if (projectCount.InterviewCount >= 1)
+        {
+            hasInterview = true;
+        }
+        if (projectCount.ApplicationCount >= 1)
+        {
+            hasApplication = true;
+        }
+
+    }
 
     <div class="content">
 
@@ -105,229 +124,207 @@
                 <div class="text-black font-weight-bold dashboard">My Dashboard</div>
             </div>
         </div>
-        @*<form asp-action="EmpDashboard" method="post">*@
-    <div class="row gutters-sm">
 
-        @{
-            @*var claimsIdentity = User.Identity as System.Security.Claims.ClaimsIdentity;
-            var userID = claimsIdentity.FindFirst(System.Security.Claims.ClaimTypes.Sid).Value;
-            <input id="userID" name="userID" asp-for="UserId" value=@userID />*@
-        }
-        @{
-            if (projectCount.ActiveCount >= 1)
-            {
-                hasActive = true;
-            }
-            if (projectCount.RunningCount >= 1)
-            {
-                hasRunning = true;
-            }
-            if (projectCount.InterviewCount >= 1)
-            {
-                hasInterview = true;
-            }
-            if (projectCount.ApplicationCount >= 1)
-            {
-                hasApplication = true;
-            }
-
-        }
-
-        <!-- Projects -->
-        <div class="col-md-6">
-            <!-- projetc application -->
-            <div class="card no-border card-box p-0 m-0">
-                <div class="card-body">
-                    <div class="card no-border-grey mb-3 title">
-                        <a asp-controller="EmployerDashboard" asp-action="EmpApplication"><p class="text-black">Project Application Request</p></a>
-                    </div>
-                    @{
-                        if (projectCount != null)
-                        {
-                            if (hasApplication)
+        <div class="row gutters-sm">
+            <!-- Projects -->
+            <div class="col-md-6">
+                <!-- projetc application -->
+                <div class="card no-border card-box p-0 m-0">
+                    <div class="card-body">
+                        <div class="card no-border-grey mb-3 title">
+                            <a asp-controller="EmployerDashboard" asp-action="EmpApplication"><p class="text-black">Project Application Request</p></a>
+                        </div>
+                        @{
+                            if (projectCount != null)
                             {
-                                
-                                <a asp-controller="EmployerDashboard" asp-action="EmpApplication" class="link-card">
-                                    <div class="card card-h m-0">
-                                        <div class="card-body p-3 card-content">
-                                            <p class="p-title">@appProject.AP_Title</p>
-                                            <p class="p-sub" id="p-desc">@appProject.AP_FullName</p>
-                                            <p class="p-sub" id="p-tag">Tags:&nbsp;@appProject.AP_Tags</p>
-                                            <p class="p-sub">@appProject.AP_Duration</p>
-                                        </div>
-                                    </div>
-                                </a>                                   
-
-                                if (projectCount.ApplicationCount > 1)
+                                if (hasApplication)
                                 {
-                                    <div class="link-more">
-                                        <a asp-controller="EmployerDashboard" asp-action="EmpApplication">View More..</a>
-                                    </div>
-                                }
 
-                            }
-                            else
-                            {
-                                <div class="card no-border title-list">
-                                    <p>You don't have any application request</p>
-                                    <hr>
-                                </div>
-                                
+                                    <a asp-controller="EmployerDashboard" asp-action="EmpApplication" class="link-card">
+                                        <div class="card card-h m-0">
+                                            <div class="card-body p-3 card-content">
+                                                <p class="p-title">@appProject.AP_Title</p>
+                                                <p class="p-sub" id="p-desc">@appProject.AP_FullName</p>
+                                                <p class="p-sub" id="p-tag">Tags:&nbsp;@appProject.AP_Tags</p>
+                                                <p class="p-sub">@appProject.AP_Duration</p>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    if (projectCount.ApplicationCount > 1)
+                                    {
+                                        <div class="link-more">
+                                            <a asp-controller="EmployerDashboard" asp-action="EmpApplication">View More..</a>
+                                        </div>
+                                    }
+
+                                }
+                                else
+                                {
+                                    <div class="card no-border title-list">
+                                        <p>You don't have any application request</p>
+                                        <hr>
+                                    </div>
+
+                                }
                             }
                         }
-                    }
 
 
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active project  -->
+            <div class="col-md-6">
+                <div class="card no-border card-box p-0 m-0">
+                    <div class="card-body">
+                        <div class="card no-border-grey mb-3 title">
+                            <a asp-controller="EmployerDashboard" asp-action="EmpActive"><p class="text-black">Active projects</p></a>
+                        </div>
+                        @{
+                            if (projectCount != null)
+                            {
+                                if (hasActive)
+                                {
+                                    <a asp-controller="EmployerDashboard" asp-action="EmpActive" class="link-card">
+                                        <div class="card card-h m-0">
+                                            <div class="card-body p-3 card-content">
+                                                <p class="p-title">@activeProject.A_Title</p>
+                                                <p class="p-sub" id="p-desc">@activeProject.A_Desc</p>
+                                                <p class="p-sub">RM&nbsp;@activeProject.A_Cost</p>
+                                                <p class="p-sub">@activeProject.A_Duration</p>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    if (projectCount.ActiveCount > 1)
+                                    {
+                                        <div class="link-more">
+                                            <a asp-controller="EmployerDashboard" asp-action="EmpActive">View More..</a>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="card no-border title-list">
+                                        <p>You don't have any active projects</p>
+                                        <hr>
+                                    </div>
+
+                                }
+                            }
+                        }
+
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Active project  -->
-        <div class="col-md-6">
-            <div class="card no-border card-box p-0 m-0">
-                <div class="card-body">
-                    <div class="card no-border-grey mb-3 title">
-                        <a asp-controller="EmployerDashboard" asp-action="EmpActive"><p class="text-black">Active projects</p></a>
-                    </div>
-                    @{
-                        if (projectCount != null)
-                        {
-                            if (hasActive)
+        <div class="row gutters-sm">
+
+
+            <div class="col-md-6">
+                <!-- running project -->
+                <div class="card no-border card-box p-0 m-0">
+                    <div class="card-body">
+                        <div class="card no-border-grey mb-3 title">
+                            <a asp-controller="EmployerDashboard" asp-action="EmpRunning"><p class="text-black ">Running projects</p></a>
+                        </div>
+                        @{
+                            if (projectCount != null)
                             {
-                                <a asp-controller="EmployerDashboard" asp-action="EmpActive" class="link-card">
-                                    <div class="card card-h m-0">
-                                        <div class="card-body p-3 card-content">
-                                            <p class="p-title">@activeProject.A_Title</p>
-                                            <p class="p-sub" id="p-desc">@activeProject.A_Desc</p>
-                                            <p class="p-sub">RM&nbsp;@activeProject.A_Cost</p>
-                                            <p class="p-sub">@activeProject.A_Duration</p>
-                                        </div>
-                                    </div>
-                                </a>
-                                
-                                if (projectCount.ActiveCount > 1)
+                                if (hasRunning)
                                 {
-                                    <div class="link-more">
-                                        <a asp-controller="EmployerDashboard" asp-action="EmpActive">View More..</a>
+                                    <a asp-controller="EmployerDashboard" asp-action="EmpRunning" class="link-card">
+                                        <div class="card card-h m-0">
+                                            <div class="card-body p-3 card-content">
+                                                <p class="p-title">@runningProject.R_Title</p>
+                                                <p class="p-sub" id="p-desc">@runningProject.R_Desc</p>
+                                                <p class="p-sub">RM&nbsp;@runningProject.R_Cost</p>
+                                                <p class="p-sub">@runningProject.R_Duration</p>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    if (projectCount.RunningCount > 1)
+                                    {
+                                        <div class="link-more">
+                                            <a asp-controller="EmployerDashboard" asp-action="EmpRunning">View More..</a>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="card no-border title-list">
+                                        <p>You don't have any running session</p>
+                                        <hr>
                                     </div>
+
                                 }
                             }
-                            else
+                        }
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- interview invitation -->
+            <div class="col-md-6">
+                <div class="card no-border card-box p-0 m-0">
+                    <div class="card-body">
+                        <div class="card no-border-grey mb-3 title">
+                            <a asp-controller="EmployerDashboard" asp-action="EmpInterview"><p class="text-black ">Interview session</p></a>
+                        </div>
+                        @{
+                            if (projectCount != null)
                             {
-                                <div class="card no-border title-list">
-                                    <p>You don't have any active projects</p>
-                                    <hr>
-                                </div>
-                                
+                                if (hasInterview)
+                                {
+                                    <a asp-controller="EmployerDashboard" asp-action="EmpInterview" class="link-card">
+                                        <div class="card card-h m-0">
+                                            <div class="card-body p-3 card-content">
+                                                <p class="p-title">@interview.I_FullName</p>
+                                                <p class="p-sub">@interview.I_Date</p>
+                                                <p class="p-sub">@interview.I_IvTime</p>
+                                                @if (interview.datePassed)
+                                                {
+                                                    <p style="color:red;" class="p-sub" id="p-tag">@interview.I_Time</p>
+                                                }
+                                                else
+                                                {
+                                                    <p class="p-sub" id="p-tag">@interview.I_Time</p>
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    if (projectCount.InterviewCount > 1)
+                                    {
+                                        <div class="link-more">
+                                            <a asp-controller="EmployerDashboard" asp-action="EmpInterview">View More..</a>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="card no-border title-list">
+                                        <p>You don't have any interview session</p>
+                                        <hr>
+                                    </div>
+
+                                }
                             }
                         }
-                    }
 
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-6">
-            <!-- running project -->
-            <div class="card no-border card-box p-0 m-0">
-                <div class="card-body">
-                    <div class="card no-border-grey mb-3 title">
-                        <a asp-controller="EmployerDashboard" asp-action="EmpRunning"><p class="text-black ">Running projects</p></a>
-                    </div>
-                    @{
-                        if (projectCount != null)
-                        {
-                            if (hasRunning)
-                            {
-                                <a asp-controller="EmployerDashboard" asp-action="EmpRunning" class="link-card">
-                                    <div class="card card-h m-0">
-                                        <div class="card-body p-3 card-content">
-                                            <p class="p-title">@runningProject.R_Title</p>
-                                            <p class="p-sub" id="p-desc">@runningProject.R_Desc</p>
-                                            <p class="p-sub">RM&nbsp;@runningProject.R_Cost</p>
-                                            <p class="p-sub">@runningProject.R_Duration</p>
-                                        </div>
-                                    </div>
-                                </a>
-                                
-                                if (projectCount.RunningCount > 1)
-                                {
-                                    <div class="link-more">
-                                        <a asp-controller="EmployerDashboard" asp-action="EmpRunning">View More..</a>
-                                    </div>
-                                }
-                            }
-                            else
-                            {
-                                <div class="card no-border title-list">
-                                    <p>You don't have any running session</p>
-                                    <hr>
-                                </div>
-                                
-                            }
-                        }
-                    }
-
-                </div>
-            </div>
-        </div>
-
-
-        <!-- interview invitation -->
-        <div class="col-md-6">
-            <div class="card no-border card-box p-0 m-0">
-                <div class="card-body">
-                    <div class="card no-border-grey mb-3 title">
-                        <a asp-controller="EmployerDashboard" asp-action="EmpInterview"><p class="text-black ">Interview session</p></a>
-                    </div>
-                    @{
-                        if (projectCount != null)
-                        {
-                            if (hasInterview)
-                            {
-                                <a asp-controller="EmployerDashboard" asp-action="EmpInterview" class="link-card">
-                                    <div class="card card-h m-0">
-                                        <div class="card-body p-3 card-content">
-                                            <p class="p-title">@interview.I_FullName</p>
-                                            <p class="p-sub">@interview.I_Date</p>
-                                            <p class="p-sub">@interview.I_IvTime</p>
-                                            @if (interview.datePassed)
-                                            {
-                                                <p style="color:red;" class="p-sub" id="p-tag">@interview.I_Time</p>
-                                            }
-                                            else
-                                            {
-                                                <p class="p-sub" id="p-tag">@interview.I_Time</p>
-                                            }
-                                            
-                                        </div>
-                                    </div>
-                                </a>
-                                
-                                if (projectCount.InterviewCount > 1)
-                                {
-                                    <div class="link-more">
-                                        <a asp-controller="EmployerDashboard" asp-action="EmpInterview">View More..</a>
-                                    </div>
-                                }
-                            }
-                            else
-                            {
-                                <div class="card no-border title-list">
-                                    <p>You don't have any interview session</p>
-                                    <hr>
-                                </div>
-                                
-                            }
-                        }
-                    }
-
-                </div>
-            </div>
-        </div>
+        @* </form>*@
     </div>
-       @* </form>*@
-</div>
 
     <script>
         function getActive() {
