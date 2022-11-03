@@ -245,8 +245,8 @@ h1{
     transition: 0.3s ease;
 }
 
-.pagination li:hover {
-    transform: translateY(5px);
+.pagination .current-page:hover {
+    transform: translateY(-5px);
 }
 
 .pagination li a {

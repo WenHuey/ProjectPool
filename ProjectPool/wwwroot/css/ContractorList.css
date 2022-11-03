@@ -1,0 +1,341 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+    font-family: "Jost", sans-serif;
+}
+
+.cards{
+    margin: 1rem auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.card{
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+}
+
+.card__content{
+    line-height: 1.5;
+    font-size: 0.9em;
+    padding: 15px;
+    background: #fafafa;
+}
+
+.contractor-title{
+    display: flex;
+}
+
+.contractor-pp{
+    margin: 5px 10px 0 0;
+}
+
+.contractor-info > i,
+.contractor-info > span{
+    color: #ffbe5b;
+}
+
+.header {
+    width: 100%;
+    height: 70vh;
+    background-image: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)),url(/image/contractorlist.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.header-title {
+    position: absolute;
+    top: 30%;
+    letter-spacing: 3;
+    /* font-weight: bolder; */
+    font-size: 45px;
+    color: white;
+    text-shadow: 4px 2px 0px rgba(0,0,0,0.2);
+    text-align: center;
+    width: 100%;
+}
+
+    .header-title > span {
+        color: steelblue;
+    }
+
+.search-wrapper {
+    width: 60%;
+    margin: auto;
+    min-width: 300px;
+    height: 3.5rem;
+    position: relative;
+}
+
+.search-box {
+    width: 100%;
+    position: absolute;
+    background-color: whitesmoke;
+    box-shadow: rgba(2, 11, 20, 0.2) 0px 5px 15px;
+    top: -45%;
+    height: 100%;
+    width: 100%;
+}
+
+.search-card {
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0.5rem;
+}
+
+.search-input {
+    height: 100%;
+    width: 100%;
+    border: none;
+    padding: 0.5rem;
+}
+
+.search-button {
+    width: 200px;
+    background: steelblue;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.filter-wrapper {
+    width: 100%;
+    height: auto;
+    font-size: 0.8rem;
+    width: 60%;
+    min-width: 300px;
+    margin: auto;
+}
+
+.filter-dropdown {
+    width: 100%;
+    border-bottom: 1px solid steelblue;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
+
+.filter-select {
+    border: none;
+    padding: 0.2rem;
+}
+
+.filter-select:hover {
+    background: whitesmoke;
+}
+
+/* box */
+.review-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.card-box {
+    width: 100%;
+    box-shadow: 2px 2px 30px rgba(0,0,0,0.1);
+    background-color: white;
+    padding: 27px;
+    cursor: default;
+}
+
+
+
+.profile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.name-contractor {
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .name-contractor > a {
+        color: #3d3d3d;
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+        font-weight: bold;
+    }
+
+    .name-contractor a:hover {
+        text-decoration: none !important;
+    }
+
+.type > span {
+    font-size: 0.9rem;
+    margin: 0.2rem;
+}
+
+.y-star {
+    color: #ffbe5b;
+}
+
+.g-star {
+    color: #adacac;
+}
+
+.box-top {
+    margin-bottom: 10px;
+}
+
+.contractor-desc > a {
+    text-decoration: none !important;
+}
+
+    .contractor-desc > a > p {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        font-size: 0.8rem;
+        color: #4b4b4b;
+    }
+
+.project-label {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+    .project-label > a {
+        padding: 0.1rem;
+        margin: 0.2rem;
+        color: white;
+        text-decoration: none !important;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        padding: 2px 13px;
+        cursor: default;
+    }
+
+.label {
+    background-color: steelblue;
+}
+
+
+
+.contractor-label {
+    padding: 0.1rem;
+    margin: 0.2rem 0.2rem 0.4rem 0.2rem;
+    font-weight: 200;
+    color: white;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    padding: 0 19px;
+    cursor: default;
+    background-color: #6ecf6fdb;
+}
+
+    .contractor-label > p {
+        margin: 0;
+        padding: 0;
+    }
+
+.con-list {
+    margin: 5% 8%;
+}
+
+.con-name a{
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.con-name a:hover {
+    
+    text-decoration: none;
+}
+
+.p-total {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #514b4b;
+    display: flex;
+    align-items: center;
+}
+
+.contractor-desc{
+    margin-bottom: 20px;
+}
+
+.location {
+    font-size: 0.8rem;
+    color: gray;
+    font-style: italic;
+}
+
+.fa-location-dot {
+    color: #adacac;
+    padding-right: 5px;
+    font-size: 0.7rem;
+}
+
+/* pagination */
+
+.pagination {
+    text-align: center;
+    margin: 30px 30px 60px;
+    user-select: none;
+}
+
+.pagination li {
+    display: inline-block;
+    margin: 5px;
+    box-shadow: 0 5px 25px rgb(1 1 1 / 10%);
+    transition: 0.3s ease;
+}
+
+.pagination .current-page:hover {
+    transform: translateY(-5px);
+}
+
+.pagination li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.9rem;
+    line-height: 30px;
+}
+
+.previous-page, .next-page {
+    background-color: steelblue;
+    width: 65px;
+    border-radius: 45px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+    .previous-page:hover {
+        transform: translateX(-5px);
+    }
+
+    .next-page:hover {
+        transform: translateX(5px);
+    }
+
+.current-page, .dots {
+    background-color: #ccc;
+    width: 33px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.active {
+    background-color: steelblue;
+}
+
+.disabled {
+    background-color: #ccc;
+    pointer-events: none;
+}

@@ -25,6 +25,8 @@ namespace ProjectPool.Controllers
         List<EmpInterviewModel> interviews = new List<EmpInterviewModel>();
         FinalReviewProjectModel finalReview = new FinalReviewProjectModel();
         List<EmpClosedModel> closedProject = new List<EmpClosedModel>();
+        EmpProfileModel profile = new EmpProfileModel();
+        List<EmpProfileModel> active = new List<EmpProfileModel>();
 
         public EmployerDashboardController(DataContext db, IConfiguration configuration)
         {
@@ -1140,12 +1142,179 @@ namespace ProjectPool.Controllers
 
         //[Route("Project")]
         [HttpGet]
-        public IActionResult EmpProfile()
+        public IActionResult EditEmpProfile()
         {
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            return View();
+            if (usertype != "2")
+            {
+                return RedirectToAction("ConProfile", "ContractorDashboard");
+            }
+
+            var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
+            var empID = _db.Employer.Where(x => x.UserID.ToString() == userID).Select(x => x.EmployerID).SingleOrDefault();
+
+            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            SqlDataReader dr;
+            conn.Open();
+
+            try
+            {
+                string query = "SELECT e.*, u.Email, CONCAT(e.[State], ', ', e.Country) as Address FROM Employer e LEFT JOIN [User] u on u.UserID = e.UserID WHERE e.EmployerID = '" + empID+"'";
+                SqlCommand cmd = new SqlCommand(query, conn);
+
+                dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    var phone = dr["Phone"].ToString();
+                    var state = dr["State"].ToString();
+                    var country = dr["Country"].ToString();
+                    var address = dr["Address"].ToString();
+                    var desc = dr["ProfileDesc"].ToString();
+                    var cName = dr["CompanyName"].ToString();
+
+                    if (string.IsNullOrWhiteSpace(phone))
+                    {
+                        phone = " ";
+                    }
+
+                    if(string.IsNullOrWhiteSpace(state) || string.IsNullOrWhiteSpace(country))
+                    {
+                        address = " ";
+                    }
+
+                    if (string.IsNullOrWhiteSpace(desc))
+                    {
+                        desc = " ";
+                    }
+
+                    if (string.IsNullOrWhiteSpace(cName))
+                    {
+                        cName = " ";
+                    }
+
+                    profile.FirstName = dr["FirstName"].ToString();
+                    profile.LastName = dr["LastName"].ToString();
+                    profile.Email = dr["Email"].ToString();
+                    profile.Address = address;
+                    profile.Phone = phone;
+                    profile.ProfileDesc = desc;
+                    profile.CompanyName = cName;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["message"] = "Unsuccesful";
+            }
+            conn.Close();
+
+            return View(profile);
         }
 
+
+        [Route("Employer/Details/{id}")]
+        [HttpGet]
+        public IActionResult EmpDetails(int id, int uID)
+        {
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
+            var empID = _db.Employer.Where(x => x.UserID.ToString() == userID).Select(x => x.EmployerID).SingleOrDefault();
+            var isCon = false;
+
+            if (usertype == "3")
+            {
+                isCon = true;
+            }
+            else if (id != empID)
+            {
+                isCon = true;
+            }
+            
+            if(uID.Equals(Convert.ToInt32(userID)))
+            {
+                id = empID;
+                isCon = false;
+            }
+
+
+            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            SqlDataReader dr;
+            conn.Open();
+
+            try
+            {
+                string query = "SELECT e.*, u.Email, CONCAT(e.[State], ', ', e.Country) as Address FROM Employer e LEFT JOIN [User] u on u.UserID = e.UserID WHERE e.EmployerID = '" + id + "'";
+                SqlCommand cmd = new SqlCommand(query, conn);
+
+                dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    var fname = dr["Phone"].ToString();
+                    var lname = dr["State"].ToString();
+                    var full = lname + " " + lname;
+
+                    profile.EmployerID = Convert.ToInt32(dr["EmployerID"]);
+                    profile.FullName = full;
+                    profile.Email = dr["Email"].ToString();
+                    profile.Address = dr["Address"].ToString();
+                    profile.Phone = dr["Phone"].ToString();
+                    profile.ProfileDesc = dr["ProfileDesc"].ToString();
+                    profile.CompanyName = dr["CompanyName"].ToString();
+                    profile.isCon = isCon;
+
+                }
+
+                conn.Close();
+                conn.Open();
+
+                string query2 = "SELECT p.Title, p.[Description], p.Cost, p.Duration, (SELECT ABS(DATEDIFF(dd, CURRENT_TIMESTAMP, DatePosted))) as Days, (SELECT ABS(DATEDIFF(hh, CURRENT_TIMESTAMP, DatePosted)))as Hours, (SELECT ABS(DATEDIFF(mi, CURRENT_TIMESTAMP, DatePosted))) as Minutes FROM Project p WHERE p.EmployerID = '"+id+"' AND p.[Status] = 'Active'";
+                cmd = new SqlCommand(query2, conn);
+                
+                cmd.ExecuteNonQuery();
+                dr = cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    var day = dr["Days"].ToString();
+                    var hr = dr["Hours"].ToString();
+                    var min = dr["Minutes"].ToString();
+                    string time = min + " minute(s) ago";
+
+                    if (Convert.ToInt32(hr) >= 24)
+                    {
+                        time = day + " day(s) ago";
+                    }
+                    else if (Convert.ToInt32(min) >= 60)
+                    {
+                        time = hr + " hour(s) ago";
+                    }
+
+                    active.Add(new EmpProfileModel()
+                    {
+                        Title = dr["Title"].ToString(),
+                        Description = dr["Description"].ToString(),
+                        Cost = dr["Cost"].ToString(),
+                        Duration = dr["Duration"].ToString(),
+                        DayHourMin = time,
+                    });
+
+                    ViewData["ActiveProject"] = active;
+
+                    
+                }
+
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                TempData["message"] = "Unsuccesful";
+            }
+            
+            return View(profile);
+        }
 
     }
 }

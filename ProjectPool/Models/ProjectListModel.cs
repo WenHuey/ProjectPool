@@ -6,36 +6,28 @@ using System.Threading.Tasks;
 
 namespace ProjectPool.Models
 {
-    public class ProjectListModel
+    public class ContractorListModel
     {
-        [Key]
-        public string ProjectID { get; set; }
+        
+        public string ContractorID { get; set; }
 
-        public string Title { get; set; }
+        public string Name { get; set; }
 
-        [StringLength(int.MaxValue)]
-        public string Description { get; set; }
+        public string Address { get; set; }
 
-        [StringLength(int.MaxValue)]
-        public string Scope { get; set; }
+        public string ProfileDesc { get; set; }
 
-        public string Duration { get; set; }
-
-        public string Status { get; set; }
-
-        public string Cost { get; set; }
-
-        //public int EmployerID { get; set; }
-
-        //public string CategoryID { get; set; }
+        public string ReviewAverage { get; set; }
 
         public string SubCategoryName { get; set; }
 
         public string CategoryName { get; set; }
 
-        public string PostedAgo { get; set; }
+        public bool HasReview { get; set; }
 
-        public string TotalBid { get; set; }
+        public bool HasSub { get; set; }
+
+
 
 
     }

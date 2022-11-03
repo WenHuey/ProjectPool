@@ -107,54 +107,7 @@
                 <option value="5">Writing & Translation</option>
             </select>
          
-            <!--<select class="filter-select" id="sub-category">
-                <option value="">Select Sub-Category</option>
-            </select>-->
 
-            <!--Programming-->
-            <!--<select disabled class="filter-select hide-submenu" id="sub-category-1" hidden>
-                <option disabled selected value="">Select Sub-Category</option>
-                <option value="Website">Website</option>
-                <option value="Mobile App">Mobile App</option>
-                <option value="Web mobile">Web mobile</option>
-                <option value="Wordpress">Wordpress</option>
-                <option value="Game development">Game development</option>
-            </select>-->
-            <!--Graphic-->
-            <!--<select disabled class="filter-select hide-submenu" id="sub-category-2" hidden>
-                <option disabled selected value="">Select Sub-Category</option>
-                <option value="Illustration">Illustration</option>
-                <option value="Logo design">Logo design</option>
-                <option value="Card design">Card design</option>
-                <option value="UI/UX design">UI/UX design</option>
-                <option value="Fonts & Typography">Fonts & Typography</option>
-            </select>-->
-            <!--sales marketing-->
-            <!--<select disabled class="filter-select hide-submenu" id="sub-category-3" hidden>
-                <option disabled selected value="">Select Sub-Category</option>
-                <option value="Data entry">Data entry</option>
-                <option value="Social media campaign">Social media campaign</option>
-                <option value="Adwords campaign">Adwords campaign</option>
-                <option value="Other">Other</option>
-            </select>-->
-            <!--video animation-->
-            <!--<select disabled class="filter-select hide-submenu" id="sub-category-4" hidden>
-                <option disabled selected value="">Select Sub-Category</option>
-                <option value="Ads & Commercial">Ads & Commercial</option>
-                <option value="Video editing">Video editing</option>
-                <option value="Animated GIFs">Animated GIFs</option>
-                <option value="Logo animation">Logo animation</option>
-                <option value="Character animation">Character animation</option>
-            </select>-->
-            <!--writing -->
-            <!--<select disabled class="filter-select hide-submenu" id="sub-category-5" hidden>
-                <option disabled selected value="">Select Sub-Category</option>
-                <option value="Translation">Translation</option>
-                <option value="Book Writing">Book Writing</option>
-                <option value="Scriptwriting">Scriptwriting</option>
-                <option value="Content writing">Content writing</option>
-                <option value="Article and blog posts">Article and blog posts</option>
-            </select>-->
 
             <p class="p-total">Total Result(s): <span class="numberResult"></span></p>
         </div>
@@ -170,7 +123,7 @@
                             @*@Html.HiddenFor(model => model.ProjectID)*@
                             <h4>@Data.Title</h4>
                             <div class="desc-content">
-                                @Html.Raw(Data.Description)
+                                @Data.Description
                             </div>
                             <div class="project-label">
                                 @if (Data.CategoryName != "")

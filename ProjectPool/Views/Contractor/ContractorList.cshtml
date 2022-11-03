@@ -1,0 +1,218 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- Font -->
+    <link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
+    <!-- icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- CSS -->
+    @*<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">*@
+
+    <link rel="stylesheet" href="~/css/ContractorList.css">
+
+    <style>
+        
+    </style>
+</head>
+<body>
+
+
+    <div class="header">
+        <h1 class="header-title">
+            Hire students or freelancers <br>
+            and get start with your project!
+        </h1>
+    </div>
+    <!-- search -->
+    <div class="search-wrapper">
+        <div class="search-box">
+            <div class="search-card">
+                <input class="search-input" id="search" type="text" placeholder="Search . .">
+            </div>
+        </div>
+    </div>
+    <!-- filter -->
+    <div class="filter-wrapper">
+        <div class="filter-dropdown">
+            <!-- category -->
+            <select class="filter-select" name="category" id="category">
+                <option value="1">Programming & Tech</option>
+                <option value="2">Graphic & Design</option>
+                <option value="3">Sales & Marketing</option>
+                <option value="4">Video & Animation</option>
+                <option value="5">Writing & Translation</option>
+            </select>
+
+            <p class="p-total">Total Result(s): <span class="numberResult"></span></p>
+
+        </div>
+    </div>
+
+    <section class="con-list">
+        <form>
+
+            <div class="cards">
+                @foreach (var Data in Model)
+                {
+                    <div class="card-box">
+                        <div class="box-top">
+                            <!-- profile -->
+                            <div class="profile">
+                                <div class="con-name" style="padding-right:10px"><a href="contractordetails.html">@Data.Name</a></div>
+                                <div class="type">
+                                    @if (Data.HasReview)
+                                    {
+                                        <span class="y-star"><i class="fa fa-star"></i>&nbsp;@Data.ReviewAverage</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="g-star"><i class="fa fa-star"></i>&nbsp;@Data.ReviewAverage</span>
+                                    }
+
+                                </div>
+
+                            </div>
+                            <!-- location -->
+                            <div class="location">
+                                <p><span><i class="fa-solid fa-location-dot"></i></span>Location:&nbsp;@Data.Address</p>
+                            </div>
+                        </div>
+
+                        <!-- description -->
+                        <div class="contractor-desc">
+                            <a href="contractordetails.html">
+                                <p>@Data.ProfileDesc</p>
+                            </a>
+                        </div>
+                        <div class="project-label">
+                            <a class="label" href="">@Data.CategoryName</a>
+                            @if (Data.HasSub)
+                            {
+                                <a class="label" href="">@Data.SubCategoryName</a>
+                            }
+                            
+                        </div>
+                    </div>
+
+                }
+
+
+            </div>
+
+        </form>
+
+    </section>
+
+    <div class="pagination">
+        
+    </div>
+
+    <script>
+        function getPageList(totalPages, page, maxLength) {
+
+            function range(start, end) {
+                return Array.from(Array(end - start + 1), (_, i) => i + start);
+            }
+
+            var sideWidth = maxLength < 9 ? 1 : 2;
+            var leftWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+            var rightWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+
+            if (totalPages <= maxLength) {
+                return range(1, totalPages);
+            }
+
+            if (page <= maxLength - sideWidth - 1 - rightWidth) {
+                return range(1, maxLength = sideWidth - 1).concat(0, range(totalPages - sideWidth + 1, totalPages));
+            }
+
+            if (page >= totalPages - sideWidth - 1 - rightWidth) {
+                return range(1, sideWidth).concat(0, range(totalPages - sideWidth - 1 - rightWidth - leftWidth, totalPages));
+            }
+
+            return range(1, sideWidth).concat(0, range(page - leftWidth, page + rightWidth), 0, range(totalPages - sideWidth + 1, totalPages));
+        }
+
+        $(function () {
+            var numberOfItems = $(".card-box").length;
+            var limitPerPage = 9; //card visible per page
+            var totalPages = Math.ceil(numberOfItems / limitPerPage);
+            var paginationSize = 7; //no of page element visible
+            var currentPage;
+            $(".numberResult").html(numberOfItems);
+
+            function showPage(whichPage) {
+                if (whichPage < 1 || whichPage > totalPages) return false;
+
+                currentPage = whichPage;
+
+                $(".card-box").hide().slice((currentPage - 1) * limitPerPage, currentPage * limitPerPage).show();
+
+                $(".pagination li").slice(1, -1).remove();
+
+                getPageList(totalPages, currentPage, paginationSize).forEach(item => {
+                    $("<li>").addClass("page-item").addClass(item ? "current-page" : "dots")
+                        .toggleClass("active", item === currentPage).append($("<a>").addClass("page-link")
+                            .attr({ href: "javascript:void(0)" }).text(item || "...")).insertBefore(".next-page")
+                });
+
+                $(".previous-page").toggleClass("disabled", currentPage === 1);
+                $(".next-page").toggleClass("disabled", currentPage === totalPages);
+
+                return true;
+            }
+
+            $(".pagination").append(
+                $("<li>").addClass("page-item").addClass("previous-page").append($("<a>").addClass("page-link").attr({ href: "javascript:void(0)" }).text("Prev")),
+                $("<li>").addClass("page-item").addClass("next-page").append($("<a>").addClass("page-link").attr({ href: "javascript:void(0)" }).text("Next"))
+            );
+
+            $(".card-box").show();
+            showPage(1);
+
+            $(document).on("click", ".pagination li.current-page:not(.active)", function () {
+                $("html, body").animate({ scrollTop: 400 }, 300); //back to top
+                return showPage(+$(this).text());
+            });
+
+            $(".next-page").on("click", function () {
+                $("html, body").animate({ scrollTop: 400 }, 300); //back to top
+                return showPage(currentPage + 1);
+            });
+
+            $(".previous-page").on("click", function () {
+                $("html, body").animate({ scrollTop: 400 }, 300); //back to top
+                return showPage(currentPage - 1);
+            });
+
+            $("#search").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $(".card-box").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+
+            $("#category").change(function () {
+                $('#category option[selected]').removeAttr("selected");
+                $("#category").find(":selected").attr("selected", "selected");
+                var value = $("#category option:selected").text().toLowerCase();
+                $(".card-box").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>

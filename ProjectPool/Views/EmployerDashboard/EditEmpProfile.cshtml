@@ -1,0 +1,369 @@
+﻿@model ProjectPool.Models.EmpProfileModel
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+
+<style>
+    body {
+        background: #a9c1d5;
+    }
+
+    .content{
+        width: 600px;
+        margin: auto;
+    }
+
+    .card {
+        margin: 1rem;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 0 solid rgba(0,0,0,.125);
+        /*border-radius: .25rem;*/
+    }
+
+    .card-body {
+        flex: 1 1 auto;
+        min-height: 1px;
+        padding: 1.8rem 3rem;
+    }
+
+    .tag {
+        font-style: italic;
+        color: grey;
+        font-size: 0.9rem;
+    }
+
+    .con-table td:nth-child(2) {
+        padding: 0 10px;
+    }
+
+    .title {
+        font-size: 1.1rem;
+        font-weight: bold;
+        padding-bottom: 10px;
+        text-decoration-line: underline;
+        font-style: italic;
+    }
+
+    .edit-section input,
+    .edit-section select {
+        box-sizing: border-box;
+        height: 35px;
+        width: 100%;
+        border: 1px solid lightgrey;
+        border-radius: 5px;
+        padding-left: 10px;
+        margin: 5px auto;
+        font-size: 15px;
+        /* transition: border-color 150ms ease; */
+        font-family: 'Jost'
+    }
+
+    .validation{
+        color: red;
+    }
+
+</style>
+
+<body>
+    <div class="content">
+        <!-- Project -->
+        <div class="row gutters-sm">
+            <div class="col-12">
+                <div class="card no-border-grey">
+                    <div class="card-body">
+
+                        <div class="edit-section">
+                            <form id="form" asp-action="EditEmpProfile" method="post">
+                                @*@Html.DisplayNameFor(model => model.Language)*@
+                                @Html.HiddenFor(model => model.FirstName)
+
+                                <p class="title">Personal Information</p>
+
+                                @Html.DisplayNameFor(model => model.FirstName)
+                                <br />
+                                @Html.TextBoxFor(model => model.FirstName, new { type = "text", @class = "width" })
+                                <br /><span hidden class="validation" id="validation-1">This field is required.</span>
+                                <br />
+                                @Html.DisplayNameFor(model => model.LastName)
+                                <br />
+                                @Html.TextBoxFor(model => model.LastName, new { type = "text", @class = "width" })
+                                <br /><span hidden class="validation" id="validation-2">This field is required.</span>
+                                <br />
+                                @Html.DisplayNameFor(model => model.Email)
+                                <br />
+                                @Html.TextBoxFor(model => model.Email, new { type = "text", @class = "width" })
+                                <br /><span hidden class="validation" id="validation-3">This field is required.</span>
+                                <br />
+                                @Html.DisplayNameFor(model => model.Phone)
+                                <br />
+                                @Html.TextBoxFor(model => model.Phone, new { type = "text", @class = "link", @placeholder = "Example: 0123451211" })
+                                <br /><span hidden class="validation" id="validation-4">This field is required.</span>
+                                <br />
+                                @Html.DisplayNameFor(model => model.State)
+                                <br />
+                                @{
+                                    List<SelectListItem>
+                                    StatelistItems = new List<SelectListItem>();
+                                    StatelistItems.Add(new SelectListItem
+                                    {
+                                        Text = "Perlis",
+                                        Value = "Perlis"
+                                    });
+                                    StatelistItems.Add(new SelectListItem
+                                    {
+                                        Text = "Kedah",
+                                        Value = "Kedah"
+                                    });
+                                    StatelistItems.Add(new SelectListItem
+                                    {
+                                        Text = "Pulau Pinang",
+                                        Value = "Pulau Pinang"
+                                    });
+                                    StatelistItems.Add(new SelectListItem
+                                    {
+                                        Text = "Perak",
+                                        Value = "Perak"
+                                    });
+                                    StatelistItems.Add(new SelectListItem
+                                    {
+                                        Text = "Selangor",
+                                        Value = "Selangor"
+                                    });
+                                    StatelistItems.Add(new SelectListItem
+                                    {
+                                        Text = "Negeri Sembilan",
+                                        Value = "Negeri Sembilan"
+                                    });
+                                    StatelistItems.Add(new SelectListItem
+                                    {
+                                        Text = "Melaka",
+                                        Value = "Melaka"
+                                    });
+                                    StatelistItems.Add(new SelectListItem
+                                    {
+                                        Text = "Johor",
+                                        Value = "Johor"
+                                    });
+                                    StatelistItems.Add(new SelectListItem
+                                    {
+                                        Text = "Terengganu",
+                                        Value = "Terengganu"
+                                    });
+                                    StatelistItems.Add(new SelectListItem
+                                    {
+                                        Text = "Kelantan",
+                                        Value = "Kelantan"
+                                    });
+                                    StatelistItems.Add(new SelectListItem
+                                    {
+                                        Text = "Pahang",
+                                        Value = "Pahang"
+                                    });
+                                    StatelistItems.Add(new SelectListItem
+                                    {
+                                        Text = "Kuala Lumpur",
+                                        Value = "Kuala Lumpur"
+                                    });
+                                    StatelistItems.Add(new SelectListItem
+                                    {
+                                        Text = "Labuan",
+                                        Value = "Labuan"
+                                    });
+                                    StatelistItems.Add(new SelectListItem
+                                    {
+                                        Text = "Putrajaya",
+                                        Value = "Putrajaya"
+                                    });
+                                    StatelistItems.Add(new SelectListItem
+                                    {
+                                        Text = "Sabah",
+                                        Value = "Sabah"
+                                    });
+                                    StatelistItems.Add(new SelectListItem
+                                    {
+                                        Text = "Sarawak",
+                                        Value = "Sarawak"
+                                    });
+                                    StatelistItems.Add(new SelectListItem
+                                    {
+                                        Text = "",
+                                        Value = "0",
+                                        Selected = true
+                                    });
+                                }
+                                <p>@Html.DropDownListFor(model => model.State, StatelistItems, new { @class = "width" })</p>
+                                <br /><span hidden class="validation" id="validation-5">This field is required.</span>
+                                
+                                @Html.DisplayNameFor(model => model.Country)
+                                <br />
+                                @{
+                                    List<SelectListItem> Country = new List<SelectListItem>();
+                                    Country.Add(new SelectListItem
+                                    {
+                                        Text = "Malaysia",
+                                        Value = "Malaysia",
+                                        Selected = true
+                                    });
+
+                                }
+                                <p>@Html.DropDownListFor(model => model.State, Country, new { @class = "width" })</p>
+                                <br />@*<span hidden class="validation" id="validation-6">This field is required.</span>*@
+
+                                <br />
+
+                                <p class="title">Additional Information</p>
+
+                                @Html.DisplayNameFor(model => model.ProfileDesc)
+                                <br />
+                                @Html.TextBoxFor(model => model.ProfileDesc, new { type = "text", @class = "width" })
+                                <br /><span hidden class="validation" id="validation-7">This field is required.</span>
+                                <br />
+                                @Html.DisplayNameFor(model => model.CompanyName)
+                                <br />
+                                @Html.TextBoxFor(model => model.CompanyName, new { type = "text", @class = "width" })
+                                <br /><span hidden class="validation" id="validation-8">This field is required.</span>
+                                <br /><br />
+                                <div class="btns">
+                                    <button class="btn-profile" id="save" asp-route-id="@Model.EmployerID" asp-route-value="1">Save Changes</button>
+                                    
+                                </div>
+
+                            </form>
+                            <button class="btn-profile" id="cancel" onclick="location.href='@Url.Action("EmpDetails", "EmployerDashboard")'">Cancel</button>
+                            <br /><br />
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+
+            function isEmail(email) {
+                var regex = /^[A-Z0-9._%+-]+@@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
+              return regex.test(email);
+            }
+
+            $(document).ready(function () {
+
+                $("#Phone").on("input", function (evt) {
+                    var self = $(this);
+                    //self.val(self.val().replace(/^\d+(-\d+)*$/, ""));
+                    self.val(self.val().replace(/\D/g, ""));
+                    if ((evt.which < 48 || evt.which > 57)) {
+                        evt.preventDefault();
+                    }
+                });
+
+                $("#Email").on("input", function (evt) {
+                    var value = $("#Email").val();
+                    if (!isEmail(value)) {
+                        //invalid
+                        $('#validation-3').removeAttr('hidden');
+                        $("#validation-3").html("Email is invalid!");
+                    }
+                    else {
+                        //valid
+                        $('#validation-1').prop('hidden', 'hidden');
+                        $("#validation-3").html("This field is required.");
+                    }
+
+                });
+
+                $("#State").change(function () {
+                    $('#State option[selected]').removeAttr("selected");
+                    $("#State").find(":selected").attr("selected", "selected");
+
+                });
+
+
+                $('#save').click(function () {
+                    if ($.trim($("#FirstName").val()) === "" || $.trim($("#LastName").val()) === "" || $.trim($("#Email").val()) === "" || (!isEmail(value)) || $.trim($("#Phone").val()) === "" || $('#State option[selected]').val() == 0 || $.trim($("#ProfileDesc").val()) === "" || $.trim($("#CompanyName").val()) === ""){
+                        return false;
+                    }
+                });
+
+                $('#save').click(function () {
+                    if (!$('#FirstName').val()) {
+                        $('#validation-1').removeAttr('hidden');
+                    }
+                    if (!$('#LastName').val()) {
+                        $('#validation-2').removeAttr('hidden');
+                    }
+                    if (!$('#Email').val()) {
+                        $('#validation-3').removeAttr('hidden');
+                    }
+                    if (!$('#Phone').val()) {
+                        $('#validation-4').removeAttr('hidden');
+                    }
+                    if ($('#State option[selected]').val() == 0) {
+                        $('#validation-5').removeAttr('hidden');
+                    }
+                    if (!$('#ProfileDesc').val()) {
+                        $('#validation-7').removeAttr('hidden');
+                    }
+                    if (!$('#CompanyName').val()) {
+                        $('#validation-8').removeAttr('hidden');
+                    }
+                })
+
+                $("#FirstName").change(function () {
+                    if (!$('#FirstName').val()) {
+                        $('#validation-1').removeAttr('hidden');
+                    }
+                    $('#validation-1').prop('hidden', 'hidden');
+                });
+                $("#LastName").change(function () {
+                    if (!$('#LastName').val()) {
+                        $('#validation-2').removeAttr('hidden');
+                    }
+                    $('#validation-2').prop('hidden', 'hidden');
+                });
+                $("#Email").change(function () {
+                    if (!$('#Email').val()) {
+                        $('#validation-3').removeAttr('hidden');
+                    }
+                    $('#validation-3').prop('hidden', 'hidden');
+                });
+                $("#Phone").change(function () {
+                    if (!$('#Phone').val()) {
+                        $('#validation-4').removeAttr('hidden');
+                    }
+                    $('#validation-4').prop('hidden', 'hidden');
+                });
+
+                $("#State").keypress(function () {
+                    if ($('#State option[selected]').val() == 0) {
+                        $('#validation-5').removeAttr('hidden');
+                    }
+                    $('#validation-5').prop('hidden', 'hidden');
+                });
+                $("#ProfileDesc").change(function () {
+                    if (!$('#ProfileDesc').val()) {
+                        $('#validation-7').removeAttr('hidden');
+                    }
+                    $('#validation-7').prop('hidden', 'hidden');
+                });
+                $("#CompanyName").change(function () {
+                    if (!$('#CompanyName').val()) {
+                        $('#validation-8').removeAttr('hidden');
+                    }
+                    $('#validation-8').prop('hidden', 'hidden');
+                });
+            })
+        </script>
+    </div>
+
+
+
+</body>

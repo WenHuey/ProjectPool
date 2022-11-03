@@ -72,6 +72,9 @@
     <Compile Update="Models\PaymentModel.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Update="Models\ContractorListModel.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Update="Models\ProjectListModel.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
@@ -92,7 +95,10 @@
     <Content Update="Views\Dashboard\EmpDashboard.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="Views\EmployerDashboard\EmpProfile.cshtml">
+    <Content Update="Views\EmployerDashboard\EditEmpProfile.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Views\EmployerDashboard\EmpDetails.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="Views\Project\ApplyProject.cshtml">
