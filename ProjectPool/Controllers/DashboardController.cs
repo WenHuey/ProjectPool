@@ -448,7 +448,7 @@ namespace ProjectPool.Controllers
                 {
                     I_Date = DateTime.Parse(Date).ToString("dd/MM/yyyy"),
                     I_FullName = name,
-                    I_IvTime = dr["IvTime"].ToString(),
+                    I_IvTime = dr["Time"].ToString(),
                     I_Time = time,
                     datePassed = datePassed,
                     I_Title = dr["Title"].ToString(),

@@ -23,6 +23,7 @@
 
     <style>
         
+
     </style>
 
     <script>
@@ -57,18 +58,25 @@
     </div>
 
     <!-- search -->
-    <div class="search-wrapper">
-        <div class="search-box">
-            <div class="search-card">
-                <input class="search-input" id="search" type="text" placeholder="Search...">
-                @*<button class="search-button">Search</button>*@
+    @using (Html.BeginForm("ProjectList", "Project", FormMethod.Get))
+    {
+        <div class="search-wrapper">
+            <div class="search-box">
+                <div class="search-card">
+                    @Html.TextBox("searchInput", null, new { @id = "search", @class = "search-input", @placeholder = "Search..." })
+                    @Html.Hidden("val", "1")
+                    @Html.Hidden("ddval", "", new { @class = "hiddenddval" })
+
+                    @*<input class="search-input" id="search" type="text" name="SearchInput" placeholder="Search...">*@
+                    <button class="search-button" type="submit">Search</button>
+                </div>
             </div>
         </div>
-    </div>
+    }
     <!-- filter -->
     <div class="filter-wrapper">
         <div class="filter-dropdown">
-            @{
+            @*@{
                 List<SelectListItem> CatlistItems = new List<SelectListItem>();
                 CatlistItems.Add(new SelectListItem
                 {
@@ -97,9 +105,10 @@
                 });
             }
 
-            @*@Html.DropDownListFor(SelectListItem, CatlistItems, "-- Filter Category --", new { @id = "category", @class = "filter-select" })*@
+            @Html.DropDownListFor(null, CatlistItems, "-- Filter Category --", new { @id = "category", @class = "filter-select" })*@
 
             <select class="filter-select" name="category" id="category">
+                <option value="0">Filter by Category</option>
                 <option value="1">Programming & Tech</option>
                 <option value="2">Graphic & Design</option>
                 <option value="3">Sales & Marketing</option>
@@ -115,42 +124,57 @@
     <section class="project-list" id="projects">
         
         <form asp-controller="Project" asp-action="ProjectDetail">
-            @foreach (var Data in Model)
+            @if (Model.Count > 0)
             {
-                <div class="project-card" style="display:none">
-                    <div class="project-name">
-                        <div class="project-detail">
-                            @*@Html.HiddenFor(model => model.ProjectID)*@
-                            <h4>@Data.Title</h4>
-                            <div class="desc-content">
-                                @Data.Description
-                            </div>
-                            <div class="project-label">
-                                @if (Data.CategoryName != "")
-                                {
-                                    <a class="label" href="" >@Data.CategoryName</a>
-                                }
-                                @if (Data.SubCategoryName != "")
-                                {
-                                    <a class="label" href="">@Data.SubCategoryName</a>
-                                }
+                foreach (var Data in Model)
+                {
+                    <div class="project-card" style="display:none">
+                        <div class="project-name">
+                            <div class="project-detail">
+                                @*@Html.HiddenFor(model => model.ProjectID)*@
+                                <h4>@Data.Title</h4>
+                                <div class="desc-content">
+                                    @Data.Description
+                                </div>
+                                <div class="project-label">
+                                    @if (Data.CategoryName != "")
+                                    {
+                                        <a class="label" href="">@Data.CategoryName</a>
+                                    }
+                                    @if (Data.SubCategoryName != "")
+                                    {
+                                        <a class="label" href="">@Data.SubCategoryName</a>
+                                    }
+                                    @if (Data.Skills != "")
+                                    {
+                                        <a class="label" href="">@Data.Skills</a>
+                                    }
 
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="project-right">
-                        <div style="color:indianred">@Data.TotalBid&nbsp;Applied</div>
-                        @*<div class="apply-project">*@
+                        <div class="project-right">
+                            <div style="color:indianred">@Data.TotalBid&nbsp;Applied</div>
+                            @*<div class="apply-project">*@
                             @Html.ActionLink("View Details", "ProjectDetail", new { id = Data.ProjectID }, new { @class = "apply-project" })
-                        @*</div>*@
-                        
-                        @*<button class="apply-project" asp-controller="Project" asp-action="ProjectDetail" id="@Data.ProjectID">Apply</button>*@
-                        <div>RM&nbsp;@Data.Cost</div>
-                        <div class="project-posted">@Data.PostedAgo</div>
+                            @*</div>*@
+
+                            @*<button class="apply-project" asp-controller="Project" asp-action="ProjectDetail" id="@Data.ProjectID">Apply</button>*@
+                            <div>RM&nbsp;@Data.Cost</div>
+                            <div class="project-posted">@Data.PostedAgo</div>
+                        </div>
                     </div>
+                }
+            }
+            else
+            {
+                <div class="no-result">
+                    <img src="~/image/search-not-found.jpg" width="300" height="200" />
+                    <p>We couldn't find any projects matching your search</p>
                 </div>
             }
+
         </form>
 
     </section>
@@ -196,7 +220,7 @@
 
         $(function () {
             var numberOfItems = $(".project-card").length;
-            var limitPerPage = 5; //card visible per page
+            var limitPerPage = 8; //card visible per page
             var totalPages = Math.ceil(numberOfItems / limitPerPage);
             var paginationSize = 7; //no of page element visible
             var currentPage;
@@ -223,10 +247,13 @@
                 return true;
             }
 
-            $(".pagination").append(
-                $("<li>").addClass("page-item").addClass("previous-page").append($("<a>").addClass("page-link").attr({ href: "javascript:void(0)" }).text("Prev")),
-                $("<li>").addClass("page-item").addClass("next-page").append($("<a>").addClass("page-link").attr({ href: "javascript:void(0)" }).text("Next"))
-            );
+            if (numberOfItems > 0) {
+                $(".pagination").append(
+                    $("<li>").addClass("page-item").addClass("previous-page").append($("<a>").addClass("page-link").attr({ href: "javascript:void(0)" }).text("Prev")),
+                    $("<li>").addClass("page-item").addClass("next-page").append($("<a>").addClass("page-link").attr({ href: "javascript:void(0)" }).text("Next"))
+                );
+            }
+            
 
             $(".project-card").show();
             showPage(1);
@@ -246,20 +273,22 @@
                 return showPage(currentPage - 1);
             });
 
-            $("#search").on("keyup", function () {
-                var value = $(this).val().toLowerCase();
-                $(".project-card").filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-                });
-            });
+            //$("#search").on("keyup", function () {
+            //    var value = $(this).val().toLowerCase();
+            //    $(".project-card").filter(function () {
+            //        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            //    });
+            //});
 
-            $("#category").change(function () {
+            $("#category").click(function (e) {
+                e.preventDefault();
                 $('#category option[selected]').removeAttr("selected");
                 $("#category").find(":selected").attr("selected", "selected");
-                var value = $("#category option:selected").text().toLowerCase();
-                $(".project-card").filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-                });
+                var value = $("#category option:selected").val();
+                console.log(value);
+                $(".search-card .hiddenddval").val(value);
+                return false;
+                
             });
 
         });

@@ -9,7 +9,13 @@ namespace ProjectPool.Models
     public class SkillsList
     {
         [Key]
-        public int ProjectID { get; set; }
+        [Required]
+        public int SkillsListID { get; set; }
+
+        public int? ProjectID { get; set; }
+        public int? ContractorID { get; set; }
+
+        public int? PortfolioID { get; set; }
 
         public string Skills { get; set; }
     }

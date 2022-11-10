@@ -121,7 +121,7 @@
                                         }
 
                                         <td>
-                                            @Html.ActionLink("Edit", "EditInterview", new { id = Data.ApplicationID })
+                                            @Html.ActionLink("Edit", "EditInterview", new { id = Data.InterviewID })
                                             |
                                             @Html.ActionLink("Approve", "#", new { id = Data.InterviewID, projectID = Data.ProjectID }, new { @class = "btn-approve", @data_target = "modal-approve", @data_id = Data.InterviewID, @data_id2 = Data.ProjectID, @data_name = Data.FullName, @data_title = Data.Title })
                                             |

@@ -34,6 +34,11 @@ namespace ProjectPool.Models
         [Display(Name = "Project Completion Rate")]
         public string CompleteRate { get; set; }
 
+        [Display(Name = "Review Description")]
+        public string ReviewDesc { get; set; }
+        [Display(Name = "Rating")]
+        public string ReviewRate { get; set; }
+
 
 
     }

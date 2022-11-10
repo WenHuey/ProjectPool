@@ -1,0 +1,58 @@
+﻿
+.d-table tr td:nth-child(2) {
+    text-align: right;
+}
+
+#p-desc {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+#open-title {
+    margin: 1rem 8px 1rem 8px;
+}
+
+#company {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.edit-link {
+    text-decoration: underline;
+}
+
+.sm-card {
+    margin: 0 !important;
+}
+
+.col-md-12 .sm-card {
+    width: 50% !important;
+}
+
+@media only screen and (max-width: 1030px) {
+    .col-md-12 .sm-card {
+        width: 100% !important;
+    }
+}
+
+.card-body {
+    background-color: #f4f7f787;
+}
+
+.grey-label a {
+    background-color: #dce2e287;
+    color: #6e6a6a;
+    padding: 2px 17px;
+    border-radius: 10px;
+    font-size: 14px;
+    cursor: default;
+    display: inline-block;
+    margin: 2px 0;
+}
+
+.grey-label a:hover {
+    text-decoration: none;
+}

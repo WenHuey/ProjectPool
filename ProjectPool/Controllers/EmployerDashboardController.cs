@@ -747,7 +747,7 @@ namespace ProjectPool.Controllers
                 return RedirectToAction("ConDashboard", "Dashboard");
             }
 
-            var getIvDetails = _db.Interview.Where(x => x.ApplicationID == id).SingleOrDefault();
+            var getIvDetails = _db.Interview.Where(x => x.InterviewID == id).SingleOrDefault();
 
             if (getIvDetails == null)
             {
@@ -937,6 +937,8 @@ namespace ProjectPool.Controllers
                     finalReview.Email = dr["Email"].ToString();
                     finalReview.Phone = dr["Phone"].ToString();
                     finalReview.FinalAmount = dr["Cost"].ToString();
+                    //finalReview.ReviewRate = dr["Cost"].ToString();
+                    //finalReview.ReviewDesc = dr["Cost"].ToString();
 
                 }
 
@@ -1140,9 +1142,9 @@ namespace ProjectPool.Controllers
         }
 
 
-        //[Route("Project")]
+        [Route("Employer/EditDetails/{id}")]
         [HttpGet]
-        public IActionResult EditEmpProfile()
+        public IActionResult EditEmpProfile(int id)
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
             var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -1161,7 +1163,7 @@ namespace ProjectPool.Controllers
 
             try
             {
-                string query = "SELECT e.*, u.Email, CONCAT(e.[State], ', ', e.Country) as Address FROM Employer e LEFT JOIN [User] u on u.UserID = e.UserID WHERE e.EmployerID = '" + empID+"'";
+                string query = "SELECT e.*, u.Email, CONCAT(e.[State], ', ', e.Country) as Address FROM Employer e LEFT JOIN [User] u on u.UserID = e.UserID WHERE e.EmployerID = '" + empID + "'";
                 SqlCommand cmd = new SqlCommand(query, conn);
 
                 dr = cmd.ExecuteReader();
@@ -1179,7 +1181,7 @@ namespace ProjectPool.Controllers
                         phone = " ";
                     }
 
-                    if(string.IsNullOrWhiteSpace(state) || string.IsNullOrWhiteSpace(country))
+                    if (string.IsNullOrWhiteSpace(state) || string.IsNullOrWhiteSpace(country))
                     {
                         address = " ";
                     }
@@ -1194,13 +1196,16 @@ namespace ProjectPool.Controllers
                         cName = " ";
                     }
 
-                    profile.FirstName = dr["FirstName"].ToString();
+                    profile.EmployerID = Convert.ToInt32(dr["EmployerID"]);
+                    profile.FName = dr["FirstName"].ToString();
                     profile.LastName = dr["LastName"].ToString();
                     profile.Email = dr["Email"].ToString();
                     profile.Address = address;
                     profile.Phone = phone;
                     profile.ProfileDesc = desc;
                     profile.CompanyName = cName;
+                    profile.State = state;
+                    profile.Country = country;
 
                 }
             }
@@ -1213,8 +1218,74 @@ namespace ProjectPool.Controllers
             return View(profile);
         }
 
+        [Route("Employer/EditDetails/{id}")]
+        [HttpPost]
+        public IActionResult EditEmpProfile(int id, EmpProfileModel model)
+        {
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
+            var empID = _db.Employer.Where(x => x.UserID.ToString() == userID).Select(x => x.EmployerID).SingleOrDefault();
 
-        [Route("Employer/Details/{id}")]
+            if (id != empID)
+            {
+                TempData["ErrorMsg"] = "An error occurred while retrieve ID";
+                return RedirectToAction("EmpDetails", new { id = id, uID = userID });
+            }
+
+            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            conn.Open();
+            SqlCommand cmd = new SqlCommand("Sp_UpdateProfile", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            try
+            {
+
+                cmd.Parameters.AddWithValue("@EmpID", empID);
+                cmd.Parameters["@EmpID"].Direction = ParameterDirection.Input;
+
+                cmd.Parameters.AddWithValue("@UserID", userID);
+                cmd.Parameters["@UserID"].Direction = ParameterDirection.Input;
+
+                cmd.Parameters.AddWithValue("@Fname", model.FName);
+                cmd.Parameters["@Fname"].Direction = ParameterDirection.Input;
+
+                cmd.Parameters.AddWithValue("@Lname", model.LastName);
+                cmd.Parameters["@Lname"].Direction = ParameterDirection.Input;
+
+                cmd.Parameters.AddWithValue("@State", model.State);
+                cmd.Parameters["@State"].Direction = ParameterDirection.Input;
+
+                cmd.Parameters.AddWithValue("@Country", "Malaysia");
+                cmd.Parameters["@Country"].Direction = ParameterDirection.Input;
+
+                cmd.Parameters.AddWithValue("@Phone", model.Phone);
+                cmd.Parameters["@Phone"].Direction = ParameterDirection.Input;
+
+                cmd.Parameters.AddWithValue("@CompanyName", model.CompanyName);
+                cmd.Parameters["@CompanyName"].Direction = ParameterDirection.Input;
+
+                cmd.Parameters.AddWithValue("@Pdesc", model.ProfileDesc);
+                cmd.Parameters["@Pdesc"].Direction = ParameterDirection.Input;
+
+                cmd.Parameters.AddWithValue("@Email", model.Email);
+                cmd.Parameters["@Email"].Direction = ParameterDirection.Input;
+
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMsg"] = "Fail to update data!";
+                throw ex;
+            }
+            cmd.Connection.Close();
+
+            return RedirectToAction("EmpDetails", new { id = id, uID = userID });
+        }
+
+
+        [Route("Employer/Details/{id}/{uID}")]
         [HttpGet]
         public IActionResult EmpDetails(int id, int uID)
         {
@@ -1252,12 +1323,12 @@ namespace ProjectPool.Controllers
                 dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
-                    var fname = dr["Phone"].ToString();
-                    var lname = dr["State"].ToString();
-                    var full = lname + " " + lname;
+                    var fname = dr["FirstName"].ToString();
+                    var lname = dr["LastName"].ToString();
+                    var full = lname + " " + fname;
 
                     profile.EmployerID = Convert.ToInt32(dr["EmployerID"]);
-                    profile.FullName = full;
+                    profile.FirstName = full;
                     profile.Email = dr["Email"].ToString();
                     profile.Address = dr["Address"].ToString();
                     profile.Phone = dr["Phone"].ToString();
@@ -1270,7 +1341,7 @@ namespace ProjectPool.Controllers
                 conn.Close();
                 conn.Open();
 
-                string query2 = "SELECT p.Title, p.[Description], p.Cost, p.Duration, (SELECT ABS(DATEDIFF(dd, CURRENT_TIMESTAMP, DatePosted))) as Days, (SELECT ABS(DATEDIFF(hh, CURRENT_TIMESTAMP, DatePosted)))as Hours, (SELECT ABS(DATEDIFF(mi, CURRENT_TIMESTAMP, DatePosted))) as Minutes FROM Project p WHERE p.EmployerID = '"+id+"' AND p.[Status] = 'Active'";
+                string query2 = "SELECT p.Title, p.[Description], p.Cost, p.Duration, (SELECT ABS(DATEDIFF(dd, CURRENT_TIMESTAMP, DatePosted))) as Days, (SELECT ABS(DATEDIFF(hh, CURRENT_TIMESTAMP, DatePosted)))as Hours, (SELECT ABS(DATEDIFF(mi, CURRENT_TIMESTAMP, DatePosted))) as Minutes, c.[Name] as CategoryName, p.SubCategoryName, sl.Skills FROM Project p LEFT JOIN Category c on c.CategoryID = p.CategoryID LEFT JOIN SkillsList sl on sl.ProjectID = p.ProjectID WHERE p.EmployerID = '"+id+"' AND p.[Status] = 'Active'";
                 cmd = new SqlCommand(query2, conn);
                 
                 cmd.ExecuteNonQuery();
@@ -1282,6 +1353,8 @@ namespace ProjectPool.Controllers
                     var hr = dr["Hours"].ToString();
                     var min = dr["Minutes"].ToString();
                     string time = min + " minute(s) ago";
+                    string skills = dr["Skills"].ToString();
+                    string[] array = skills.Split(',');
 
                     if (Convert.ToInt32(hr) >= 24)
                     {
@@ -1299,6 +1372,9 @@ namespace ProjectPool.Controllers
                         Cost = dr["Cost"].ToString(),
                         Duration = dr["Duration"].ToString(),
                         DayHourMin = time,
+                        CategoryName = dr["CategoryName"].ToString(),
+                        SubCategoryName = dr["SubCategoryName"].ToString(),
+                        Skills = array
                     });
 
                     ViewData["ActiveProject"] = active;
@@ -1310,11 +1386,13 @@ namespace ProjectPool.Controllers
             }
             catch (Exception ex)
             {
-                TempData["message"] = "Unsuccesful";
+                TempData["ErrorMsg"] = "Unsuccesful";
             }
             
             return View(profile);
         }
+
+
 
     }
 }

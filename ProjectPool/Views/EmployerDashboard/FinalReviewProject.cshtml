@@ -77,7 +77,8 @@
         font-style: italic;
     }
 
-    #desc-textarea {
+    #desc-textarea,
+    #rate-textarea{
         width: 100%;
         height: auto;
         resize: none;
@@ -95,6 +96,49 @@
 
     .con-table td:nth-child(2) {
         padding: 0 10px;
+    }
+
+    .rate {
+        float: left;
+        height: 46px;
+        padding: 0 10px;
+    }
+
+    .rate:not(:checked) > input {
+        position: absolute;
+        /*top: -9999px;*/
+        visibility: hidden;
+    }
+
+    .rate:not(:checked) > label {
+        float: right;
+        width: 1em;
+        overflow: hidden;
+        white-space: nowrap;
+        cursor: pointer;
+        font-size: 30px;
+        color: #ccc;
+    }
+
+    .rate:not(:checked) > label:before {
+        content: '★ ';
+    }
+
+    .rate > input:checked ~ label {
+        color: #ffc700;
+    }
+
+    .rate:not(:checked) > label:hover,
+    .rate:not(:checked) > label:hover ~ label {
+        color: #deb217;
+    }
+
+    .rate > input:checked + label:hover,
+    .rate > input:checked + label:hover ~ label,
+    .rate > input:checked ~ label:hover,
+    .rate > input:checked ~ label:hover ~ label,
+    .rate > label:hover ~ input:checked ~ label {
+        color: #c59b08;
     }
 
 </style>
@@ -196,10 +240,9 @@
                             <p>@Html.DisplayNameFor(model => model.FinalAmount)</p>
                             <p class="pt-1">RM&nbsp;<span id="FinalAmount" value="@Model.FinalAmount">@Html.DisplayFor(model => model.FinalAmount)</span></p>
                             <br />
-                            <br />
                             <p>@Html.DisplayNameFor(model => model.PaymentDesc)<span style="color:grey;font-style:italic">&nbsp;(Optional)</span></p>
                             @Html.TextAreaFor(model => model.PaymentDesc, new { @id = "desc-textarea", maxlength = 300 })
-                            <div id="counter-desc" style="float: right;">
+                            <div id="counter-desc" style="text-align: right;">
                                 <span id="current-desc">0</span>
                                 <span id="maximum-desc">/ 300</span>
                             </div>
@@ -207,7 +250,41 @@
                             <input hidden id="CompleteRate" name="CompleteRate" asp-for="CompleteRate" />
                             <input hidden id="amount-final" name="FinalAmount" asp-for="FinalAmount" />
 
-                            <br /><br />
+                            <br />
+                            <hr />
+                            <br />
+
+                            <div class="text-black title">Leave a Rating!</div>
+                            <div class="rate">
+                                <input type="radio" id="star5" class="star-rate" name="rate" value="5" />
+                                <label for="star5" title="text">5 stars</label>
+                                <input type="radio" id="star4" class="star-rate" name="rate" value="4" />
+                                <label for="star4" title="text">4 stars</label>
+                                <input type="radio" id="star3" class="star-rate" name="rate" value="3" />
+                                <label for="star3" title="text">3 stars</label>
+                                <input type="radio" id="star2" class="star-rate" name="rate" value="2" />
+                                <label for="star2" title="text">2 stars</label>
+                                <input type="radio" id="star1" class="star-rate" name="rate" value="1" />
+                                <label for="star1" title="text">1 star</label>
+                            </div>
+                            <input hidden asp-for="ReviewRate" />
+                            <br />
+
+                            <div>
+                                <p>@Html.DisplayNameFor(model => model.ReviewDesc)<span style="color:grey;font-style:italic">&nbsp;(Optional)</span></p>
+                                @Html.TextAreaFor(model => model.ReviewDesc, new { @id = "rate-textarea", maxlength = 100 })
+                                <div id="counter-rate" style="float: right;">
+                                    <span id="current-rate">0</span>
+                                    <span id="maximum-rate">/ 100</span>
+                                </div>
+                            </div>
+                            
+                            
+                            <br />
+                            <br />
+                            <br />
+
+
                             <div class="btns">
                                 <button class="btn-review" id="proceed" asp-route-id="@Model.ProjectID" asp-route-conID="@Model.ContractorID">Proceed</button>
                                 @*<button class="btn-review" id="proceed" asp-route-id="@Model.ContractorID">Proceed</button>*@
@@ -231,10 +308,40 @@
 
 <script>
     $(document).ready(function () {
+        $('.star-rate').click(function () {
+            //$('.ratings_star').removeClass('selected'); // Removes the selected class from all of them
+            //$(this).addClass('selected'); // Adds the selected class to just the one you clicked
+
+            var rating = $(this).val(); // Get the rating from the selected star
+            console.log(rating);
+            $('#ReviewRate').val(rating); // Set the value of the hidden rating form element
+        });
+
+        $("#rate-textarea").keyup(function () {
+
+            var character = $(this).val();
+            var current = $('#current-rate');
+            var length = character.length;
+            maximum = $('#maximum-rate');
+            theCount = $('#the-count');
+
+            current.text(length);
+
+            if (length > 299) {
+                maximum.css('color', '#841c1c');
+                current.css('color', '#841c1c');
+            }
+            else {
+                current.css('color', 'black');
+                maximum.css('color', 'black');
+            }
+
+        });
+
         $("#desc-textarea").keyup(function () {
 
             var character = $(this).val();
-            var current = $('#current-title');
+            var current = $('#current-desc');
             var length = character.length;
             maximum = $('#maximum-desc');
             theCount = $('#the-count');

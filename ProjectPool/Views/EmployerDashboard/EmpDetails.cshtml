@@ -18,39 +18,9 @@
     <link href='https://fonts.googleapis.com/css?family=Jost' rel='stylesheet'>
 
     <link rel="stylesheet" href="~/css/ProjectDetail.css">
+    <link rel="stylesheet" href="~/css/ProfileDetails.css">
 
     <style>
-        .main-body{
-            margin: auto !important;
-            width: 1000px;
-        }
-
-        .d-table td:nth-child(3){
-            text-align: right;
-        }
-
-        #p-desc {
-            display: -webkit-box;
-            overflow: hidden;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-        }
-
-        #open-title{
-            margin: 1rem 8px 0 8px;
-
-        }
-
-        #company {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .edit-link{
-            text-decoration: underline;
-        }
-
     </style>
 
 </head>
@@ -76,7 +46,7 @@
 
                                 @if (!Model.isCon)
                                 {
-                                    <a href='@Url.Action("EditEmpProfile","EmployerDashboard")' class="edit-link">Edit Profile Details</a>
+                                    <a href='@Url.Action("EditEmpProfile","EmployerDashboard", new { id = Model.EmployerID })' class="edit-link">Edit Profile Details</a>
 
                                 }
                             </div>
@@ -108,25 +78,36 @@
             <div class="col-md-7">
                 <p id="open-title" class="h4 font-weight-bold"><span style="padding-right:10px"><i style="color: #5bd76e; font-size: 20px;" class="fa-solid fa-circle-dot"></i></span>Open Projects</p>
                 <div class="row gutters-sm">
-                    <div class="col-md-5 mb-3">
-                        @{
-                            foreach (var item in ViewData["ActiveProject"] as IEnumerable<EmpProfileModel>)
-                            {
+                    
+                    @{
+                        foreach (var item in ViewData["ActiveProject"] as IEnumerable<EmpProfileModel>)
+                        {
+                            <div class="col-md-6 col-sm-12 mb-3">
                                 <!-- description -->
-                                <div class="card no-border mb-3">
+                                <div class="card no-border sm-card mb-3">
                                     <div class="card-body">
                                         <div class="project-desc">
                                             <div class="h4 text-black font-weight-bold mb-3">@item.Title</div>
                                             <p class="p-sub" id="p-desc">@item.Description</p>
-                                            <p class="p-sub">RM&nbsp;@item.Cost</p>
+                                            <p class="p-sub m-0">RM&nbsp;@item.Cost</p>
                                             <p class="p-sub">@item.Duration</p>
+                                            <div class="grey-label">
+                                                <a href="">@item.CategoryName</a>
+                                                <a href="">@item.SubCategoryName</a>
+                                                @foreach (var sl in item.Skills)
+                                                {
+                                                    <a href="">@sl</a>
+                                                }
+                                            </div>
+                                            
                                         </div>
                                     </div>
                                 </div>
-                            }
-
+                            </div>
                         }
-                    </div>
+
+                    }
+                    
                 </div>
 
 

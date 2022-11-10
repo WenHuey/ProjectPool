@@ -29,8 +29,8 @@ namespace ProjectPool.Controllers
 
         [AllowAnonymous]
         [Route("ProjectList")]
-
-        public IActionResult ProjectList()
+        [HttpGet]
+        public IActionResult ProjectList(string searchInput, int val, int ddval)
         {
 
             ClaimsPrincipal claimUser = HttpContext.User;
@@ -47,39 +47,68 @@ namespace ProjectPool.Controllers
             {
                 conn.Open();
                 //Create command
-                SqlCommand cmd = new SqlCommand("Sp_DisplayAllProject", conn);
+                SqlCommand cmd;
 
                 if (claimUser.Identity.IsAuthenticated) {
                     var claimsIdentity = User.Identity as ClaimsIdentity;
                     var usertypeID = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
                     
-                    if(usertypeID == "3")
+                    if(usertypeID == "3" && val != 1)
                     {
                         var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
+                        var conID = _db.Contractor.Where(x => x.UserID.ToString() == userID).Select(x => x.ContractorID).SingleOrDefault();
                         var catID = _db.Contractor.Where(x => x.UserID.ToString() == userID).Select(x => x.CategoryID).SingleOrDefault();
                         var subName = _db.Contractor.Where(x => x.UserID.ToString() == userID).Select(x => x.SubCategoryName).SingleOrDefault();
+                        var skill = _db.SkillsList.Where(x => x.ContractorID.Equals(conID)).Select(x => x.Skills).SingleOrDefault();
 
-                        if(catID == null)
+                        if(catID != null || catID != 0 || !string.IsNullOrWhiteSpace(subName))
                         {
-                            return RedirectToAction("ViewProfile", "ContractorDashboard");
+                            cmd = new SqlCommand("Sp_DisplayAllProjectFiltered", conn);
+
+                            cmd.Parameters.AddWithValue("@CatID", catID);
+                            cmd.Parameters["@CatID"].Direction = ParameterDirection.Input;
+                            cmd.Parameters.AddWithValue("@SubName", subName == null ? DBNull.Value.ToString() : subName);
+                            cmd.Parameters["@SubName"].Direction = ParameterDirection.Input;
+                            cmd.Parameters.AddWithValue("@SkillList", skill == null ? DBNull.Value.ToString() : skill);
+                            cmd.Parameters["@SkillList"].Direction = ParameterDirection.Input;
+                        }
+                        else
+                        {
+                            cmd = new SqlCommand("Sp_DisplayAllProject", conn);
+                            cmd.Parameters.AddWithValue("@SearchInput", searchInput == null ? DBNull.Value.ToString() : searchInput);
+                            cmd.Parameters["@SearchInput"].Direction = ParameterDirection.Input;
+                            cmd.Parameters.AddWithValue("@Category", ddval);
+                            cmd.Parameters["@Category"].Direction = ParameterDirection.Input;
                         }
 
-                        cmd = new SqlCommand("Sp_DisplayAllProjectFiltered", conn);
-
-                        cmd.Parameters.AddWithValue("@CatID", catID);
-                        cmd.Parameters["@CatID"].Direction = ParameterDirection.Input;
-                        cmd.Parameters.AddWithValue("@SubName", subName == null ? DBNull.Value.ToString() : subName);
-                        cmd.Parameters["@SubName"].Direction = ParameterDirection.Input;
-                        
                     }
-                    
+                    else
+                    {
+                        cmd = new SqlCommand("Sp_DisplayAllProject", conn);
+                        cmd.Parameters.AddWithValue("@SearchInput", searchInput == null ? DBNull.Value.ToString() : searchInput);
+                        cmd.Parameters["@SearchInput"].Direction = ParameterDirection.Input;
+                        cmd.Parameters.AddWithValue("@Category", ddval);
+                        cmd.Parameters["@Category"].Direction = ParameterDirection.Input;
+
+                    }
+                }
+                else 
+                {
+                    cmd = new SqlCommand("Sp_DisplayAllProject", conn);
+                    cmd.Parameters.AddWithValue("@SearchInput", searchInput == null ? DBNull.Value.ToString() : searchInput);
+                    cmd.Parameters["@SearchInput"].Direction = ParameterDirection.Input;
+                    cmd.Parameters.AddWithValue("@Category", ddval);
+                    cmd.Parameters["@Category"].Direction = ParameterDirection.Input;
                 }
 
                 cmd.CommandType = CommandType.StoredProcedure;
 
+                
+
                 cmd.ExecuteNonQuery();
 
                 dr = cmd.ExecuteReader();
+
                 while (dr.Read())
                 {
                     var day = dr["Days"].ToString();
@@ -111,8 +140,9 @@ namespace ProjectPool.Controllers
                         CategoryName = dr["CategoryName"].ToString(), 
                         SubCategoryName = dr["SubCategoryName"].ToString(), 
                         PostedAgo = time,
-                        TotalBid = dr["TotalBid"].ToString()
-                        
+                        TotalBid = dr["TotalBid"].ToString(),
+                        Skills = dr["Skills"].ToString(),
+
                     });
                 }
                 conn.Close();
@@ -436,6 +466,7 @@ namespace ProjectPool.Controllers
             //Back to active product page
             return RedirectToAction("EmpActive", "EmployerDashboard");
         }
+
 
 
 
