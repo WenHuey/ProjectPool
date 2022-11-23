@@ -18,6 +18,7 @@
 
     <link rel="stylesheet" href="~/css/ProjectDetail.css">
     <link rel="stylesheet" href="~/css/ProfileDetails.css">
+    <link rel="stylesheet" href="~/css/taginput/tagify.css">
 
     <style>
 
@@ -26,14 +27,14 @@
             margin: 2.5rem 1rem 0 1rem;
         }
 
-        #project-done i {
-            padding-right: 10px;
-            color: green;
-        }
+            #project-done i {
+                padding-right: 10px;
+                color: green;
+            }
 
         .image {
             width: 100%;
-            height: 150px;
+            /*height: 150px;*/
             background-image: url(website-portfolio.jpg);
             background-size: cover;
         }
@@ -41,11 +42,10 @@
         .project-portfolio {
             border: 0 solid rgba(0,0,0,.125);
             box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
-
         }
 
-        #portfolio-title{
-            margin-left: 1rem; 
+        #portfolio-title {
+            margin-left: 1rem;
         }
 
         .no-border {
@@ -55,7 +55,7 @@
             margin: 1rem;
         }
 
-        .project-portfolio .card-body{
+        .project-portfolio .card-body {
             padding: 1rem !important;
         }
 
@@ -73,9 +73,9 @@
             box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
         }
 
-        .add-portfolio:hover{
-            background-color: #c1c1c1;
-        }
+            .add-portfolio:hover {
+                background-color: #c1c1c1;
+            }
 
         /* Modal View */
         .modal {
@@ -155,6 +155,39 @@
                 border-bottom: #21232d 1px solid;
                 color: #21232d;
             }
+
+        .image img {
+            width: 100%;
+            /*height: 360px;*/
+            background-size: cover;
+        }
+
+        .pf-input {
+            box-sizing: border-box;
+            height: 35px;
+            width: 100%;
+            border: 1px solid lightgrey;
+            border-radius: 5px;
+            padding-left: 10px;
+            margin: 5px auto;
+            font-size: 15px;
+        }
+
+        .label-title {
+            font-weight: bold;
+        }
+
+        .validation{
+            color: red;
+        }
+
+        .card-text {
+            display: -webkit-box;
+            overflow: hidden;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
     </style>
 
 </head>
@@ -162,7 +195,10 @@
 
 
     <div class="content">
-
+        <div class="TempMsg" style="margin: 0 1rem; font-size: 1.2rem;">
+            <p class="Msg" style="color:green">@TempData["SuccessMsg"]</p>
+            <p class="Msg" style="color:red">@TempData["ErrorMsg"]</p>
+        </div>
         @*<input hidden id="ProjectID" name="ProjectID" asp-for="ProjectID" />*@
 
         <div class="row gutters-sm">
@@ -171,7 +207,7 @@
                 <div class="card">
                     <div class="card-body m-2">
                         <div class="d-flex flex-column">
-                            <!-- <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150"> -->
+                            @*<img src="/image/website-portfolio.jpg" alt="Admin" class="rounded-circle" width="150">*@
                             <div class="mt-3">
 
                                 <p id="fullname" class="h5 font-weight-bold mb-4">@Html.DisplayFor(model => model.FullName)</p>
@@ -193,7 +229,7 @@
                                 {
 
                                     <div style="margin-top:10px;">
-                                        <a href='@Url.Action("EditConProfile","ContractorDashboard", new { id = Model.ContractorID })' class="edit-link mt-1">Edit Profile Details</a>
+                                        <a href='@Url.Action("EditConProfile","Profile", new { id = Model.ContractorID })' class="edit-link mt-1">Edit Profile Details</a>
                                     </div>
 
 
@@ -252,48 +288,40 @@
             </div>
 
             <div class="col-md-7">
-                <p id="open-title" class="h4 font-weight-bold"><span style="padding-right: 10px; padding-left: 10px;"><i style="color: #5bd76e; font-size: 20px;" class="fa-solid fa-circle-dot"></i></span>Open Projects</p>
-                <div class="row gutters-sm">
-                    <div class="col-md-5 mb-3">
-                        @*@{
-                                foreach (var item in ViewData["ActiveProject"] as IEnumerable<EmpProfileModel>)
-                                {
-                                    <!-- description -->
-                                    <div class="card no-border mb-3">
-                                        <div class="card-body">
-                                            <div class="project-desc">
-                                                <div class="h4 text-black font-weight-bold mb-3">@item.Title</div>
-                                                <p class="p-sub" id="p-desc">@item.Description</p>
-                                                <p class="p-sub">RM&nbsp;@item.Cost</p>
-                                                <p class="p-sub">@item.Duration</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-
-                            }*@
-                    </div>
-                </div>
 
                 <!-- Portfolio -->
                 <div class="portfolio-section">
                     <p id="portfolio-title" class="h4 font-weight-bold">Portfolio</p>
-                    <button class="add-portfolio" id="add-new" data-id="@Model.ContractorID" data-target="modal-add" >+ Add new</button>
+                    <button class="add-portfolio" id="add-new" data-id="@Model.ContractorID" data-target="modal-add">+ Add new</button>
                 </div>
 
-                <div class="row gutters-sm">
-                    @for (int i = 0; i < 4; i++)
-                    {
-                        <div class="col-md-6 col-sm-12 mb-3">
-                            <div class="project-portfolio">
-                                <div class="image"></div>
-                                <div class="card-body">
-                                    <p class="card-text" style="font-size: 15px;">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                @if (ViewData["Portfolio"] != "0")
+                {
+                    <div class="row gutters-sm">
+                        @foreach (var item in ViewData["Portfolio"] as IEnumerable<ConProfileModel>)
+                        {
+                            <div class="col-md-6 col-sm-12 mb-3">
+                                <div class="project-portfolio">
+                                    <div class="image">
+                                        <img src="/PortfolioImages/@item.PortfolioString" alt="Admin" >
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="card-text" style="font-size: 15px;">@item.PF_Desc</p>
+
+                                        <div class="grey-label">
+                                            @foreach (var sl in item.PF_SkillArray)
+                                            {
+                                                <a href="">@sl</a>
+                                            }
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                             </div>
-                        </div>
-                    }
-                </div>
+                        }
+                    </div>
+                }
+
 
             </div>
 
@@ -305,21 +333,30 @@
         <div class="modal-content">
             <div class="project">
                 <a class="close">&times;</a>
-                <form asp-action="DeleteActiveProject">
+                <form asp-action="AddPortfolio" enctype="multipart/form-data">
                     <h2 style="margin-bottom: 20px;">Add New Portfolio</h2>
                     <div class="portfolio-content">
                         <p>
-                            <div class="custom-file">
-                                <input asp-for="Portfolio" class="custom-file-input" id="customFile">
-                                <label class="custom-file-label" for="customFile">Choose file</label>
-                            </div>
+                            <div class="label-title">Project Title</div>
+                            @Html.TextAreaFor(model => model.PF_Title, new { @id = "project-textarea", maxlength = 100, @class = "pf-input" })
+                            @Html.ValidationMessageFor(model => model.PF_Title, "", new { @class = "validation" })
 
-                            <div>
-                                <input asp-for="PF_Desc"/>
-                            </div>
-                            Are you sure you want to delete this project?
-                            <br>
-                            <strong>* This action cannot be undone.</strong>
+                            <div class="label-title">Brief Description</div>
+                            @Html.TextAreaFor(model => model.PF_Desc, new { @id = "desc-textarea", maxlength = 300, @class = "pf-input" })
+                            @Html.ValidationMessageFor(model => model.PF_Desc, "", new { @class = "validation" })
+
+                            <div class="label-title">Required Skill</div>
+                            @Html.TextAreaFor(model => model.PF_Skills, new { @id = "skill-tag", @class = "pf-input" })
+                            @Html.ValidationMessageFor(model => model.PF_Skills, "", new { @class = "validation" })
+
+                        <div class="form-group">
+                            <div class="label-title">Upload Image</div>
+                            <input asp-for="Portfolio" class="form-control">
+                            @*<label class="custom-file-label" for="customFile">Choose file</label>*@
+                            @Html.ValidationMessageFor(model => model.Portfolio, "", new { @class = "validation" })
+                        </div>
+                            
+
                         </p>
 
                         @Html.Hidden("id", "", new { @class = "hiddenid" })
@@ -336,6 +373,7 @@
         </div>
     </div>
 
+    <script src="~/script/tagify.min.js"></script>
     <script>
         $(document).ready(function () {
 
@@ -353,6 +391,18 @@
                 var passedID = $(this).data('id');
                 $(".project-content-delete .hiddenid").val(passedID);
                 return false;
+            })
+
+            //Tag input
+            var skill_input = document.querySelector('#skill-tag')
+            var arr = ["Javascript", "JQuery", "PHP", "MySQL", "Ruby", "HTML ", "CSS", "C++", "Java", "Python", "React", "C#", "APA MySQL", "Firebase", "Nodejs",
+                        "MVC"];
+            var tagify = new Tagify(skill_input, {
+                enforceWhitelist: true,
+                maxTags: 7,
+                editTags: false,
+                whitelist: arr,
+                originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
             })
 
 

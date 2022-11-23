@@ -1,0 +1,533 @@
+﻿@model ProjectPool.Models.ConProfileModel
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+
+<style>
+    body {
+        background: #f9f9f9;
+    }
+
+    .content{
+        width: 600px;
+        margin: auto;
+    }
+
+    .card {
+        margin: 1rem;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 0 solid rgba(0,0,0,.125);
+        /*border-radius: .25rem;*/
+    }
+
+    .card-body {
+        flex: 1 1 auto;
+        min-height: 1px;
+        padding: 1.8rem 3rem;
+    }
+
+    .tag {
+        font-style: italic;
+        color: grey;
+        font-size: 0.9rem;
+    }
+
+    .con-table td:nth-child(2) {
+        padding: 0 10px;
+    }
+
+    .title {
+        font-size: 1.1rem;
+        font-weight: bold;
+        padding-bottom: 10px;
+        text-decoration-line: underline;
+        font-style: italic;
+    }
+
+    .edit-section input,
+    .edit-section select {
+        box-sizing: border-box;
+        height: 35px;
+        width: 100%;
+        border: 1px solid lightgrey;
+        border-radius: 5px;
+        padding-left: 10px;
+        margin: 5px auto;
+        font-size: 15px;
+        /* transition: border-color 150ms ease; */
+        font-family: 'Jost'
+    }
+
+    .validation{
+        color: red;
+    }
+
+    #save {
+        padding: 8px 23px;
+        width: 170px;
+        background-color: steelblue;
+        border: none;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    .Msg {
+        color: #d33333;
+        font-size: 17px;
+        font-style: italic;
+    }
+</style>
+
+<body>
+    <div class="content">
+        
+        <!-- Project -->
+        <div class="row gutters-sm">
+            <div class="col-6">
+                <div class="card no-border-grey">
+                    <div class="card-body">
+                        <div class="TempMsg" style="margin-bottom: 1rem;">
+                            <p class="Msg" >@TempData["message"]</p>
+                        </div>
+
+                        <div class="edit-section">
+                            <form id="form" asp-action="EditConProfile" asp-controller="Profile" method="post">
+                                <div class="col-6">
+                                    @Html.ValidationSummary(true)
+                                    @*@Html.DisplayNameFor(model => model.Language)*@
+
+                                    <p class="title">Personal Information</p>
+
+                                    @Html.DisplayNameFor(model => model.FName)
+                                    <br />
+                                    @*<input asp-for="FirstName" class="width" />*@
+                                    @Html.TextBoxFor(model => model.FName, new { type = "text", @class = "width" })
+                                    <br /><span hidden class="validation" id="validation-1">This field is required.</span>
+                                    <br />
+                                    @Html.DisplayNameFor(model => model.LastName)
+                                    <br />
+                                    @Html.TextBoxFor(model => model.LastName, new { type = "text", @class = "width" })
+                                    <br /><span hidden class="validation" id="validation-2">This field is required.</span>
+                                    <br />
+                                    @Html.DisplayNameFor(model => model.Email)
+                                    <br />
+                                    @Html.TextBoxFor(model => model.Email, new { type = "text", @class = "width" })
+                                    <br /><span hidden class="validation" id="validation-3">This field is required.</span>
+                                    <br />
+                                </div>
+                                <div class="col-6">
+                                    @Html.DisplayNameFor(model => model.Phone)
+                                    <br />
+                                    @Html.TextBoxFor(model => model.Phone, new { type = "text", @class = "link", @placeholder = "Example: 0123451211" })
+                                    <br /><span hidden class="validation" id="validation-4">This field is required.</span>
+                                    <br />
+                                    @Html.DisplayNameFor(model => model.State)
+                                    <br />
+                                    @{
+                                        List<SelectListItem>
+                                        StatelistItems = new List<SelectListItem>();
+                                        StatelistItems.Add(new SelectListItem
+                                        {
+                                            Text = "Perlis",
+                                            Value = "Perlis"
+                                        });
+                                        StatelistItems.Add(new SelectListItem
+                                        {
+                                            Text = "Kedah",
+                                            Value = "Kedah"
+                                        });
+                                        StatelistItems.Add(new SelectListItem
+                                        {
+                                            Text = "Pulau Pinang",
+                                            Value = "Pulau Pinang"
+                                        });
+                                        StatelistItems.Add(new SelectListItem
+                                        {
+                                            Text = "Perak",
+                                            Value = "Perak"
+                                        });
+                                        StatelistItems.Add(new SelectListItem
+                                        {
+                                            Text = "Selangor",
+                                            Value = "Selangor"
+                                        });
+                                        StatelistItems.Add(new SelectListItem
+                                        {
+                                            Text = "Negeri Sembilan",
+                                            Value = "Negeri Sembilan"
+                                        });
+                                        StatelistItems.Add(new SelectListItem
+                                        {
+                                            Text = "Melaka",
+                                            Value = "Melaka"
+                                        });
+                                        StatelistItems.Add(new SelectListItem
+                                        {
+                                            Text = "Johor",
+                                            Value = "Johor"
+                                        });
+                                        StatelistItems.Add(new SelectListItem
+                                        {
+                                            Text = "Terengganu",
+                                            Value = "Terengganu"
+                                        });
+                                        StatelistItems.Add(new SelectListItem
+                                        {
+                                            Text = "Kelantan",
+                                            Value = "Kelantan"
+                                        });
+                                        StatelistItems.Add(new SelectListItem
+                                        {
+                                            Text = "Pahang",
+                                            Value = "Pahang"
+                                        });
+                                        StatelistItems.Add(new SelectListItem
+                                        {
+                                            Text = "Kuala Lumpur",
+                                            Value = "Kuala Lumpur"
+                                        });
+                                        StatelistItems.Add(new SelectListItem
+                                        {
+                                            Text = "Labuan",
+                                            Value = "Labuan"
+                                        });
+                                        StatelistItems.Add(new SelectListItem
+                                        {
+                                            Text = "Putrajaya",
+                                            Value = "Putrajaya"
+                                        });
+                                        StatelistItems.Add(new SelectListItem
+                                        {
+                                            Text = "Sabah",
+                                            Value = "Sabah"
+                                        });
+                                        StatelistItems.Add(new SelectListItem
+                                        {
+                                            Text = "Sarawak",
+                                            Value = "Sarawak"
+                                        });
+                                        StatelistItems.Add(new SelectListItem
+                                        {
+                                            Text = "",
+                                            Value = "0",
+                                            Selected = true
+                                        });
+                                    }
+                                    <p>@Html.DropDownListFor(model => model.State, StatelistItems, new { @class = "width" })</p>
+                                    <br /><span hidden class="validation" id="validation-5">This field is required.</span>
+
+                                    @Html.DisplayNameFor(model => model.Country)
+                                    <br />
+                                    @{
+                                        List<SelectListItem>
+                                        Country = new List<SelectListItem>();
+                                        Country.Add(new SelectListItem
+                                        {
+                                            Text = "Malaysia",
+                                            Value = "Malaysia",
+                                            Selected = true
+                                        });
+
+                                    }
+                                    <p>@Html.DropDownListFor(model => model.State, Country, new { @class = "width" })</p>
+                                    <br />
+                                </div>
+                                <br /><br />
+                                <div class="field">
+                                    <div class="label">Category</div>
+                                    @{
+                                        List<SelectListItem>
+                                            CatlistItems = new List<SelectListItem>
+                                                ();
+                                        CatlistItems.Add(new SelectListItem
+                                        {
+                                            Text = "Programming & Tech",
+                                            Value = "1"
+                                        });
+                                        CatlistItems.Add(new SelectListItem
+                                        {
+                                            Text = "Graphic & Design",
+                                            Value = "2"
+                                        });
+                                        CatlistItems.Add(new SelectListItem
+                                        {
+                                            Text = "Sales & Marketing",
+                                            Value = "3"
+                                        });
+                                        CatlistItems.Add(new SelectListItem
+                                        {
+                                            Text = "Video & Animation",
+                                            Value = "4"
+                                        });
+                                        CatlistItems.Add(new SelectListItem
+                                        {
+                                            Text = "Writing & Translation",
+                                            Value = "5"
+                                        });
+                                    }
+
+                                    @Html.DropDownListFor(model => model.CategoryID, CatlistItems, "-- Select Category --", new { @id = "main-category", @class = "category" })
+                                    @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "validation" })
+                                    @*<span class="validation-cat" style="float: left;">asd</span>*@
+                                </div>
+                                <br>
+                                <div class="field">
+                                    <div class="label">Sub-Category</div>
+                                    <select class="category" id="sub-category">
+                                        <option value="">-- Select Sub Category --</option>
+                                    </select>
+
+                                    <!--Programming-->
+                                    <select class="category hide-submenu" id="sub-category-1" hidden>
+                                        <option value="Website">Website</option>
+                                        <option value="Mobile App">Mobile App</option>
+                                        <option value="Web mobile">Web mobile</option>
+                                        <option value="Wordpress">Wordpress</option>
+                                        <option value="Game development">Game development</option>
+                                    </select>
+                                    <!--Graphic-->
+                                    <select class="category hide-submenu" id="sub-category-2" hidden>
+                                        <option value="Illustration">Illustration</option>
+                                        <option value="Logo design">Logo design</option>
+                                        <option value="Card design">Card design</option>
+                                        <option value="UI/UX design">UI/UX design</option>
+                                        <option value="Fonts & Typography">Fonts & Typography</option>
+                                    </select>
+                                    <!--sales marketing-->
+                                    <select class="category hide-submenu" id="sub-category-3" hidden>
+                                        <option value="Data entry">Data entry</option>
+                                        <option value="Social media campaign">Social media campaign</option>
+                                        <option value="Adwords campaign">Adwords campaign</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <!--video animation-->
+                                    <select class="category hide-submenu" id="sub-category-4" hidden>
+                                        <option value="Ads & Commercial">Ads & Commercial</option>
+                                        <option value="Video editing">Video editing</option>
+                                        <option value="Animated GIFs">Animated GIFs</option>
+                                        <option value="Logo animation">Logo animation</option>
+                                        <option value="Character animation">Character animation</option>
+                                    </select>
+                                    <!--writing -->
+                                    <select class="category hide-submenu" id="sub-category-5" hidden>
+                                        <option value="Translation">Translation</option>
+                                        <option value="Book Writing">Book Writing</option>
+                                        <option value="Scriptwriting">Scriptwriting</option>
+                                        <option value="Content writing">Content writing</option>
+                                        <option value="Article and blog posts">Article and blog posts</option>
+                                    </select>
+                                    <input hidden id="SubCategoryName" name="SubCategoryName" asp-for="SubCategoryName" />
+                                </div>
+
+                                @*<span hidden class="validation" id="validation-6">This field is required.</span>*@
+
+                                <br />
+
+                                <p class="title">Additional Information</p>
+
+                                @Html.DisplayNameFor(model => model.ProfileDesc)
+                                <br />
+                                @Html.TextBoxFor(model => model.ProfileDesc, new { type = "text", @class = "width" })
+                                <br /><span hidden class="validation" id="validation-7">This field is required.</span>
+
+
+                                <br /><br />
+                                <div class="btns">
+                                    <button class="btn-profile" id="save" asp-route-id="@Model.ContractorID">Save Changes</button>
+
+                                </div>
+
+                            </form>
+                            <br />
+
+                            @*<div>
+                <a asp-controller="Profile" asp-action="ConDetails" asp-route-id="@Model.ContractorID" asp-route-uID="0" >Back to View Details</a>
+            </div>*@
+
+                            <br /><br />
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <script>
+            //Sub category change based on category
+            $(function () {
+
+                var num = $('#main-category').val();
+                //console.log(num);
+                $("#sub-category").hide();
+                $("#sub-category-" + num).show();
+                var value = $("#SubCategoryName").val();
+                $("#sub-category-" + num).val(value).change();
+                $(".hide-submenu").find(":selected").attr("selected", "selected");
+
+                $('#main-category').change(function () {
+                    var id = $('#main-category').val();
+                    $(".hide-submenu").hide();
+                    $("#sub-category").hide();
+                    $("#sub-category-" + id).show();
+
+                    console.log(id);
+                    console.log("clicked");
+
+                    if ($("#main-category option:selected").val() == '') {
+                        $("#sub-category").show();
+                    }
+
+                    $("#sub-category-" + id).change(function () {
+                        console.log("changed");
+                        $("#SubCategoryName").val($("#sub-category-" + id + " option:selected").text());
+                        console.log($("#sub-category-" + id + " option:selected").text())
+                        $('.hide-submenu option[selected]').removeAttr("selected");
+                        $(".hide-submenu").find(":selected").attr("selected", "selected");
+                        //$("#sub-category").attr("value", $("#sub-category option:selected").text());
+                    })
+
+                });
+
+                $("#sub-category-" + id).change(function () {
+                    //console.log("changed")
+                    $("#SubCategoryName").val($("#sub-category-" + num + " option:selected").text());
+                    //console.log($("#sub-category-" + num + " option:selected").text())
+                    $('.hide-submenu option[selected]').removeAttr("selected");
+                    $(".hide-submenu").find(":selected").attr("selected", "selected");
+                    //$("#sub-category").attr("value", $("#sub-category option:selected").text());
+                })
+            })
+
+
+            $(document).ready(function () {
+
+
+
+
+                $("#Phone").on("input", function (evt) {
+                    var self = $(this);
+                    //self.val(self.val().replace(/^\d+(-\d+)*$/, ""));
+                    self.val(self.val().replace(/\D/g, ""));
+                    if ((evt.which < 48 || evt.which > 57)) {
+                        evt.preventDefault();
+                    }
+                });
+
+                $("#Email").on("input", function (evt) {
+                    var value = $(this).val();
+                    var regex = /^\b[A-Z0-9._%-]+@@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i
+                    if (!regex.test(value)) {
+                        //invalid
+                        console.log("invalid");
+                        $('#validation-3').removeAttr('hidden');
+                        $("#validation-3").html("Email is invalid!");
+                    }
+                    else {
+                        //valid
+                        console.log("valid");
+                        $('#validation-3').prop('hidden', 'hidden');
+                        $("#validation-3").html("This field is required.");
+                    }
+
+                });
+
+                $("#State").change(function () {
+                    $('#State option[selected]').removeAttr("selected");
+                    $("#State").find(":selected").attr("selected", "selected");
+
+                });
+
+
+                $('#save').click(function () {
+                    var value = $("#Email").val();
+                    var regex = /^\b[A-Z0-9._%-]+@@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i
+                    console.log(">??");
+                    if ($.trim($("#FName").val()) === "" || $.trim($("#LastName").val()) === "" || $.trim($("#Email").val()) === "" || (!regex.test(value)) || $.trim($("#Phone").val()) === "" || $('#State option[selected]').val() == 0 || $.trim($("#ProfileDesc").val()) === "") {
+                        return false;
+                    }
+                });
+
+                $('#save').click(function () {
+                    var value = $("#Email").val();
+                    var regex = /^\b[A-Z0-9._%-]+@@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i
+
+                    if (!$('#FName').val()) {
+                        $('#validation-1').removeAttr('hidden');
+                    }
+                    if (!$('#LastName').val()) {
+                        $('#validation-2').removeAttr('hidden');
+                    }
+                    if (!$('#Email').val()) {
+                        $('#validation-3').removeAttr('hidden');
+                    }
+                    if (!$('#Phone').val()) {
+                        $('#validation-4').removeAttr('hidden');
+                    }
+                    if ($('#State option[selected]').val() == 0) {
+                        $('#validation-5').removeAttr('hidden');
+                    }
+                    if (!$('#ProfileDesc').val()) {
+                        $('#validation-7').removeAttr('hidden');
+                    }
+                    if (!regex.test(value)) {
+                        $('#validation-3').removeAttr('hidden');
+                        $("#validation-3").html("Email is invalid!");
+                    }
+                })
+
+
+                $("#FName").change(function () {
+                    if (!$('#FName').val()) {
+                        $('#validation-1').removeAttr('hidden');
+                    }
+                    $('#validation-1').prop('hidden', 'hidden');
+                });
+                $("#LastName").change(function () {
+                    if (!$('#LastName').val()) {
+                        $('#validation-2').removeAttr('hidden');
+                    }
+                    $('#validation-2').prop('hidden', 'hidden');
+                });
+                $("#Email").change(function () {
+                    if (!$('#Email').val()) {
+                        $('#validation-3').removeAttr('hidden');
+                    }
+                    $('#validation-3').prop('hidden', 'hidden');
+                });
+                $("#Phone").change(function () {
+                    if (!$('#Phone').val()) {
+                        $('#validation-4').removeAttr('hidden');
+                    }
+                    $('#validation-4').prop('hidden', 'hidden');
+                });
+
+                $("#State").change(function () {
+                    if ($('#State option[selected]').val() == 0) {
+                        $('#validation-5').removeAttr('hidden');
+                    }
+                    $('#validation-5').prop('hidden', 'hidden');
+                });
+                $("#ProfileDesc").change(function () {
+                    if (!$('#ProfileDesc').val()) {
+                        $('#validation-7').removeAttr('hidden');
+                    }
+                    $('#validation-7').prop('hidden', 'hidden');
+                });
+
+            })
+        </script>
+    </div>
+
+
+
+</body>

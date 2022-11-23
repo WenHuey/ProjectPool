@@ -18,10 +18,71 @@
    @* <link rel="stylesheet" href="~/css/NavRegister.css">*@
     <link rel="stylesheet" href="~/css/Account.css">
     <!-- Script-->
-    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
 
+
+
+    <style>
+        .card {
+            margin: 1rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 0 solid rgba(0,0,0,.125);
+            /*border-radius: .25rem;*/
+        }
+
+        .card-body {
+            flex: 1 1 auto;
+            min-height: 1px;
+            padding: 55px 40px;
+            background-color: white;
+            border-radius: .4rem;
+            margin: 20px;
+            max-width: 300px;
+            box-shadow: 0px 30px 40px -20px #a3a5ae;
+            transition: 0.3s ease;
+        }
+
+        #usertype{
+            margin-top: 100px;
+        
+        }
+
+        .user-card{
+            display: flex;
+            justify-content:center;
+        }
+
+        .box-red {
+            border-top: 3px solid #ea5353;
+        }
+
+        .box-blue {
+            border-top: 3px solid #549ef2;
+        }
+
+        .user-card a{
+            text-decoration: none;
+            color: black;
+        }
+
+        .user-card span {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .card-body:hover {
+            background-color: #f4f7f787;
+            transform: translateY(-7px);
+        }
+        
+    </style>
 </head>
 
 <body>
@@ -41,16 +102,40 @@
     </header>*@
 
     <section id="usertype">
-        @*<form method="post" asp-controller="Account" asp-action="UserType">*@
-            <button class="btn-ut" name="usertypeID" value="2">Employer</button>
-            <button class="btn-ut" name="usertypeID" value="3">Contractor</button>
-        @*</form>*@
+        <div class="row gutters-sm user-card">
+            <div class="col-md-6 mb-3">
+                <a class="btn-ut" href="#" onclick="showRegister(2)">
+                    <div class="card">
+                        <div class="card-body box-red m-2">
+                            <div class="d-flex flex-column">
+                                <p><span>I'm an <br />Employer, </span><br />who are hiring for a project.</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <a class="btn-ut" href="#" onclick="showRegister(3)">
+                    <div class="card">
+                        <div class="card-body box-blue m-2">
+                            <div class="d-flex flex-column">
+                                <p><span>I'm a <br />Student/Freelancer, </span><br />who are looking for project.</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                
+            </div>
+        </div>
+
     </section>
 
     <section id="signup">
         <div class="container" id="container">
             <div class="form-container account-container">
-                <form>
+                <form method="post" asp-action="SignUp" asp-controller="Account">
                     <h1>Create Your Account</h1>
  
                     <p id="sub-title"></p>
@@ -98,37 +183,49 @@
     </section>
 
     <script>
+        var valid;
 
         function checkUser() {
 
             $("#Status").html("Checking...");
             var email = $("#Email").val();
+            var regex = /^\b[A-Z0-9._%-]+@@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i
 
             if (email != null || email != "") {
-                $.post("@Url.Action("IsUserExist", "Account")",
-                    {
-                        email: email
-                    },
-                    function (data) {
-                        if (data == 0) {
-                            $('#Status').removeAttr('hidden');
-                            $("#Status").html('<font color="Green">Email Available!</font>');
-                            valid = true;
+                if (!regex.test(email)) {
+                    //invalid
+                    console.log("invalid");
+                    $('#Status').removeAttr('hidden');
+                    $("#Status").html('<font color="Red">Email is invalid!</font>');
+                }
+                else {
+                    $.post("@Url.Action("IsUserExist", "Account")",
+                        {
+                            email: email
+                        },
+                        function (data) {
+                            if (data == 0) {
+                                $('#Status').removeAttr('hidden');
+                                $("#Status").html('<font color="Green">Email Available!</font>');
+                                valid = true;
+                            }
+                            else if (data == 2) {
+                                $('#validation-3').removeAttr('hidden');
+                                $('#Status').prop('hidden', 'hidden');
+                                valid = false;
+                            }
+                            else {
+                                $('#Status').removeAttr('hidden');
+                                $("#Status").html('<font color="Red">Email Taken! Try Another.</font>');
+                                valid = false;
+                            }
                         }
-                        else if (data == 2) {
-                            $('#validation-3').removeAttr('hidden');
-                            $('#Status').prop('hidden', 'hidden');
-                            valid = false;
-                        }
-                        else {
-                            $('#Status').removeAttr('hidden');
-                            $("#Status").html('<font color="Red">Email Taken! Try Another.</font>');
-                            valid = false;
-                        }
-                    }
-                )
+                    )
+                }
             }
-
+            else {
+                $('#validation-3').removeAttr('hidden');
+            }
         }
 
         function comparePass() {
@@ -145,25 +242,40 @@
 
         }
 
+        function showRegister(id) {
+            $('input[type="text"]').val('');
+            $('.validation').prop('hidden', 'hidden');
+            if (id == 2) {
+                $('.box-blue').prop('hidden', 'hidden');
+            }
+            else if (id == 3) {
+                $('.box-red').prop('hidden', 'hidden');
+            }
+            $("#signup").show();
+            console.log(id);
+            $("#typeID").val(id);
+            console.log("val:"+$("#typeID").val());
+
+        }
+
         $(document).ready(function () {
             $("#signup").hide();
 
-            $(".btn-ut").on("click", function () {
-                var id = $(this).val();
-                $('input[type="text"]').val('');
-                $('.validation').prop('hidden', 'hidden');
-                if (id == 2) {
-                    $("#sub-title").html("As an Employer");
-                }
-                else if(id == 3){
-                    $("#sub-title").html("As s Student / Freelancer");
-                }
-                $("#signup").show();
-                $("#typeID").val(id);
-                console.log(id);
+
+
+            $(".btn-ut").on("click", function (e) {
+                e.preventDefault();
+                //showRegister();
+                $('html, body').animate({
+                    scrollTop: $("#signup").offset().top
+                }, 500, function () {
+                    $("#FirstName").focus();
+                });
+
+
             });
 
-            var valid;
+
 
             $("#Email").change(function () {
                 checkUser();
@@ -180,6 +292,9 @@
 
 
             $('#btn-signup').click(function () {
+                var value = $("#Email").val();
+                var regex = /^\b[A-Z0-9._%-]+@@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i
+
                 if (!$('#FirstName').val()) {
                     $('#validation-1').removeAttr('hidden');
                 }
@@ -195,11 +310,17 @@
                 if (!$('#ConfirmPassword').val()) {
                     $('#validation-5').removeAttr('hidden');
                 }
+                //if (!regex.test(value)) {
+                //    $('#validation-3').removeAttr('hidden');
+                //    $("#validation-3").html("Email is invalid!");
+                //}
 
-                if ($.trim($("#FirstName").val()) === "" || $.trim($("#LastName").val()) === "" || $.trim($("#Email").val()) === "" || $.trim($("#ConfirmPassword").val()) === "" || valid == false) {
+                if ($.trim($("#FirstName").val()) === "" || $.trim($("#LastName").val()) === ""
+                    || $.trim($("#Email").val()) === "" || $.trim($("#ConfirmPassword").val()) === ""
+                    || valid == false || (!regex.test(value))) {
                     return false;
                 }
-                else {
+                @*else {
 
                     $.ajax({
                         url: "@Url.Action("SignUp", "Account")",
@@ -212,12 +333,15 @@
                             Password: $("#Password").val(),
                             ConfirmPassword: $("#ConfirmPassword").val(),
                         },
-                        success: function (response) {
-                            var url = "@Url.Action("Login", "Account")";
-                            window.location.href = url;
+                        success: function (result) {
+                            //if (result.redirectUrl !== undefined) {
+                                window.location = result.redirectUrl;
+                            //}
+                            //var url = "@Url.Action("Login", "Account")";
+                            //window.location.href = url;
                         }
                     });
-                }
+                }*@
 
             });
 

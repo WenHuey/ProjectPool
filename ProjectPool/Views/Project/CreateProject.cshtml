@@ -27,6 +27,7 @@
 
 
     <style>
+        
     </style>
 </head>
 <body>
@@ -34,11 +35,12 @@
 
     @*<div class="main-body">*@
     <div class="content">
+
         <div class="col-12">
             <div class="text-black font-weight-bold create-project">Create Project</div>
         </div>
         @*@using (Html.BeginForm("CreateProject", "ProjectController"))
-            {*@
+        {*@
         <form asp-action="CreateProject" method="post">
             @Html.ValidationSummary(true)
             <div class="page col-12">
@@ -70,13 +72,13 @@
                     <div class="label">Project Scope</div>
                     @Html.TextAreaFor(model => model.Scope, new { @id = "project-scope" })
                     @Html.ValidationMessageFor(model => model.Scope, "", new { @class = "validation" })
-                <span hidden class="validation-desc" style="float: left;">This field is required</span>
+                    <span hidden class="validation-desc" style="float: left;">This field is required</span>
                 </div>
                 <br />
                 <div class="field">
                     <div class="label">Category</div>
                     @{
-                        List<SelectListItem> CatlistItems= new List<SelectListItem>();
+                        List<SelectListItem> CatlistItems = new List<SelectListItem>();
                         CatlistItems.Add(new SelectListItem
                         {
                             Text = "Programming & Tech",
@@ -104,7 +106,7 @@
                         });
                     }
 
-                    @Html.DropDownListFor(model => model.CategoryID, CatlistItems, "-- Select Category --", new { @id = "main-category", @class = "category" })                      
+                    @Html.DropDownListFor(model => model.CategoryID, CatlistItems, "-- Select Category --", new { @id = "main-category", @class = "category" })
                     @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "validation" })
                     @*<span class="validation-cat" style="float: left;">asd</span>*@
                 </div>
@@ -161,8 +163,8 @@
                     </select>
 
                     @*<select asp-for="SubCategoryName" class="category" id="sub-category">
-            <option value="">Select Sub Category</option>
-        </select>*@
+                        <option value="">Select Sub Category</option>
+                    </select>*@
                     <input hidden id="SubCategoryName" name="SubCategoryName" asp-for="SubCategoryName" />
                     @*@Html.HiddenFor(model => model.SubCategoryName)*@
                     @Html.ValidationMessageFor(model => model.SubCategoryName, "", new { @class = "validation" })

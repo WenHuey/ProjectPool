@@ -86,10 +86,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Update="Views\ContractorDashboard\ConDetails.cshtml">
+    <Content Update="Views\Profile\ConDetails.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="Views\ContractorDashboard\EditConProfile.cshtml">
+    <Content Update="Views\Profile\EditConProfile.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="Views\Dashboard\ConDashboard.cshtml">
@@ -104,10 +104,10 @@
     <Content Update="Views\Dashboard\EmpDashboard.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="Views\EmployerDashboard\EditEmpProfile.cshtml">
+    <Content Update="Views\Profile\EditEmpProfile.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="Views\EmployerDashboard\EmpDetails.cshtml">
+    <Content Update="Views\Profile\EmpDetails.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="Views\Project\ApplyProject.cshtml">

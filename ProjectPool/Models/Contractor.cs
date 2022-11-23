@@ -38,7 +38,7 @@ namespace ProjectPool.Models
         public string ProfileDesc { get; set; }
 
         [Display(Name = "Reviews")]
-        public string ReviewAverage { get; set; }
+        public double ReviewAverage { get; set; }
 
         [Required]
         public bool Deleted { get; set; }

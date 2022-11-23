@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ProjectPool.Models;
 using System;
@@ -218,6 +219,7 @@ namespace ProjectPool.Controllers
                     //{
                     var Date = dr["DatePosted"].ToString();
                     
+                    projectDetails.Status = dr["Status"].ToString();
                     projectDetails.EmployerID = dr["EmployerID"].ToString();
                     projectDetails.FullName = dr["FullName"].ToString();
                     projectDetails.Phone = dr["Phone"].ToString();
@@ -297,12 +299,20 @@ namespace ProjectPool.Controllers
 
         [Route("ApplyProject/{id}")]
         [HttpGet]
-        public IActionResult ApplyProject(int? id)
+        public IActionResult ApplyProject(int id)
         {
-            //var claimsIdentity = User.Identity as ClaimsIdentity;
-            //var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
 
-            //var conID = _db.Contractor.Where(x => x.UserID.ToString() == userID).Select(x => x.ContractorID).SingleOrDefault();
+            //var conID = _db.Contractor.FromSqlRaw("Select * From Contractor Where UserID = '"+userID+"'");
+            var conID = _db.Contractor.SingleOrDefault(x => x.UserID.ToString() == userID);
+            //var conID = _db.Contractor.FirstOrDefault(x => x.UserID.ToString() == userID);
+
+            if (conID.Phone == null || conID.ProfileDesc == null || conID.CategoryID == null || conID.SubCategoryName == null)
+            {
+                TempData["message"] = "Please complete profile before applying for project.";
+                return RedirectToAction("EditConProfile","Profile", new { id = conID.ContractorID });
+            }
 
             SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             SqlDataReader dr;
@@ -383,27 +393,16 @@ namespace ProjectPool.Controllers
         [Route("CreateProject")]
         public IActionResult CreateProject()
         {
-            //int count = 0;
-            //string[] skills;
-            ////Connect db
-            //string connStr = _configuration.GetConnectionString("DefaultConnection");
-            //SqlConnection conn = new SqlConnection(connStr);
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
 
-            //string query = "Insert into Employer (FirstName, LastName, Email, [Password]) VALUES (@FirstName, @LastName, @Email, hashbytes('sha2_512', @Password))";
-            //SqlCommand cmd = new SqlCommand(query, conn);
+            var empID = _db.Employer.SingleOrDefault(x => x.UserID.ToString() == userID);
 
-
-            //String str = "select c_name from contacts where user_id = " + user_id + "";
-            //MySqlCommand cmd = new MySqlCommand(str, dbConnection);
-            //MySqlDataReader mdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
-            //List<string> list = new List<string>();
-            //while (mdr.Read())
-            //{
-            //    list.Add(mdr.GetString(0));
-            //}
-
-            //string[] strMyArray = list.ToArray<string>();
+            if (empID.Phone == null || empID.ProfileDesc == null || empID.CompanyName == null )
+            {
+                TempData["message"] = "Please complete profile before posting project.";
+                return RedirectToAction("EditEmpProfile", "Profile", new { id = empID.EmployerID });
+            }
 
             return View();
         }

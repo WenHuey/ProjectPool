@@ -14,7 +14,7 @@ namespace ProjectPool.Models
         public string FullName { get; set; }
 
         [Display(Name = "First Name")]
-        public string FirstName { get; set; }
+        public string FName { get; set; }
 
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
@@ -39,12 +39,16 @@ namespace ProjectPool.Models
         public string Address { get; set; }
 
         public string ReviewAverage { get; set; }
+        public string CategoryID { get; set; }
         public string CategoryName { get; set; }
         public string SubCategoryName { get; set; }
 
         public string[] Skills { get; set; }
 
         public bool isCon { get; set; }
+
+        [StringLength(int.MaxValue)]
+        public string PortfolioString { get; set; }
 
 
         public string P_Title { get; set; }
@@ -53,9 +57,18 @@ namespace ProjectPool.Models
         public string P_Category { get; set; }
         public string[] P_Skills { get; set; }
 
+        [Required(ErrorMessage = "This field is required.")]
         public IFormFile Portfolio { get; set; }
-
+        [Required(ErrorMessage = "This field is required.")]
+        public string PF_Title { get; set; }
+        [Required(ErrorMessage = "This field is required.")]
+        [StringLength(int.MaxValue)]
         public string PF_Desc { get; set; }
+        [Required(ErrorMessage = "This field is required.")]
+        public string PF_Skills { get; set; }
+
+        public string[] PF_SkillArray { get; set; }
+
 
     }
 }

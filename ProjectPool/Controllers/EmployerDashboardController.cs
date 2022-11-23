@@ -25,8 +25,7 @@ namespace ProjectPool.Controllers
         List<EmpInterviewModel> interviews = new List<EmpInterviewModel>();
         FinalReviewProjectModel finalReview = new FinalReviewProjectModel();
         List<EmpClosedModel> closedProject = new List<EmpClosedModel>();
-        EmpProfileModel profile = new EmpProfileModel();
-        List<EmpProfileModel> active = new List<EmpProfileModel>();
+        
 
         public EmployerDashboardController(DataContext db, IConfiguration configuration)
         {
@@ -243,7 +242,7 @@ namespace ProjectPool.Controllers
             return View(getActiveDetails);
         }
 
-        
+        //not using
         [HttpPost]
         public async Task<IActionResult> DeleteActiveProject(int? id)
         {
@@ -988,7 +987,6 @@ namespace ProjectPool.Controllers
                 //{
                 var cRate = model.CompleteRate;
                 var pDesc = model.PaymentDesc;
-
                 
                 if(cRate == "1")
                 {
@@ -1003,24 +1001,22 @@ namespace ProjectPool.Controllers
                 }
 
                     
-
                 cmd.Parameters.AddWithValue("@ContractorID", conID);
                 cmd.Parameters["@ContractorID"].Direction = ParameterDirection.Input;
                 cmd.Parameters.AddWithValue("@EmployerID", empID);
                 cmd.Parameters["@EmployerID"].Direction = ParameterDirection.Input;
                 cmd.Parameters.AddWithValue("@Amount", model.FinalAmount);
                 cmd.Parameters["@Amount"].Direction = ParameterDirection.Input;
-                
-                //if (pDesc == null)
-                //{
-                //    cmd.Parameters["@Desc"].Value = DBNull.Value;
-                //}
                 cmd.Parameters.AddWithValue("@Desc", model.PaymentDesc == null ? DBNull.Value.ToString() : model.PaymentDesc);
                 cmd.Parameters["@Desc"].Direction = ParameterDirection.Input;
                 cmd.Parameters.AddWithValue("@ProjectID", id);
                 cmd.Parameters["@ProjectID"].Direction = ParameterDirection.Input;
                 cmd.Parameters.AddWithValue("@CompleteRate", cRate);
                 cmd.Parameters["@CompleteRate"].Direction = ParameterDirection.Input;
+                cmd.Parameters.AddWithValue("@ReviewDesc", model.ReviewDesc == null ? DBNull.Value.ToString() : model.ReviewDesc);
+                cmd.Parameters["@ReviewDesc"].Direction = ParameterDirection.Input;
+                cmd.Parameters.AddWithValue("@Rating", model.ReviewRate == null ? "0" : model.ReviewRate);
+                cmd.Parameters["@Rating"].Direction = ParameterDirection.Input;
                 cmd.ExecuteNonQuery();
 
                 //}
@@ -1142,255 +1138,7 @@ namespace ProjectPool.Controllers
         }
 
 
-        [Route("Employer/EditDetails/{id}")]
-        [HttpGet]
-        public IActionResult EditEmpProfile(int id)
-        {
-            var claimsIdentity = User.Identity as ClaimsIdentity;
-            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            if (usertype != "2")
-            {
-                return RedirectToAction("ConProfile", "ContractorDashboard");
-            }
-
-            var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
-            var empID = _db.Employer.Where(x => x.UserID.ToString() == userID).Select(x => x.EmployerID).SingleOrDefault();
-
-            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-            SqlDataReader dr;
-            conn.Open();
-
-            try
-            {
-                string query = "SELECT e.*, u.Email, CONCAT(e.[State], ', ', e.Country) as Address FROM Employer e LEFT JOIN [User] u on u.UserID = e.UserID WHERE e.EmployerID = '" + empID + "'";
-                SqlCommand cmd = new SqlCommand(query, conn);
-
-                dr = cmd.ExecuteReader();
-                while (dr.Read())
-                {
-                    var phone = dr["Phone"].ToString();
-                    var state = dr["State"].ToString();
-                    var country = dr["Country"].ToString();
-                    var address = dr["Address"].ToString();
-                    var desc = dr["ProfileDesc"].ToString();
-                    var cName = dr["CompanyName"].ToString();
-
-                    if (string.IsNullOrWhiteSpace(phone))
-                    {
-                        phone = " ";
-                    }
-
-                    if (string.IsNullOrWhiteSpace(state) || string.IsNullOrWhiteSpace(country))
-                    {
-                        address = " ";
-                    }
-
-                    if (string.IsNullOrWhiteSpace(desc))
-                    {
-                        desc = " ";
-                    }
-
-                    if (string.IsNullOrWhiteSpace(cName))
-                    {
-                        cName = " ";
-                    }
-
-                    profile.EmployerID = Convert.ToInt32(dr["EmployerID"]);
-                    profile.FName = dr["FirstName"].ToString();
-                    profile.LastName = dr["LastName"].ToString();
-                    profile.Email = dr["Email"].ToString();
-                    profile.Address = address;
-                    profile.Phone = phone;
-                    profile.ProfileDesc = desc;
-                    profile.CompanyName = cName;
-                    profile.State = state;
-                    profile.Country = country;
-
-                }
-            }
-            catch (Exception ex)
-            {
-                TempData["message"] = "Unsuccesful";
-            }
-            conn.Close();
-
-            return View(profile);
-        }
-
-        [Route("Employer/EditDetails/{id}")]
-        [HttpPost]
-        public IActionResult EditEmpProfile(int id, EmpProfileModel model)
-        {
-            var claimsIdentity = User.Identity as ClaimsIdentity;
-            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
-            var empID = _db.Employer.Where(x => x.UserID.ToString() == userID).Select(x => x.EmployerID).SingleOrDefault();
-
-            if (id != empID)
-            {
-                TempData["ErrorMsg"] = "An error occurred while retrieve ID";
-                return RedirectToAction("EmpDetails", new { id = id, uID = userID });
-            }
-
-            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-            conn.Open();
-            SqlCommand cmd = new SqlCommand("Sp_UpdateProfile", conn);
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            try
-            {
-
-                cmd.Parameters.AddWithValue("@EmpID", empID);
-                cmd.Parameters["@EmpID"].Direction = ParameterDirection.Input;
-
-                cmd.Parameters.AddWithValue("@UserID", userID);
-                cmd.Parameters["@UserID"].Direction = ParameterDirection.Input;
-
-                cmd.Parameters.AddWithValue("@Fname", model.FName);
-                cmd.Parameters["@Fname"].Direction = ParameterDirection.Input;
-
-                cmd.Parameters.AddWithValue("@Lname", model.LastName);
-                cmd.Parameters["@Lname"].Direction = ParameterDirection.Input;
-
-                cmd.Parameters.AddWithValue("@State", model.State);
-                cmd.Parameters["@State"].Direction = ParameterDirection.Input;
-
-                cmd.Parameters.AddWithValue("@Country", "Malaysia");
-                cmd.Parameters["@Country"].Direction = ParameterDirection.Input;
-
-                cmd.Parameters.AddWithValue("@Phone", model.Phone);
-                cmd.Parameters["@Phone"].Direction = ParameterDirection.Input;
-
-                cmd.Parameters.AddWithValue("@CompanyName", model.CompanyName);
-                cmd.Parameters["@CompanyName"].Direction = ParameterDirection.Input;
-
-                cmd.Parameters.AddWithValue("@Pdesc", model.ProfileDesc);
-                cmd.Parameters["@Pdesc"].Direction = ParameterDirection.Input;
-
-                cmd.Parameters.AddWithValue("@Email", model.Email);
-                cmd.Parameters["@Email"].Direction = ParameterDirection.Input;
-
-
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                TempData["ErrorMsg"] = "Fail to update data!";
-                throw ex;
-            }
-            cmd.Connection.Close();
-
-            return RedirectToAction("EmpDetails", new { id = id, uID = userID });
-        }
-
-
-        [Route("Employer/Details/{id}/{uID}")]
-        [HttpGet]
-        public IActionResult EmpDetails(int id, int uID)
-        {
-            var claimsIdentity = User.Identity as ClaimsIdentity;
-            var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
-            var empID = _db.Employer.Where(x => x.UserID.ToString() == userID).Select(x => x.EmployerID).SingleOrDefault();
-            var isCon = false;
-
-            if (usertype == "3")
-            {
-                isCon = true;
-            }
-            else if (id != empID)
-            {
-                isCon = true;
-            }
-            
-            if(uID.Equals(Convert.ToInt32(userID)))
-            {
-                id = empID;
-                isCon = false;
-            }
-
-
-            SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-            SqlDataReader dr;
-            conn.Open();
-
-            try
-            {
-                string query = "SELECT e.*, u.Email, CONCAT(e.[State], ', ', e.Country) as Address FROM Employer e LEFT JOIN [User] u on u.UserID = e.UserID WHERE e.EmployerID = '" + id + "'";
-                SqlCommand cmd = new SqlCommand(query, conn);
-
-                dr = cmd.ExecuteReader();
-                while (dr.Read())
-                {
-                    var fname = dr["FirstName"].ToString();
-                    var lname = dr["LastName"].ToString();
-                    var full = lname + " " + fname;
-
-                    profile.EmployerID = Convert.ToInt32(dr["EmployerID"]);
-                    profile.FirstName = full;
-                    profile.Email = dr["Email"].ToString();
-                    profile.Address = dr["Address"].ToString();
-                    profile.Phone = dr["Phone"].ToString();
-                    profile.ProfileDesc = dr["ProfileDesc"].ToString();
-                    profile.CompanyName = dr["CompanyName"].ToString();
-                    profile.isCon = isCon;
-
-                }
-
-                conn.Close();
-                conn.Open();
-
-                string query2 = "SELECT p.Title, p.[Description], p.Cost, p.Duration, (SELECT ABS(DATEDIFF(dd, CURRENT_TIMESTAMP, DatePosted))) as Days, (SELECT ABS(DATEDIFF(hh, CURRENT_TIMESTAMP, DatePosted)))as Hours, (SELECT ABS(DATEDIFF(mi, CURRENT_TIMESTAMP, DatePosted))) as Minutes, c.[Name] as CategoryName, p.SubCategoryName, sl.Skills FROM Project p LEFT JOIN Category c on c.CategoryID = p.CategoryID LEFT JOIN SkillsList sl on sl.ProjectID = p.ProjectID WHERE p.EmployerID = '"+id+"' AND p.[Status] = 'Active'";
-                cmd = new SqlCommand(query2, conn);
-                
-                cmd.ExecuteNonQuery();
-                dr = cmd.ExecuteReader();
-
-                while (dr.Read())
-                {
-                    var day = dr["Days"].ToString();
-                    var hr = dr["Hours"].ToString();
-                    var min = dr["Minutes"].ToString();
-                    string time = min + " minute(s) ago";
-                    string skills = dr["Skills"].ToString();
-                    string[] array = skills.Split(',');
-
-                    if (Convert.ToInt32(hr) >= 24)
-                    {
-                        time = day + " day(s) ago";
-                    }
-                    else if (Convert.ToInt32(min) >= 60)
-                    {
-                        time = hr + " hour(s) ago";
-                    }
-
-                    active.Add(new EmpProfileModel()
-                    {
-                        Title = dr["Title"].ToString(),
-                        Description = dr["Description"].ToString(),
-                        Cost = dr["Cost"].ToString(),
-                        Duration = dr["Duration"].ToString(),
-                        DayHourMin = time,
-                        CategoryName = dr["CategoryName"].ToString(),
-                        SubCategoryName = dr["SubCategoryName"].ToString(),
-                        Skills = array
-                    });
-
-                    ViewData["ActiveProject"] = active;
-
-                    
-                }
-
-                conn.Close();
-            }
-            catch (Exception ex)
-            {
-                TempData["ErrorMsg"] = "Unsuccesful";
-            }
-            
-            return View(profile);
-        }
+        
 
 
 

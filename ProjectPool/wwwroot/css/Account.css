@@ -233,3 +233,11 @@
     float: left;
     font-size: 0.9rem;
 }
+
+.admin-link{
+    color:steelblue;
+}
+
+.admin-link:hover {
+    text-decoration: underline;
+}

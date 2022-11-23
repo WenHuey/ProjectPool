@@ -270,7 +270,7 @@
                             <input hidden asp-for="ReviewRate" />
                             <br />
 
-                            <div>
+                            <div style="margin-top:30px;">
                                 <p>@Html.DisplayNameFor(model => model.ReviewDesc)<span style="color:grey;font-style:italic">&nbsp;(Optional)</span></p>
                                 @Html.TextAreaFor(model => model.ReviewDesc, new { @id = "rate-textarea", maxlength = 100 })
                                 <div id="counter-rate" style="float: right;">
@@ -366,7 +366,7 @@
             var amount = @Model.FinalAmount;
             var value = $("#CompleteRate").val();
             var finalAmount = amount * value;
-            console.log(amount, " ",value, " ",finalAmount)
+            //console.log(amount, " ",value, " ",finalAmount)
             $("#FinalAmount").text(finalAmount.toFixed(2));
             $("#amount-final").attr("value", finalAmount.toFixed(2));
            

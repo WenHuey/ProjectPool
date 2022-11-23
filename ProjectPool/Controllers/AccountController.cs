@@ -63,7 +63,8 @@ namespace ProjectPool.Controllers
             TempData["typeID"] = usertypeID;
             return RedirectToAction("SignUp");
         }
-
+        
+        //check if user exist in database
         public JsonResult IsUserExist(string email)
         {
             System.Threading.Thread.Sleep(200);
@@ -98,7 +99,7 @@ namespace ProjectPool.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            
+
             //Connect db
             string connStr = _configuration.GetConnectionString("DefaultConnection");
             SqlConnection conn = new SqlConnection(connStr);
@@ -138,8 +139,9 @@ namespace ProjectPool.Controllers
             //close connection
             conn.Close();
 
-            return RedirectToAction("Login");
-           
+            return RedirectToAction("Login", "Account");
+            //return Json(new { redirectUrl = Url.Action("Login", "Account") });
+
         }
 
 
@@ -151,21 +153,25 @@ namespace ProjectPool.Controllers
             if (claimUser.Identity.IsAuthenticated)
             {
                 var claimsIdentity = User.Identity as ClaimsIdentity;
-                var userID = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+                var usertype = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-                if (userID != null)
+                if (usertype != null)
                 {
-                    if (userID == "2") //employer
+                    if (usertype == "2") //employer
                     {
                         return RedirectToAction("EmpDashboard", "Dashboard");
                     }
-                    else if (userID == "3") //contractor
+                    else if (usertype == "3") //contractor
                     {
                         return RedirectToAction("ConDashboard", "Dashboard");
                     }
+                    else if (usertype == "1")
+                    {
+                        return RedirectToAction("AdminDashboard", "Admin");
+                    }
                 }
                 //return View("~/Views/Dashboard/Dashboard.cshtml");
-                return RedirectToAction("Welcome");
+                //return RedirectToAction("Welcome");
             }
                 
 
