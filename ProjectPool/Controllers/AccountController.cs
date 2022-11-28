@@ -167,7 +167,7 @@ namespace ProjectPool.Controllers
                     }
                     else if (usertype == "1")
                     {
-                        return RedirectToAction("AdminDashboard", "Admin");
+                        return RedirectToAction("AdminProjectList", "Admin");
                     }
                 }
                 //return View("~/Views/Dashboard/Dashboard.cshtml");

@@ -67,7 +67,14 @@ namespace ProjectPool.Controllers
 
             if (usertype != "2")
             {
-                return RedirectToAction("ConDashboard");
+                if (usertype == "1") //admin
+                {
+                    return RedirectToAction("AdminProjectList", "Admin");
+                }
+                else if (usertype == "3") //contractor
+                {
+                    return RedirectToAction("ConDashboard");
+                }
             }
 
             var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
@@ -271,7 +278,14 @@ namespace ProjectPool.Controllers
 
             if (usertype != "3")
             {
-                return RedirectToAction("EmpDashboard");
+                if (usertype == "1") //admin
+                {
+                    return RedirectToAction("AdminProjectList", "Admin");
+                }
+                else if (usertype == "2") //employer
+                {
+                    return RedirectToAction("EmpDashboard");
+                }
             }
 
             var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;

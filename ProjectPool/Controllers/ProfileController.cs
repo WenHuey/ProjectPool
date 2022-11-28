@@ -524,7 +524,8 @@ namespace ProjectPool.Controllers
 
             try
             {
-                string query = "SELECT c.*, u.Email FROM Contractor c LEFT JOIN [User] u on u.UserID = c.UserID WHERE c.ContractorID = '" + conID + "'";
+
+                string query = "SELECT c.*, u.Email, sl.Skills, ll.[Language] FROM Contractor c LEFT JOIN [User] u on u.UserID = c.UserID LEFT JOIN SkillsList sl on sl.ContractorID = c.ContractorID LEFT JOIN LanguageList ll on ll.ContractorID = c.ContractorID WHERE c.ContractorID = '"+conID+"'";
                 SqlCommand cmd = new SqlCommand(query, conn);
 
                 dr = cmd.ExecuteReader();
@@ -556,12 +557,14 @@ namespace ProjectPool.Controllers
                     conProfile.Country = dr["Country"].ToString();
                     conProfile.CategoryID = dr["CategoryID"].ToString();
                     conProfile.SubCategoryName = dr["SubCategoryName"].ToString();
+                    conProfile.EditSkill = dr["Skills"].ToString();
+                    conProfile.EditLang = dr["Language"].ToString();
 
                 }
             }
             catch (Exception ex)
             {
-                TempData["message"] = "Unsuccesful";
+                TempData["ErrorMsg"] = "Unsuccesful";
             }
             conn.Close();
 
@@ -619,13 +622,26 @@ namespace ProjectPool.Controllers
                 cmd.Parameters.AddWithValue("@Email", model.Email);
                 cmd.Parameters["@Email"].Direction = ParameterDirection.Input;
 
+                cmd.Parameters.AddWithValue("@CatID", model.CategoryID);
+                cmd.Parameters["@CatID"].Direction = ParameterDirection.Input;
+
+                cmd.Parameters.AddWithValue("@SubCatName", model.SubCategoryName);
+                cmd.Parameters["@SubCatName"].Direction = ParameterDirection.Input;
+
+                cmd.Parameters.AddWithValue("@Skill", model.EditSkill);
+                cmd.Parameters["@Skill"].Direction = ParameterDirection.Input;
+
+                cmd.Parameters.AddWithValue("@Language", model.EditLang);
+                cmd.Parameters["@Language"].Direction = ParameterDirection.Input;
+
 
                 cmd.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
-                TempData["ErrorMsg"] = "Fail to update data!";
+                TempData["ErrorMsg"] = "Error occured! Fail to update data.";
                 throw ex;
+                return View();
             }
             cmd.Connection.Close();
 
@@ -739,6 +755,7 @@ namespace ProjectPool.Controllers
 
                     portfolio.Add(new ConProfileModel()
                     {
+                        PortfolioID = dr["PortfolioID"].ToString(),
                         PF_Title = dr["Title"].ToString(),
                         PF_Desc = dr["Description"].ToString(),
                         PortfolioString =  dr["Image"].ToString(),

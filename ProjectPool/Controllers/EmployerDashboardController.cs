@@ -44,7 +44,14 @@ namespace ProjectPool.Controllers
 
             if (usertype != "2")
             {
-                return RedirectToAction("ConDashboard", "Dashboard");
+                if (usertype == "1") //admin
+                {
+                    return RedirectToAction("AdminProjectList", "Admin");
+                }
+                else if (usertype == "3") //contractor
+                {
+                    return RedirectToAction("ConDashboard", "Dashboard");
+                }
             }
 
             var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
@@ -107,7 +114,14 @@ namespace ProjectPool.Controllers
 
             if (usertype != "2")
             {
-                return RedirectToAction("ConDashboard", "Dashboard");
+                if (usertype == "1") //admin
+                {
+                    return RedirectToAction("AdminProjectList", "Admin");
+                }
+                else if (usertype == "3") //contractor
+                {
+                    return RedirectToAction("ConDashboard", "Dashboard");
+                }
             }
 
             var getActiveDetails = await _db.Project.FindAsync(id);
@@ -147,7 +161,14 @@ namespace ProjectPool.Controllers
 
             if (usertype != "2")
             {
-                return RedirectToAction("ConDashboard", "Dashboard");
+                if (usertype == "1") //admin
+                {
+                    return RedirectToAction("AdminProjectList", "Admin");
+                }
+                else if (usertype == "3") //contractor
+                {
+                    return RedirectToAction("ConDashboard", "Dashboard");
+                }
             }
 
             if (ModelState.IsValid)
@@ -242,7 +263,7 @@ namespace ProjectPool.Controllers
             return View(getActiveDetails);
         }
 
-        //not using
+        
         [HttpPost]
         public async Task<IActionResult> DeleteActiveProject(int? id)
         {
@@ -372,7 +393,15 @@ namespace ProjectPool.Controllers
 
             if (usertype != "2")
             {
-                return RedirectToAction("ConRunning", "ContractorDashboard");
+                if (usertype == "1") //admin
+                {
+                    return RedirectToAction("AdminProjectList", "Admin");
+                }
+                else if (usertype == "3") //contractor
+                {
+                    return RedirectToAction("ConRunning", "ContractorDashboard");
+                }
+                
             }
 
             var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
@@ -429,7 +458,15 @@ namespace ProjectPool.Controllers
 
             if (usertype != "2")
             {
-                return RedirectToAction("ConApplication", "ContractorDashboard");
+                if (usertype == "1") //admin
+                {
+                    return RedirectToAction("AdminProjectList", "Admin");
+                }
+                else if (usertype == "3") //contractor
+                {
+                    return RedirectToAction("ConApplication", "ContractorDashboard");
+                }
+                
             }
 
             var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
@@ -519,7 +556,14 @@ namespace ProjectPool.Controllers
 
             if (usertype != "2")
             {
-                return RedirectToAction("ConDashboard", "Dashboard");
+                if (usertype == "1") //admin
+                {
+                    return RedirectToAction("AdminProjectList", "Admin");
+                }
+                else if (usertype == "3") //contractor
+                {
+                    return RedirectToAction("ConDashboard", "Dashboard");
+                }
             }
 
             SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
@@ -599,7 +643,14 @@ namespace ProjectPool.Controllers
 
             if (usertype != "2")
             {
-                return RedirectToAction("ConDashboard", "Dashboard");
+                if (usertype == "1") //admin
+                {
+                    return RedirectToAction("AdminProjectList", "Admin");
+                }
+                else if (usertype == "3") //contractor
+                {
+                    return RedirectToAction("ConDashboard", "Dashboard");
+                }
             }
 
             SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
@@ -653,7 +704,14 @@ namespace ProjectPool.Controllers
 
             if (usertype != "2")
             {
-                return RedirectToAction("ConDashboard", "Dashboard");
+                if (usertype == "1") //admin
+                {
+                    return RedirectToAction("AdminProjectList", "Admin");
+                }
+                else if (usertype == "3") //contractor
+                {
+                    return RedirectToAction("ConDashboard", "Dashboard");
+                }
             }
 
             var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
@@ -743,7 +801,14 @@ namespace ProjectPool.Controllers
 
             if (usertype != "2")
             {
-                return RedirectToAction("ConDashboard", "Dashboard");
+                if (usertype == "1") //admin
+                {
+                    return RedirectToAction("AdminProjectList", "Admin");
+                }
+                else if (usertype == "3") //contractor
+                {
+                    return RedirectToAction("ConDashboard", "Dashboard");
+                }
             }
 
             var getIvDetails = _db.Interview.Where(x => x.InterviewID == id).SingleOrDefault();
@@ -773,7 +838,14 @@ namespace ProjectPool.Controllers
 
             if (usertype != "2")
             {
-                return RedirectToAction("ConDashboard", "Dashboard");
+                if (usertype == "1") //admin
+                {
+                    return RedirectToAction("AdminProjectList", "Admin");
+                }
+                else if (usertype == "3") //contractor
+                {
+                    return RedirectToAction("ConDashboard", "Dashboard");
+                }
             }
 
             if (ModelState.IsValid)
@@ -815,7 +887,14 @@ namespace ProjectPool.Controllers
 
             if (usertype != "2")
             {
-                return RedirectToAction("ConDashboard", "Dashboard");
+                if (usertype == "1") //admin
+                {
+                    return RedirectToAction("AdminProjectList", "Admin");
+                }
+                else if (usertype == "3") //contractor
+                {
+                    return RedirectToAction("ConDashboard", "Dashboard");
+                }
             }
 
             SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
@@ -858,7 +937,14 @@ namespace ProjectPool.Controllers
 
             if (usertype != "2")
             {
-                return RedirectToAction("ConDashboard", "Dashboard");
+                if (usertype == "1") //admin
+                {
+                    return RedirectToAction("AdminProjectList", "Admin");
+                }
+                else if (usertype == "3") //contractor
+                {
+                    return RedirectToAction("ConDashboard", "Dashboard");
+                }
             }
 
             //Connect db
@@ -902,7 +988,14 @@ namespace ProjectPool.Controllers
 
             if (usertype != "2")
             {
-                return RedirectToAction("ConDashboard", "Dashboard");
+                if (usertype == "1") //admin
+                {
+                    return RedirectToAction("AdminProjectList", "Admin");
+                }
+                else if (usertype == "3") //contractor
+                {
+                    return RedirectToAction("ConDashboard", "Dashboard");
+                }
             }
 
             SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
@@ -968,7 +1061,14 @@ namespace ProjectPool.Controllers
 
             if (usertype != "2")
             {
-                return RedirectToAction("ConDashboard", "Dashboard");
+                if (usertype == "1") //admin
+                {
+                    return RedirectToAction("AdminProjectList", "Admin");
+                }
+                else if (usertype == "3") //contractor
+                {
+                    return RedirectToAction("ConDashboard", "Dashboard");
+                }
             }
 
             var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
@@ -1048,7 +1148,14 @@ namespace ProjectPool.Controllers
 
             if (usertype != "2")
             {
-                return RedirectToAction("ConAll", "ContractorDashboard");
+                if (usertype == "1") //admin
+                {
+                    return RedirectToAction("AdminProjectList", "Admin");
+                }
+                else if (usertype == "3") //contractor
+                {
+                    return RedirectToAction("ConDashboard", "Dashboard");
+                }
             }
 
             var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;

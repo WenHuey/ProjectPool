@@ -4,6 +4,7 @@
     ViewData["Title"] = "Profile";
 }
 
+<link rel="stylesheet" href="~/css/taginput/tagify.css">
 
 <style>
     body {
@@ -84,26 +85,38 @@
         font-size: 17px;
         font-style: italic;
     }
+
+    #ProfileDesc {
+        width: 100%;
+        height: auto;
+        resize: none;
+        min-height: 100px;
+        padding: 10px 15px;
+        border: 1px solid lightgrey;
+        border-radius: 5px;
+        font-size: 15px;
+        font-family: "Jost", sans-serif;
+    }
 </style>
 
 <body>
     <div class="content">
-        
+
         <!-- Project -->
         <div class="row gutters-sm">
             <div class="col-6">
                 <div class="card no-border-grey">
                     <div class="card-body">
                         <div class="TempMsg" style="margin-bottom: 1rem;">
-                            <p class="Msg" >@TempData["message"]</p>
+                            <p class="Msg">@TempData["ErrorMsg"]</p>
                         </div>
 
                         <div class="edit-section">
                             <form id="form" asp-action="EditConProfile" asp-controller="Profile" method="post">
                                 <div class="col-6">
                                     @Html.ValidationSummary(true)
-                                    @*@Html.DisplayNameFor(model => model.Language)*@
 
+                                    <!-- personal info -->
                                     <p class="title">Personal Information</p>
 
                                     @Html.DisplayNameFor(model => model.FName)
@@ -240,7 +253,10 @@
                                     <p>@Html.DropDownListFor(model => model.State, Country, new { @class = "width" })</p>
                                     <br />
                                 </div>
-                                <br /><br />
+
+                                <!-- expertise -->
+                                <p class="title">Area of Expertise</p>
+
                                 <div class="field">
                                     <div class="label">Category</div>
                                     @{
@@ -330,12 +346,27 @@
                                 @*<span hidden class="validation" id="validation-6">This field is required.</span>*@
 
                                 <br />
+                                <div class="field">
+                                    <div class="label">Required Skill</div>
+                                    @Html.TextAreaFor(model => model.EditSkill, new { @class = "skill-tag" })
+                                    @*<textarea class="skill-tag">CSS, HTML, PHP, jQuery</textarea>*@
+                                    @Html.ValidationMessageFor(model => model.EditSkill, "", new { @class = "validation" })
+                                </div>
+                                <br />
+                                <div class="field">
+                                    <div class="label"> Required Language</div>
+                                    @Html.TextAreaFor(model => model.EditLang, new { @class = "language-tag" })
+                                    @*<textarea class="language-tag">English, Chinese</textarea>*@
+                                    @Html.ValidationMessageFor(model => model.EditLang, "", new { @class = "validation" })
+                                </div>
+                                <br />
 
+                                <!-- additional info -->
                                 <p class="title">Additional Information</p>
 
                                 @Html.DisplayNameFor(model => model.ProfileDesc)
                                 <br />
-                                @Html.TextBoxFor(model => model.ProfileDesc, new { type = "text", @class = "width" })
+                                @Html.TextAreaFor(model => model.ProfileDesc, new { type = "text", @class = "width", maxlength = 300 })
                                 <br /><span hidden class="validation" id="validation-7">This field is required.</span>
 
 
@@ -349,8 +380,8 @@
                             <br />
 
                             @*<div>
-                <a asp-controller="Profile" asp-action="ConDetails" asp-route-id="@Model.ContractorID" asp-route-uID="0" >Back to View Details</a>
-            </div>*@
+                                <a asp-controller="Profile" asp-action="ConDetails" asp-route-id="@Model.ContractorID" asp-route-uID="0" >Back to View Details</a>
+                            </div>*@
 
                             <br /><br />
 
@@ -362,56 +393,39 @@
 
         </div>
 
+        <script src="~/script/tagify.min.js"></script>
         <script>
-            //Sub category change based on category
-            $(function () {
-
-                var num = $('#main-category').val();
-                //console.log(num);
-                $("#sub-category").hide();
-                $("#sub-category-" + num).show();
-                var value = $("#SubCategoryName").val();
-                $("#sub-category-" + num).val(value).change();
-                $(".hide-submenu").find(":selected").attr("selected", "selected");
-
-                $('#main-category').change(function () {
-                    var id = $('#main-category').val();
-                    $(".hide-submenu").hide();
-                    $("#sub-category").hide();
-                    $("#sub-category-" + id).show();
-
-                    console.log(id);
-                    console.log("clicked");
-
-                    if ($("#main-category option:selected").val() == '') {
-                        $("#sub-category").show();
-                    }
-
-                    $("#sub-category-" + id).change(function () {
-                        console.log("changed");
-                        $("#SubCategoryName").val($("#sub-category-" + id + " option:selected").text());
-                        console.log($("#sub-category-" + id + " option:selected").text())
-                        $('.hide-submenu option[selected]').removeAttr("selected");
-                        $(".hide-submenu").find(":selected").attr("selected", "selected");
-                        //$("#sub-category").attr("value", $("#sub-category option:selected").text());
-                    })
-
-                });
-
-                $("#sub-category-" + id).change(function () {
-                    //console.log("changed")
-                    $("#SubCategoryName").val($("#sub-category-" + num + " option:selected").text());
-                    //console.log($("#sub-category-" + num + " option:selected").text())
-                    $('.hide-submenu option[selected]').removeAttr("selected");
-                    $(".hide-submenu").find(":selected").attr("selected", "selected");
-                    //$("#sub-category").attr("value", $("#sub-category option:selected").text());
-                })
-            })
-
-
+            
             $(document).ready(function () {
 
+                //Tag input
+                var skill_input = document.querySelector('.skill-tag')
+                var arr = ["Javascript", "JQuery", "PHP", "MySQL", "Ruby", "HTML ", "CSS", "C++", "Java", "Python", "React", "C#", "APA MySQL", "Firebase",
+                    "Facebook", "Instagram", "Advertising", "Social Media Marketing", "Graphic Design", "Content Writing", "Online Writing", "Advertisement",
+                    "Social Media Content", "Android", "IOS", "Web Development", "Mobile App Development", "Tablet", "API", "Scripting", "Automation",
+                    "Smartphone", "IOS Development", "Android App Development", "Web Design",
+                    "Logo Design", "Adobe Photoshop", "Adobe Illustrator", "Banner Ad Design", "Typography", "Book", "Brochure", "Illustration",
+                    "Book Cover", "Storybook", "Game Design", "Character Design",
+                    "Animation", "2D Animation", "3D Animation", "Video Production", "Video Editing", "Video Commercial", "Adobe Animate", "Adobe Premiere Pro",
+                    ];
+                var tagify = new Tagify(skill_input, {
+                    enforceWhitelist: true,
+                    maxTags: 7,
+                    editTags: false,
+                    whitelist: arr,
+                    originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
+                })
 
+
+                var lang_input = document.querySelector('.language-tag');
+
+                var tagify = new Tagify(lang_input, {
+                    enforceWhitelist: true,
+                    maxTags: 3,
+                    editTags: false,
+                    whitelist: ["English", "Chinese", "Malay", "Japanese", "Korean", "Tamil", "Spanish", "Hokkien"],
+                    originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
+                })
 
 
                 $("#Phone").on("input", function (evt) {
@@ -525,6 +539,53 @@
                 });
 
             })
+
+            //Sub category change based on category
+            $(function () {
+
+                var num = $('#main-category').val();
+                //console.log(num);
+                $("#sub-category").hide();
+                $("#sub-category-" + num).show();
+                var value = $("#SubCategoryName").val();
+                $("#sub-category-" + num).val(value).change();
+                $(".hide-submenu").find(":selected").attr("selected", "selected");
+                var id;
+
+                $('#main-category').change(function () {
+                    id = $('#main-category').val();
+                    $(".hide-submenu").hide();
+                    $("#sub-category").hide();
+                    $("#sub-category-" + id).show();
+
+                    console.log(id);
+                    console.log("clicked");
+
+                    if ($("#main-category option:selected").val() == '') {
+                        $("#sub-category").show();
+                    }
+
+                    $("#sub-category-" + id).change(function () {
+                        console.log("changed");
+                        $("#SubCategoryName").val($("#sub-category-" + id + " option:selected").text());
+                        console.log($("#sub-category-" + id + " option:selected").text())
+                        $('.hide-submenu option[selected]').removeAttr("selected");
+                        $(".hide-submenu").find(":selected").attr("selected", "selected");
+                        //$("#sub-category").attr("value", $("#sub-category option:selected").text());
+                    })
+
+                });
+
+                $("#sub-category-" + num).change(function () {
+                    //console.log("changed")
+                    $("#SubCategoryName").val($("#sub-category-" + num + " option:selected").text());
+                    //console.log($("#sub-category-" + num + " option:selected").text())
+                    $('.hide-submenu option[selected]').removeAttr("selected");
+                    $(".hide-submenu").find(":selected").attr("selected", "selected");
+                    //$("#sub-category").attr("value", $("#sub-category option:selected").text());
+                })
+            })
+
         </script>
     </div>
 

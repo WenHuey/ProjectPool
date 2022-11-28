@@ -39,7 +39,15 @@ namespace ProjectPool.Controllers
 
             if (usertype != "3")
             {
-                return RedirectToAction("EmpApplication", "Dashboard");
+                if (usertype == "1") //admin
+                {
+                    return RedirectToAction("AdminProjectList", "Admin");
+                }
+                else if (usertype == "2") //employer
+                {
+                    return RedirectToAction("EmpApplication", "Dashboard");
+                }
+                
             }
 
             var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
@@ -110,7 +118,15 @@ namespace ProjectPool.Controllers
 
             if (usertype != "3")
             {
-                return RedirectToAction("EmpApplication", "Dashboard");
+                if (usertype == "1") //admin
+                {
+                    return RedirectToAction("AdminProjectList", "Admin");
+                }
+                else if (usertype == "2") //employer
+                {
+                    return RedirectToAction("EmpApplication", "Dashboard");
+                }
+                
             }
 
 
@@ -185,7 +201,14 @@ namespace ProjectPool.Controllers
 
             if (usertype != "3")
             {
-                return RedirectToAction("EmpApplication", "Dashboard");
+                if (usertype == "1") //admin
+                {
+                    return RedirectToAction("AdminProjectList", "Admin");
+                }
+                else if (usertype == "2") //employer
+                {
+                    return RedirectToAction("EmpDashboard", "Dashboard");
+                }
             }
 
             var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
@@ -247,7 +270,14 @@ namespace ProjectPool.Controllers
 
             if (usertype != "3")
             {
-                return RedirectToAction("EmpApplication", "Dashboard");
+                if (usertype == "1") //admin
+                {
+                    return RedirectToAction("AdminProjectList", "Admin");
+                }
+                else if (usertype == "2") //employer
+                {
+                    return RedirectToAction("EmpDashboard", "Dashboard");
+                }
             }
 
             if (id == null || perc == null)
@@ -293,7 +323,14 @@ namespace ProjectPool.Controllers
 
             if (usertype != "3")
             {
-                return RedirectToAction("EmpApplication", "Dashboard");
+                if (usertype == "1") //admin
+                {
+                    return RedirectToAction("AdminProjectList", "Admin");
+                }
+                else if (usertype == "2") //employer
+                {
+                    return RedirectToAction("EmpDashboard", "Dashboard");
+                }
             }
 
             var userID = claimsIdentity.FindFirst(ClaimTypes.Sid).Value;
@@ -385,15 +422,7 @@ namespace ProjectPool.Controllers
         #endregion
 
 
-        
-
-
-
-        
-
-
-
-
+        //no use - backup
         public async Task<IActionResult> ViewProfile()
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;

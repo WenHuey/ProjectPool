@@ -75,10 +75,10 @@
     <Compile Update="Models\PaymentModel.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Models\ContractorListModel.cs">
+    <Compile Update="Models\ProjectListModel.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Models\ProjectListModel.cs">
+    <Compile Update="Models\ContractorListModel.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Update="Models\SignUpModel.cs">

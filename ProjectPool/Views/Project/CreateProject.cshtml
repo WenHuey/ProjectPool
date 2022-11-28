@@ -331,7 +331,14 @@
 
         //Tag input
         var skill_input = document.querySelector('.skill-tag')
-        var arr = [ "Javascript", "JQuery", "PHP", "MySQL", "Ruby", "HTML ", "CSS", "C++", "Java", "Python", "React", "C#", "APA MySQL"];
+        var arr = ["Javascript", "JQuery", "PHP", "MySQL", "Ruby", "HTML ", "CSS", "C++", "Java", "Python", "React", "C#", "APA MySQL", "Firebase",
+            "Facebook", "Instagram", "Advertising", "Social Media Marketing", "Graphic Design", "Content Writing", "Online Writing", "Advertisement",
+            "Social Media Content", "Android", "IOS", "Web Development", "Mobile App Development", "Tablet", "API", "Scripting", "Automation",
+            "Smartphone", "IOS Development", "Android App Development", "Web Design",
+            "Logo Design", "Adobe Photoshop", "Adobe Illustrator", "Banner Ad Design", "Typography", "Book", "Brochure", "Illustration",
+            "Book Cover", "Storybook", "Game Design", "Character Design",
+            "Animation", "2D Animation", "3D Animation", "Video Production", "Video Editing", "Video Commercial", "Adobe Animate", "Adobe Premiere Pro",
+        ];
         var tagify = new Tagify(skill_input, {
             enforceWhitelist: true,
             maxTags: 7,

@@ -26,7 +26,7 @@
     <hr />
     <div class="row login-form">
         <div class="col-md-4">
-            <form asp-action="Index">
+            <form asp-action="Index" asp-controller="Admin" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="Email" class="control-label"></label>
@@ -37,6 +37,9 @@
                     <label asp-for="Password" class="control-label"></label>
                     <input asp-for="Password" class="form-control" />
                     <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div>
+                    <label style="color:red; text-align:left">@ViewBag.error</label>
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Login" class="btn btn-primary" />

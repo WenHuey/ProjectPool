@@ -43,6 +43,10 @@ namespace ProjectPool.Models
         public string CategoryName { get; set; }
         public string SubCategoryName { get; set; }
 
+        public string EditSkill { get; set; }
+        public string EditLang { get; set; }
+
+
         public string[] Skills { get; set; }
 
         public bool isCon { get; set; }
@@ -56,6 +60,8 @@ namespace ProjectPool.Models
         public string P_SubCategory { get; set; }
         public string P_Category { get; set; }
         public string[] P_Skills { get; set; }
+
+        public string PortfolioID { get; set; }
 
         [Required(ErrorMessage = "This field is required.")]
         public IFormFile Portfolio { get; set; }

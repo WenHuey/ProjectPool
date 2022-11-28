@@ -1,0 +1,300 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+
+    ViewData["Title"] = "Manage Listing - Admin";
+    var totalCount = ViewData["TotalCount"] as AdminDashboardModel;
+    string[] TableHeaders = new string[] {"#"
+               ,"Employer ID"
+               ,"User ID"
+               ,"Last Name"
+               ,"First Name"
+               ,"Company Name"
+               ,"Actions"};
+
+}
+
+    <link rel="stylesheet" href="~/css/EmpManageProject.css">
+
+<style>
+    .no-border {
+        border-style: none;
+        background-color: none;
+        box-shadow: none;
+        margin: 1rem;
+    }
+
+    .card-box {
+        margin: 0 0 6rem 0;
+    }
+    .card {
+        box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
+    }
+
+    .card {
+        margin: 1rem;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 0 solid rgba(0,0,0,.125);
+        border-radius: .25rem;
+    }
+
+    .card-body {
+        flex: 1 1 auto;
+        min-height: 1px;
+        padding: 1.5rem;
+    }
+
+    .cards {
+        margin: 0 auto 1rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
+
+    .card-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .p-title {
+        font-style: italic;
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .total {
+        font-size: 1.2rem;
+        font-weight: normal;
+    }
+
+    .total-amt {
+        font-size: 2rem;
+        font-style: italic;
+    }
+
+    #project {
+        background-color: #7ec4ef !important;
+    }
+
+    #user {
+        background-color: #7ec4cf !important;
+    }
+
+    #employer {
+        background-color: #9cadce !important;
+    }
+
+    #contarctor {
+        background-color: #d4afb9 !important;
+    }
+</style>
+
+    <div class="content">
+        <div class="TempMsg" style="margin: 0 1rem; font-size: 1.2rem;">
+            <p class="Msg" style="color:green">@TempData["SuccessMsg"]</p>
+            <p class="Msg" style="color:red">@TempData["ErrorMsg"]</p>
+        </div>
+
+
+        <div class="text-black font-weight-bold manage-project">Admin Dashboard</div>
+        <div class="row gutters-sm cards">
+            <!-- Projects -->
+            <div class="col-md-3">
+                <div class="card card-h m-0" id="project">
+                    <div class="card-body p-3 card-content">
+                        <div class="col-7">
+                            <p class="p-title"><span class="total">TOTAL</span><br />Project</p>
+                        </div>
+                        <div class="col-5">
+                            <p class="total-amt">@totalCount.ProjectCount</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total users  -->
+            <div class="col-md-3">
+                <div class="card card-h m-0" id="user">
+                    <div class="card-body p-3 card-content">
+                        <div class="col-7">
+                            <p class="p-title"><span class="total">TOTAL</span><br />User</p>
+                        </div>
+                        <div class="col-5">
+                            <p class="total-amt">@totalCount.UserCount</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total employers  -->
+            <div class="col-md-3">
+                <div class="card card-h m-0" id="employer">
+                    <div class="card-body p-3 card-content">
+                        <div class="col-7">
+                            <p class="p-title"><span class="total">TOTAL</span><br />Employer</p>
+                        </div>
+                        <div class="col-5">
+                            <p class="total-amt">@totalCount.EmployerCount</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total contractors  -->
+            <div class="col-md-3">
+                <div class="card card-h m-0" id="contarctor">
+                    <div class="card-body p-3 card-content">
+                        <div class="col-7">
+                            <p class="p-title"><span class="total">TOTAL</span><br />Contractor</p>
+                        </div>
+                        <div class="col-5">
+                            <p class="total-amt">@totalCount.UserCount</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab">
+            <div class="btn-box">
+                <button onclick="location.href='@Url.Action("AdminProjectList", "Admin")'">Project</button>
+                <button class="active" onclick="location.href='@Url.Action("AdminEmployerList", "Admin")'">Employer</button>
+                <button onclick="location.href='@Url.Action("AdminContractorList", "Admin")'">Contractor</button>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="outer-wrapper">
+            <div class="table-wrapper">
+                <table class="table display cell-border hover" id="datatable">
+                    <thead>
+                        <tr>
+                            @{
+                                foreach (var item in TableHeaders)
+                                {
+                                    <th>
+                                        @item
+                                    </th>
+                                }
+                            }
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            if (Model != null)
+                            {
+                                foreach (var Data in Model)
+                                {
+                                    <tr>
+                                        <td></td>
+                                        <td>@Data.EmployerID</td>
+                                        <td>@Data.UserID</td>
+                                        <td>@Data.Emp_LN</td>
+                                        <td>@Data.Emp_FN</td>
+                                        <td>@Data.Emp_CN</td>
+                                        <td>
+                                            <a href="#" type="button" class="btn btn-delete" data-id="@Data.EmployerID" data-target="modal-delete">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Delete Modal -->
+    <div id="modal-delete" class="modal">
+        <div class="modal-content">
+            <div class="project">
+                <a class="close">&times;</a>
+                <form asp-action="DeleteEmployer">
+                    <h2>Delete Employer</h2>
+                    <div class="project-content-delete">
+                        <p>
+                            Are you sure you want to remove this Employer?
+                            <br><br />
+                            <strong>* This action cannot be undone.</strong>
+                        </p>
+
+                        @Html.Hidden("id", "", new { @class = "hiddenid" })
+
+                    </div>
+                    <br />
+                    <div class="project-button">
+                        <button id="btn-confirm" type="submit">Confirm</button>
+                        <button type="submit" class="close">Cancel</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        $(document).ready(function () {
+
+            $("#datatable").DataTable();
+
+            $(".Msg").fadeTo(2000, 500).slideUp(500, function () {
+                $(".Msg").slideUp(500);
+            });
+
+            $('.btn-delete').on("click", function (e) {
+                e.preventDefault();
+                //perform the url load  then
+                $('#modal-delete').modal({
+                    keyboard: true
+                }, 'show');
+                var passedID = $(this).data('id');
+                $(".project-content-delete .hiddenid").val(passedID);
+                return false;
+            })
+
+
+        });
+
+        //let modalClosed = [...document.querySelectorAll(".btn-xmark")];
+        //modalClosed.forEach(function (btn) {
+        //    btn.onclick = function () {
+        //        let modal = btn.getAttribute("data-modal");
+        //        document.getElementById(modal).style.display = "block";
+        //    };
+        //});
+
+        //let modalDelete = [...document.querySelectorAll(".btn-delete")];
+        //modalDelete.forEach(function (btn) {
+        //    btn.onclick = function () {
+        //        let modal = btn.getAttribute("data-modal");
+        //        document.getElementById(modal).style.display = "block";
+        //    };
+        //});
+
+        $('.close').on("click", function (e) {
+            e.preventDefault();
+            //perform the url load  then
+            $('.modal').modal('hide');
+
+            return false;
+        })
+
+        //};
+
+    </script>

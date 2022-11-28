@@ -92,7 +92,54 @@
             color: grey;
             font-size: 0.9rem;
         }
-        
+
+        .card-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-total p {
+            margin: 0;
+        }
+
+        .cards {
+            margin: 0 auto 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        }
+
+        .total-title {
+            font-style: italic;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .total {
+            font-size: 1.2rem;
+            font-weight: normal;
+        }
+
+        .total-amt {
+            font-size: 2rem;
+            font-style: italic;
+        }
+
+        #project {
+            background-color: #7ec4ef !important;
+        }
+
+        #user {
+            background-color: #7ec4cf !important;
+        }
+
+        #employer {
+            background-color: #9cadce !important;
+        }
+
+        #contarctor {
+            background-color: #d4afb9 !important;
+        }
     </style>
 </head>
 <body>
@@ -124,6 +171,62 @@
                 <div class="text-black font-weight-bold dashboard">My Dashboard</div>
             </div>
         </div>
+
+        <div class="row gutters-sm cards">
+            
+            <div class="">
+                <div class="card card-h" id="project">
+                    <div class="card-body card-total">
+                        <div class="">
+                            <p class="total-title"><span class="total">TOTAL</span><br />Application</p>
+                        </div>
+                        <div class="">
+                            <p class="total-amt">@projectCount.ApplicationCount</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="">
+                <div class="card card-h" id="user">
+                    <div class="card-body card-total">
+                        <div class="">
+                            <p class="total-title"><span class="total">TOTAL</span><br />Active</p>
+                        </div>
+                        <div class="">
+                            <p class="total-amt">@projectCount.ActiveCount</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="">
+                <div class="card card-h" id="employer">
+                    <div class="card-body card-total">
+                        <div class="">
+                            <p class="total-title"><span class="total">TOTAL</span><br />Running</p>
+                        </div>
+                        <div class="">
+                            <p class="total-amt">@projectCount.RunningCount</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="">
+                <div class="card card-h" id="contarctor">
+                    <div class="card-body card-total">
+                        <div class="">
+                            <p class="total-title"><span class="total">TOTAL</span><br />Interview</p>
+                        </div>
+                        <div class="">
+                            <p class="total-amt">@projectCount.InterviewCount</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <div class="row gutters-sm">
             <!-- Projects -->
